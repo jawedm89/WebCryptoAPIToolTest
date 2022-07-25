@@ -34,26 +34,34 @@ let signkey = await window.crypto.subtle.generateKey(
 );
 return signkey;
   }
-  let key = genKeyAES();
-  let signkey = genSignKey();
+  //let key = genKeyAES();
+  //let signkey = genSignKey();
+    
+
+  async function start() {
+    let key = await genKeyAES();
+    let signkey = await genSignKey();
     window.crypto.subtle.encrypt(
       {
         name: "AES-CBC",
         iv
       },
-      genKeyAES(),
+      key,
       data
     ).then(result => {encryption = result;
       window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
-    genSignKey().privateKey, //from generateKey or importKey above
+    signkey.privateKey, //from generateKey or importKey above
     result //ArrayBuffer of data you want to sign
 );
 }).then(result => {signatur = result;
   console.log("hier kommt die Verschlüssleung" , encryption);
   console.log("hier kommt die signatur" , signatur);})
+  }
+
+  start();
 
   </script>
 </body>
