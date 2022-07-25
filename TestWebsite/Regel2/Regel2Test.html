@@ -10,6 +10,7 @@
     let encoder = new TextEncoder();
     let data = encoder.encode("ich bin verschlüsselt");
     let encryption , signatur;
+    async function genKeyAES() {
     let key = await window.crypto.subtle.generateKey(
     {
         name: "AES-CBC",
@@ -18,6 +19,9 @@
     false, //whether the key is extractable (i.e. can be used in exportKey)
     ["encrypt", "decrypt"] //can be "encrypt", "decrypt", "wrapKey", or "unwrapKey"
 );
+return key;
+}
+async function genSignKey() {
 let signkey = await window.crypto.subtle.generateKey(
     {
         name: "RSASSA-PKCS1-v1_5",
@@ -28,6 +32,10 @@ let signkey = await window.crypto.subtle.generateKey(
     false, //whether the key is extractable (i.e. can be used in exportKey)
     ["sign", "verify"] //can be any combination of "sign" and "verify"
 );
+return signkey;
+  }
+  let key = genKeyAES();
+  let signkey = genSignKey();
     window.crypto.subtle.encrypt(
       {
         name: "AES-CBC",
