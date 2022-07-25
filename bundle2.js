@@ -326,6 +326,7 @@
                 if (arr[i].declarations.id.name === node.name)
                 {
                     found.push(arr[i].declarations.init);
+                    console.log("gefunden", arr[i].declarations.id.name);
                 }
                 break;
             case "AssignmentExpression":
