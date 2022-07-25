@@ -17,7 +17,6 @@
                         resolve(xhr.response);
                     } else {
                        resolve('/* Could not load. Status = ' + xhr.status + '*/' + file);
-                       
                     }
                 }
             };
@@ -217,19 +216,8 @@
         }
       }
       
-      if (WebCryptoAPIScripts.regel1.length =! 0) {
-        let signRequired = false;
-        WebCryptoAPIScripts.regel1.forEach(element => {
-          let encMode = walk.findNodeAround(WebCryptoAPIScripts.ast, element,  "CallExpression").node.arguments[0].properties[0].value.value;
-          if (encMode === "AES-CBC" || encMode === "AES-CTR") {
-            signRequired = true;
-          }
-        });
-
-      }
-      else {
-        console.log("hier findet Regel 2 keine Anwendung!");
-      }
+    
+      
       for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
 
 
