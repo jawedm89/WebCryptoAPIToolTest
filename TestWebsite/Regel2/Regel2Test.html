@@ -13,7 +13,7 @@
       let scr = document.createElement("script");
       scr.src = "test1.js";
       document.head.appendChild(scr);
-    })
+    });
     let iv = window.crypto.getRandomValues(new Uint8Array(16));
     let encoder = new TextEncoder();
     let data = encoder.encode("ich bin verschlüsselt");
