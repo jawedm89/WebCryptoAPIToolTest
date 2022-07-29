@@ -5,8 +5,15 @@
 
   <h1 align="center">Web Crypto API TestWebsite für Regel 2</h1>
   <button id="refresh">click mich</button>
+  <button id="test1">testi test</button>
 
   <script>
+    let test1 = document.getElementById("test1");
+    test1.addEventListener("click", function() {
+      let scr = document.createElement("script");
+      scr.src = "test1.js";
+      document.head.appendChild(scr);
+    })
     let iv = window.crypto.getRandomValues(new Uint8Array(16));
     let encoder = new TextEncoder();
     let data = encoder.encode("ich bin verschlüsselt");
