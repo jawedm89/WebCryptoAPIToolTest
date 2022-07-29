@@ -1,133 +1,22 @@
-//import { NodeWalk } from './NodeWalk.js';
 (function () { function r(e, n, t) { function o(i, f) { if (!n[i]) { if (!e[i]) { var c = "function" == typeof require && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = "MODULE_NOT_FOUND", a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = "function" == typeof require && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({
   1: [function (require, module, exports) {
+    
+    let butto = document.getElementById("refresh");
+    butto.addEventListener("click", function() {
+      starten();
+    });
 
-    document.addEventListener("DOMContentLoaded", function (event) {
+    document.addEventListener("DOMContentLoaded", function starten(event) {
       let scripts = document.scripts;
       let jsscripts = [];
       let WebCryptoAPIScripts = [];
       const acorn = require('acorn');
       const walk = require("acorn-walk");
+      //const obj = require("./GenObject")
 
-      var loadScript = function (file) {
-        return new Promise(function (resolve, reject) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', file, true);
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-              if (xhr.status === 200) {
-                resolve(xhr.response);
-              } else {
-                resolve('/* Could not load. Status = ' + xhr.status + '*/' + file);
-              }
-            }
-          };
-          xhr.send();
-        });
-      };
-
-
-      /*
-       let a = async (url) => {
-          const d = await loadScript(url);
-          return d;
-      } 
       
-      for (let i = 0; i < scripts.length; i++) {
-          if(scripts[i].src == '') {
-              if(scripts[i].innerHTML.indexOf("window.crypto.subtle.encrypt") != -1) 
-              {
-                  browser.runtime.sendMessage({Scrip: scripts[i].innerHTML});
-                  console.log("sende das Script");
-              }
-             }
-          else {            
-              a(scripts[i].src).then(value => {
-                  if (value.includes("/* Could not load. Status = ")) 
-                  {
-                      browser.runtime.sendMessage({SRC: scripts[i].src});
-                      console.log("sende die SRC!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                  }
-                  else {
-                      if(value.indexOf("window.crypto.subtle.encrypt") != -1)
-                      {
-                          browser.runtime.sendMessage({Scrip: value});     
-                          console.log("sende das Script");
-                      }
-                  }
-                });
-              }        
-      }
-      */
-      async function laden() {
-        for (let i = 0; i < scripts.length; i++) {
-          if (scripts[i].src == '') {
-            jsscripts[i] = scripts[i].innerHTML;
-          }
-          else {
-            jsscripts[i] = await loadScript(scripts[i].src);
-          }
-        }
-        return jsscripts;
-      }
-      async function ObjectGen() {
-        let j = 0;
-        let indexx;
-        for (let i = 0; i < jsscripts.length; i++) {
 
-          if (jsscripts[i].indexOf('window.crypto.subtle') != -1) {
-            WebCryptoAPIScripts[j] = new Object();
-            WebCryptoAPIScripts[j].src = scripts[i].src;
-            WebCryptoAPIScripts[j].script = jsscripts[i];
-            WebCryptoAPIScripts[j].ast = acorn.parse(jsscripts[i]);
-            WebCryptoAPIScripts[j].entrys = [];
-            WebCryptoAPIScripts[j].functions = [];
-            walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
-              if (ancestors.type === "FunctionDeclaration") {
-                WebCryptoAPIScripts[j].functions.push(ancestors);
-              }
-            });
-            WebCryptoAPIScripts[j].regel1 = [];
-            WebCryptoAPIScripts[j].regel2 = [];
-            WebCryptoAPIScripts[j].regel3 = [];
-            WebCryptoAPIScripts[j].regel4 = [];
-            WebCryptoAPIScripts[j].regel5 = [];
-            WebCryptoAPIScripts[j].regel6 = [];
-            WebCryptoAPIScripts[j].regel7 = [];
-            let start = 0;
-            do {
-              indexx = WebCryptoAPIScripts[j].script.indexOf("window.crypto.subtle", start)
-              if (indexx != -1) {
-                let cryptoCallee = WebCryptoAPIScripts[j].script.substring(indexx + 21, WebCryptoAPIScripts[j].script.indexOf("(", indexx));
-                switch (cryptoCallee) {
-                  case "encrypt":
-                    WebCryptoAPIScripts[j].regel1.push(indexx);
-                    WebCryptoAPIScripts[j].regel2.push(indexx);
-                    WebCryptoAPIScripts[j].regel3.push(indexx);
-                    break;
-                  case "sign":
-                    //WebCryptoAPIScripts[j].regel2.push(indexx);
-                    WebCryptoAPIScripts[j].regel3.push(indexx);
-                    break;
-                  case "exportKey":
-                    WebCryptoAPIScripts[j].regel4.push(indexx);
-                    WebCryptoAPIScripts[j].regel7.push(indexx);
-                    break;
-                  case "deriveBits":
-                    WebCryptoAPIScripts[j].regel5.push(indexx);
-                    break;
-                  case "deriveKey":
-                    WebCryptoAPIScripts[j].regel6.push(indexx);
-                    break;
-                }
-                WebCryptoAPIScripts[j].entrys.push(indexx);
-                start = indexx + 1;
-              }
-            } while (indexx != -1);
-            j++;
-          }
-        }
-      }
+      
 
       async function RegelVerteiler(WebCryptoAPIScripts) {
         try {
@@ -163,8 +52,8 @@
       }
 
       async function hin() {
-        await laden();
-        await ObjectGen();
+        jsscripts = await laden(scripts, jsscripts);
+        WebCryptoAPIScripts = await objectGen(WebCryptoAPIScripts, jsscripts, scripts);
         await RegelVerteiler(WebCryptoAPIScripts);
       }
       hin();

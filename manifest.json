@@ -14,7 +14,7 @@
     {
     "run_at": "document_start",
     "matches": ["<all_urls>"],
-    "js": ["NodeWalk.js", "bundle2.js"]
+    "js": ["bundle.js", "loadScripts.js", "NodeWalk.js", "bundle2.js"]
     }
   ],
    
