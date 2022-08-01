@@ -4,76 +4,23 @@
 <body>
 
   <h1 align="center">Web Crypto API TestWebsite für Regel 2</h1>
-  <button id="refresh">click mich</button>
-  <button id="test1">testi test</button>
+  <button id="test1">Test 1</button>
+  <button id="test2">Test 2</button>
 
   <script>
     let test1 = document.getElementById("test1");
     test1.addEventListener("click", function() {
-      let scr = document.createElement("script");
-      scr.src = "test1.js";
-      document.head.appendChild(scr);
+      let script1 = document.createElement("script");
+      script1.src = "test1.js";
+      document.head.appendChild(script1);
     });
-    let iv = window.crypto.getRandomValues(new Uint8Array(16));
-    let encoder = new TextEncoder();
-    let data = encoder.encode("ich bin verschlüsselt");
-    let encryption, signatur;
-
-    async function genKeyAES() {
-      let key = await window.crypto.subtle.generateKey(
-        {
-          name: "AES-CBC",
-          length: 256, //can be  128, 192, or 256
-        },
-        false, //whether the key is extractable (i.e. can be used in exportKey)
-        ["encrypt", "decrypt"] //can be "encrypt", "decrypt", "wrapKey", or "unwrapKey"
-      );
-      return key;
-    }
+    let test2 = document.getElementById("test2");
+    test2.addEventListener("click", function() {
+      let script2 = document.createElement("script");
+      script2.src = "test2.js";
+      document.head.appendChild(script2);
+    });
     
-    async function genSignKey() {
-      let signkey = await window.crypto.subtle.generateKey(
-        {
-          name: "RSASSA-PKCS1-v1_5",
-          modulusLength: 2048, //can be 1024, 2048, or 4096
-          publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-          hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
-        },
-        false, //whether the key is extractable (i.e. can be used in exportKey)
-        ["sign", "verify"] //can be any combination of "sign" and "verify"
-      );
-      return signkey;
-    }
-
-
-    async function start() {
-      let key = await genKeyAES();
-      let signkey = await genSignKey();
-      window.crypto.subtle.encrypt(
-        {
-          name: "AES-CBC",
-          iv
-        },
-        key,
-        data
-      ).then(result => {
-        encryption = result;
-        window.crypto.subtle.sign(
-          {
-            name: "RSASSA-PKCS1-v1_5"
-          },
-          signkey.privateKey, //from generateKey or importKey above
-          result //ArrayBuffer of data you want to sign
-        );
-      }).then(result => {
-        signatur = result;
-        console.log("hier kommt die Verschlüssleung", encryption);
-        console.log("hier kommt die signatur", signatur);
-      })
-    }
-
-    start();
-
   </script>
 </body>
 

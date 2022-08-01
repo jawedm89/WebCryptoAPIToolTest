@@ -9,28 +9,24 @@ let len = document.scripts.length;
     function starten() {
       
       let mutation = new MutationObserver(findmutation);
-      
       mutation.observe(document.head, {childList: true});
       mutation.observe(document.body, {childList: true});
       function findmutation() {
-        if (len != document.scripts.length) {
+        if (len < document.scripts.length) {
           console.log("es  gab eine veränderung");
+          len = document.scripts.length;
+          starten();
+        }
+        else {
           len = document.scripts.length;
         }
       }
-      let buttion = document.getElementById("refresh");
-      buttion.addEventListener("click", starten);
+
       let scripts = document.scripts;
       let jsscripts = [];
       let WebCryptoAPIScripts = [];
       const acorn = require('acorn');
       const walk = require("acorn-walk");
-      //const obj = require("./GenObject")
-
-      
-
-      
-
       async function RegelVerteiler(WebCryptoAPIScripts) {
         try {
           for (let i = 0; i < Object.keys(WebCryptoAPIScripts).length; i++) {
