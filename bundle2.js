@@ -12,13 +12,14 @@ let len = document.scripts.length;
       mutation.observe(document.head, {childList: true});
       mutation.observe(document.body, {childList: true});
       function findmutation() {
-        if (len < document.scripts.length) {
+        if (len != document.scripts.length) {
           console.log("es  gab eine veränderung");
           len = document.scripts.length;
           starten();
         }
         else {
           len = document.scripts.length;
+          console.log("hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
         }
       }
 
