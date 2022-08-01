@@ -24,6 +24,12 @@
     test2.addEventListener("click", function() {
       let script2 = document.createElement("script");
       script2.src = "test2.js";
+      try{
+        document.head.removeChild(document.scripts[1]);
+      }
+      catch (e) {
+        console.log(e);
+      }
       document.head.appendChild(script2);
     });
     
