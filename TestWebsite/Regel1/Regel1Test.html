@@ -1,11 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-  
-  <h1 align ="center">Web Crypto API TestWebsite für Regel 1</h1>
-    <p>Test auf einhaltung der Regel im bei einem einfachen Aufruf der Web Crypto API</p>
-    <p>Test </p>
+
+  <h1 align="center">Web Crypto API TestWebsite für Regel 1</h1>
+  <p>Test auf einhaltung der Regel im bei einem einfachen Aufruf der Web Crypto API</p>
+  <br>
+  <br>
+  <button id="test1">Test 1</button>
+  <P>Hier wird in den Verschlüsselungs-Modi #AES-CTR, #AES-GCM und #AES-CBC die window.crypto.getRandomValues() direkt aufgerufen. 
+    Dies wird jeweilt in über die then() Methode und über eine async Funktion getan. Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein.</P>
+  <br>
+  <br>
+  <button id="test2">Test 2</button>
+  <p>Hier wird einmal der IV als globale Variable initialisiert und dann in der then()-Methode und in einer async Funktion bei den Verschlüsselungs-Modi #AES-CBC und #AES-GCM 
+    verwendet. Außerdem wird in einer async Funktion ein IV initialisiert, der dann beim Verschlüsselungs-Modi #AES-CTR verwendet wird.
+     Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein</p>
+
+  <script>
+    let test1 = document.getElementById("test1");
+    let test2 = document.getElementById("test2");
+
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    test1.addEventListener("click", async function () {
+      let script1 = document.createElement("script");
+      script1.src = "test1.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+    });
+
+    test2.addEventListener("click", async function () {
+      let script2 = document.createElement("script");
+      script2.src = "test2.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script2);
+    });
+
+  </script>
 
 
 </body>
+
 </html>
