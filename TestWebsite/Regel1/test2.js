@@ -6,14 +6,15 @@ window.crypto.subtle.generateKey({
     length: 256,
 },
     false,
-    ["encrypt", "decrypt"]).then(key => {
-        window.crypto.subtle.encrypt(
+    ["encrypt", "decrypt"]).then(async function (key) {
+        let cipher = await window.crypto.subtle.encrypt(
             {
                 name: "AES-CBC",
                 iv: iv,
             },
             key,
-            data)
+            data);
+            return cipher;
     }).then(result => {
         console.log("hier kommt die Chiffre von AES-CBC aus der then()-Methode", result)
     });

@@ -203,9 +203,8 @@ let len = document.scripts.length;
           try {
             switch (arr[i].type) {
               case "VariableDeclaration":
-                if (arr[i].declarations.id.name === node.name) {
-                  found.push(arr[i].declarations.init);
-                  console.log("gefunden", arr[i].declarations.id.name);
+                if (arr[i].declarations[0].id.name === node.name) {
+                  found.push(arr[i].declarations[0].init);
                 }
                 break;
               case "AssignmentExpression":

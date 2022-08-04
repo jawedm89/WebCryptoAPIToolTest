@@ -5,14 +5,15 @@ window.crypto.subtle.generateKey({
     length: 256,
 },
     false,
-    ["encrypt", "decrypt"]).then(key => {
-        window.crypto.subtle.encrypt(
+    ["encrypt", "decrypt"]).then(async function (key) {
+        let cipher = await window.crypto.subtle.encrypt(
             {
                 name: "AES-CBC",
                 iv: window.crypto.getRandomValues(new Uint8Array(16)),
             },
             key,
-            data)
+            data);
+            return cipher;
     }).then(result => {
         console.log("hier kommt die Chiffre von AES-CBC aus der then()-Methode", result)
     });
@@ -22,8 +23,8 @@ window.crypto.subtle.generateKey({
     length: 256,
 },
     false,
-    ["encrypt", "decrypt"]).then(key => {
-        window.crypto.subtle.encrypt(
+    ["encrypt", "decrypt"]).then(async function (key) {
+        let cipher = await window.crypto.subtle.encrypt(
             {
                 name: "AES-CTR",
                 counter: window.crypto.getRandomValues(new Uint8Array(16)),
@@ -31,7 +32,8 @@ window.crypto.subtle.generateKey({
             },
             key,
             data
-        )
+        );
+        return cipher;
     }).then(result => {
         console.log("hier kommt die Chiffre von AES-CTR aus der then()-Methode", result)
     });
@@ -44,14 +46,15 @@ window.crypto.subtle.generateKey(
     },
     false,
     ["encrypt", "decrypt"]
-).then(key => {
-    window.crypto.subtle.encrypt(
+).then(async function (key) {
+    let cipher = await window.crypto.subtle.encrypt(
         {
             name: "AES-GCM",
             iv: window.crypto.getRandomValues(new Uint8Array(12)),
         },
         key,
-        data)
+        data);
+        return cipher;
 }).then(result => {
     console.log("hier kommt die Chiffre von AES-GCM aus der then()-Methode", result)
 });
