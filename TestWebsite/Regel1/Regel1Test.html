@@ -16,11 +16,17 @@
   <p>Hier wird einmal der IV als globale Variable initialisiert und dann in der then()-Methode und in einer async Funktion bei den Verschlüsselungs-Modi #AES-CBC und #AES-GCM 
     verwendet. Außerdem wird in einer async Funktion ein IV initialisiert, der dann beim Verschlüsselungs-Modi #AES-CTR verwendet wird.
      Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein</p>
+  <br>
+  <br>
+  <button id = "test3">Test 3</button>
 
   <script>
+    let rand = window.crypto.getRandomValues(new Uint8Array(16));
     let test1 = document.getElementById("test1");
     let test2 = document.getElementById("test2");
+    let test3 = document.getElementById("test2");
 
+    test3.addEventListener("click", () => {console.log(rand)})
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
     }

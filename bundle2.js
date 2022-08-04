@@ -251,13 +251,32 @@ let len = document.scripts.length;
           return check;
         }
         else {
-          if (inOrOut = ! "OutSideFunction") {
-            if (node.name === inOrOut.params.Identifier.name) {
+          console.log(inOrOut)
+          if (inOrOut != "OutSideFunction") {
+            let param = false
+            inOrOut.params.forEach(element => {
+              if (node.name === element.Identifier.name) {
+                param = true;
               //Suche alle Function calls, für jeden checken ob in or outside einer Funktion. 
-            }
-            else {
+              console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
+            }});
+            if (param === false) {
+              console.log("hier sind wir schon mal an der richtigen stelle")
               let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, "FunctionDeclaration");
-
+              searchHere.forEach(element => {
+                try {
+                if (element.declarations[0].id.name === node.name) {
+                  check.push(element.declarations[0].init);
+                }
+              }
+              catch (e) {}
+              });
+              if (check.length > 0) {
+                return check;
+              }
+              else {
+              return false;
+              }
             }
           }
           else {
