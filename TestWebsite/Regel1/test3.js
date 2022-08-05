@@ -1,6 +1,6 @@
 let data = new TextEncoder().encode("ich werde verschlüsselt")
 
-function iv() {
+function rand() {
     let iv = window.crypto.getRandomValues(new Uint8Array(16));
     return iv;
 } 
@@ -14,7 +14,7 @@ window.crypto.subtle.generateKey({
         let cipher = await window.crypto.subtle.encrypt(
             {
                 name: "AES-CBC",
-                iv: iv(),
+                iv: rand(),
             },
             key,
             data);
@@ -26,10 +26,10 @@ window.crypto.subtle.generateKey({
     async function encryptGCM() {
         let bool = true;
         if (bool === true) {
-            iv = iv();
+            let iv = rand();
         }
         else {
-            iv = window.crypto.getRandomValues(new Uint8Array(16));
+            let iv = window.crypto.getRandomValues(new Uint8Array(16));
         }
         let key = await window.crypto.subtle.generateKey(
             {
@@ -53,10 +53,10 @@ window.crypto.subtle.generateKey({
     async function encryptGCM2() {
         let bool = true;
         if (bool === true) {
-            iv = iv();
+            let iv = rand();
         }
         else {
-            iv = new Uint8Array(16);
+            let iv = new Uint8Array(16);
         }
         let key = await window.crypto.subtle.generateKey(
             {
