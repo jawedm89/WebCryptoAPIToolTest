@@ -18,7 +18,7 @@
      Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein</p>
   <br>
   <br>
-  <button id = "test3">Test 3!</button>
+  <button id = "test3">Test 3</button>
 
   <script>
     let rand = window.crypto.getRandomValues(new Uint8Array(16));
@@ -26,8 +26,6 @@
     let test2 = document.getElementById("test2");
     let test3 = document.getElementById("test3");
 
-    (() => {let rand2 = window.crypto.getRandomValues(new Uint8Array(16));
-      test3.addEventListener("click", () => {console.log(rand, rand2)})})();
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
     }
@@ -56,6 +54,19 @@
       }
       await delay(1000);
       document.head.appendChild(script2);
+    });
+
+    test3.addEventListener("click", async function () {
+      let script3 = document.createElement("script");
+      script3.src = "test3.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script3);
     });
 
   </script>
