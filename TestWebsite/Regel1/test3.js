@@ -3,7 +3,7 @@ let data = new TextEncoder().encode("ich werde verschlüsselt")
 function iv() {
     let iv = window.crypto.getRandomValues(new Uint8Array(16));
     return iv;
-}
+} 
 
 window.crypto.subtle.generateKey({
     name: "AES-CBC",
