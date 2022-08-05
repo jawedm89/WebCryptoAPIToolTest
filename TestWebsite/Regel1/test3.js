@@ -25,7 +25,6 @@ window.crypto.subtle.generateKey({
 
     async function encryptGCM() {
         let bool = true;
-        let iv;
         if (bool === true) {
             iv = iv();
         }
@@ -53,7 +52,6 @@ window.crypto.subtle.generateKey({
 
     async function encryptGCM2() {
         let bool = true;
-        let iv;
         if (bool === true) {
             iv = iv();
         }
