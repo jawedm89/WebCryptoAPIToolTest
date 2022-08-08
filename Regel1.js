@@ -60,9 +60,12 @@ async function typeCheck(node, WebCryptoAPIScripts) {
   if (node.type === "CallExpression" && node.callee.type != "MemberExpression") {
     let chek = [];
     for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
-      if (WebCryptoAPIScripts.functions[i].id.name === node.callee.name) {
+      try {
+      if (WebCryptoAPIScripts.functions[i].id.name === node.callee.name || WebCryptoAPIScripts.functions[i].declarations.id.name === node.callee.name) {
         chek = await NodeWalk(WebCryptoAPIScripts.functions[i]);
       }
+    }
+    catch (e) {}
     }
     let filter = chek.filter(element => element.type === "ReturnStatement");
     filter.forEach(function (element, index, arr) {
@@ -147,7 +150,14 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       let param = false;
       let p = 0;
       let ind;
-      inOrOut.params.forEach(element => {
+      let parameter = [];
+      if (inOrOut.type === "FunctionDeclaration") {
+        parameter = inOrOut.params;
+      }
+      else {
+        parameter = inOrOut.declarations[0].init.params;
+      }
+      parameter.forEach(element => {
         p++;
         if (node.name === element.name) {
           let funcName;
@@ -158,22 +168,21 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
             funcName = inOrOut.id.name;
           }
           else {
-            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, inOrOut.start, "VariableDeclarator"))
-            funcName = walk.findNodeAround(WebCryptoAPIScripts.ast, inOrOut.start, "VariableDeclarator").id.name;
+            funcName = inOrOut.declarations[0].id.name;
             console.log(funcName);
           }
           walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
             try{
-            if (ancestors.type === "CallExpression" & ancestors.callee.name === funcName) {
-              check.push(ancestors.arguments[ind]);
-            }
+              if (ancestors.type === "CallExpression" & ancestors.callee.name === funcName) {
+                check.push(ancestors.arguments[ind]);
+              }
           }
           catch (e) {}
         });
       }
     });
     if(param === true) {
-        console.log(check)
+      console.log(check)
         return check; 
       }
       if (param === false) {
@@ -199,6 +208,23 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       return false;
     }
   }
+}
+
+function findFunction(funtionName, WebCryptoAPIScripts) {
+  let foundFunctions = [];
+  for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
+    if (WebCryptoAPIScripts.functions[i].type === "FunctionDeclaration") {
+      if (WebCryptoAPIScripts.functions[i].id.name === funtionName) {
+        foundFunctions.push(WebCryptoAPIScripts.functions[i]);
+      }
+    }
+    else {
+      if (WebCryptoAPIScripts.functions[i].declarations[0].id.name === funtionName) {
+        foundFunctions.push(WebCryptoAPIScripts.functions[i]);
+      }
+    }
+  }
+  return foundFunctions;
 }
 
 async function inOrOutFunction(start, functions) {
