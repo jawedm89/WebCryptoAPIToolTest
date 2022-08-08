@@ -14,7 +14,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].entrys = [];
         WebCryptoAPIScripts[j].functions = [];
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
-          if (ancestors.type === "FunctionDeclaration") {
+          if (ancestors.type === "FunctionDeclaration" || ancestors.type === "FunctionExpression") {
             WebCryptoAPIScripts[j].functions.push(ancestors);
           }
         });

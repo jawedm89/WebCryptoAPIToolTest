@@ -68,7 +68,9 @@ function starten() {
   hin().then(() => console.log("Die Laufzeit der WebExtension in Millisekunden: ", Date.now() - startZeit));
 
 }
-  }, { "acorn": 3, "acorn-walk": 2 }], 2: [function (require, module, exports) {
+
+
+}, { "acorn": 3, "acorn-walk": 2 }], 2: [function (require, module, exports) {
     (function (global, factory) {
       typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
         typeof define === 'function' && define.amd ? define(['exports'], factory) :

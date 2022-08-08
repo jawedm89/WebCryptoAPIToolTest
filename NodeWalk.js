@@ -1,4 +1,4 @@
-async function d(node, end, auslassen) {
+async function d(node, end, f1, f2) {
     let nexti = [];
     let waiting = [];
     if (node != null && node.start < end) {
@@ -13,7 +13,7 @@ async function d(node, end, auslassen) {
             }
             return [nexti, waiting];
         }
-        if (node.type === auslassen) {
+        if (node.type === f1 || node.type === f2) {
             return [nexti, waiting];
         }
         else {
@@ -22,7 +22,7 @@ async function d(node, end, auslassen) {
                 if (typeof value === "object" && value != null) {
                     try {
                         value.forEach(element => {
-                            if (element.type != auslassen && element.start < end) {
+                            if (element.type != f1 || element.type != f2 && element.start < end) {
                                 if (gefunden === false) {
                                     nexti.push(element);
                                     gefunden = true;
@@ -55,8 +55,14 @@ async function NodeWalk(node, end, auslassen) {
     let next = [node];
     let arr = [];
     let waiting = [];
-    if (auslassen === undefined) {
-        auslassen = "";
+    let f1, f2;
+    if (auslassen === true) {
+        f1 = "FunctionDeclaration";
+        f2 = "FunctionExpression";
+    }
+    else {
+        f1 = "";
+        f2 = "";
     }
     if (end === undefined) {
         end = Number.POSITIVE_INFINITY;
@@ -64,13 +70,13 @@ async function NodeWalk(node, end, auslassen) {
     do {
         if (next.length > 0) {
             arr.push(next[0]);
-            let result = await d(next[0], end, auslassen);
+            let result = await d(next[0], end, f1, f2);
             next = result[0];
             result[1].forEach(element => { waiting.push(element) })
         }
         else {
             arr.push(waiting[waiting.length - 1]);
-            let result = await d(waiting.pop(), end, auslassen);
+            let result = await d(waiting.pop(), end, f1, f2);
             next = result[0];
             result[1].forEach(element => { waiting.push(element) });
         }

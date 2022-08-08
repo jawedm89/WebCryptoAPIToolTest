@@ -82,7 +82,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
   let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions);
   let arr = [];
   if (inOrOut === "OutSideFunction") {
-    arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, "FunctionDeclaration");
+    arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
   }
   else {
     arr = await NodeWalk(inOrOut);
@@ -144,7 +144,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
   else {
     console.log(inOrOut)
     if (inOrOut != "OutSideFunction") {
-      let param = false
+      let param = false;
       inOrOut.params.forEach(element => {
         if (node.name === element.Identifier.name) {
           param = true;
@@ -154,7 +154,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       });
       if (param === false) {
         console.log("hier sind wir schon mal an der richtigen stelle")
-        let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, "FunctionDeclaration");
+        let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, true);
         searchHere.forEach(element => {
           try {
             if (element.declarations[0].id.name === node.name) {
