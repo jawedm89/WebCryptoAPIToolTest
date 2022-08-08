@@ -158,6 +158,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
             funcName = inOrOut.id.name;
           }
           else {
+            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, inOrOut.start, "VariableDeclarator"))
             funcName = walk.findNodeAround(WebCryptoAPIScripts.ast, inOrOut.start, "VariableDeclarator").id.name;
             console.log(funcName);
           }
