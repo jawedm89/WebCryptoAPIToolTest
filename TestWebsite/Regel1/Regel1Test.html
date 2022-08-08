@@ -32,6 +32,14 @@
   <p></p>
   <br>
   <br>
+  <button id = "test6"> Test 6</button>
+  <p></p>
+  <br>
+  <br>
+  <button id = "testAll"> Test All</button>
+  <p></p>
+  <br>
+  <br>
 
 
   <script>
@@ -41,12 +49,15 @@
     let test3 = document.getElementById("test3");
     let test4 = document.getElementById("test4");
     let test5 = document.getElementById("test5");
+    let test6 = document.getElementById("test6");
+    let testAll = document.getElementById("testAll");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
     }
 
-    test1.addEventListener("click", async function () {
+    test1.addEventListener("click", Test1());
+    async function Test1() {
       let script1 = document.createElement("script");
       script1.src = "test1.js";
       try {
@@ -57,9 +68,10 @@
       }
       await delay(1000);
       document.head.appendChild(script1);
-    });
+    }
 
-    test2.addEventListener("click", async function () {
+    test2.addEventListener("click", Test2());
+    async function Test2() {
       let script2 = document.createElement("script");
       script2.src = "test2.js";
       try {
@@ -70,9 +82,10 @@
       }
       await delay(1000);
       document.head.appendChild(script2);
-    });
+    }
 
-    test3.addEventListener("click", async function () {
+    test3.addEventListener("click", Test3());
+    async function Test3() {
       let script3 = document.createElement("script");
       script3.src = "test3.js";
       try {
@@ -83,9 +96,10 @@
       }
       await delay(1000);
       document.head.appendChild(script3);
-    });
+    }
 
-    test4.addEventListener("click", async function () {
+    test4.addEventListener("click", Test4());
+    async function Test4() {
       let script4 = document.createElement("script");
       script4.src = "test4.js";
       try {
@@ -96,9 +110,10 @@
       }
       await delay(1000);
       document.head.appendChild(script4);
-    });
+    }
 
-    test5.addEventListener("click", async function () {
+    test5.addEventListener("click", Test5());
+    async function Test5() {
       let script5 = document.createElement("script");
       script5.src = "test5.js";
       try {
@@ -109,7 +124,31 @@
       }
       await delay(1000);
       document.head.appendChild(script5);
-    });
+    }
+
+    test6.addEventListener("click", Test1());
+    async function Test6() {
+      let script6 = document.createElement("script");
+      script6.src = "test6.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script6);
+    }
+
+    testAll.addEventListener("click", TestAll());
+    async function TestAll() {
+      Test1();
+      Test2();
+      Test3();
+      Test4();
+      Test5();
+      Test6();
+    }
 
   </script>
 
