@@ -30,11 +30,11 @@ function starten() {
     try {
       for (let i = 0; i < Object.keys(WebCryptoAPIScripts).length; i++) {
         if (WebCryptoAPIScripts[i].regel1.length != 0) {
-          console.log("starte regel 1", WebCryptoAPIScripts[i].regel1, i);
+          //console.log("starte regel 1", WebCryptoAPIScripts[i].regel1, i);
           await Regel1(WebCryptoAPIScripts[i]);
         }
         if (WebCryptoAPIScripts[i].regel2.length != 0) {
-          console.log("starte Regel 2");
+          //console.log("starte Regel 2");
           Regel2(WebCryptoAPIScripts[i]);
         }
         if (WebCryptoAPIScripts[i].regel3.length != 0) {

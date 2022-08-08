@@ -16,7 +16,7 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
             ergebnis.push(s);
           }
           else {
-            console.log(s);
+            //console.log(s);
             s.forEach(element => { arr.push(element) })
           }
         } while (arr.length > 0)
@@ -36,7 +36,7 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
 }
 
 async function correctRandomValueCheck(node) {
-  console.log("Check ob die Callexpression der API call ist: ", node);
+  //console.log("Check ob die Callexpression der API call ist: ", node);
   if (node.callee.object.object.name === "window" && node.callee.object.property.name === "crypto" && node.callee.property.name === "getRandomValues") {
     return true;
   }
@@ -47,13 +47,13 @@ async function correctRandomValueCheck(node) {
 
 async function typeCheck(node, WebCryptoAPIScripts) {
   if (node.type === "Identifier") {
-    console.log("jetzt wird der Identifier gecheckt für: ", node);
+    //console.log("jetzt wird der Identifier gecheckt für: ", node);
     let r = await identifierValueCheck(node, WebCryptoAPIScripts);
-    console.log(r);
+    //console.log(r);
     return r;
   }
   if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
-    console.log("jetzt wird die Callexpression gecheckt für: ", node);
+    //console.log("jetzt wird die Callexpression gecheckt für: ", node);
     let r = await correctRandomValueCheck(node);
     return r;
   }
@@ -118,12 +118,12 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
     }
     i = i - 1;
   } while (i > 0)
-  console.log("test hier", found);
+  //console.log("test hier", found);
   if (SwitchOrIf.length > 0) {
-    console.log(SwitchOrIf, found)
+    //console.log(SwitchOrIf, found)
     for (let i = 0; found.length > i; i++) {
       SwitchOrIf.forEach(element => {
-        console.log(found[i].start, element.start)
+        //console.log(found[i].start, element.start)
         if (found[i].start > element.start && found[i].end < element.end) {
           found[i].keepMe = true;
         }
@@ -134,18 +134,18 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
     }
     found.forEach(element => {
       if (element.keepMe === true) {
-        console.log("ich pushe das", element)
+        //console.log("ich pushe das", element)
         check.push(element);
       }
     });
   }
   if (found.length >= 1) {
     check.push(found[found.length - 1]);
-    console.log("check this", check);
+    //console.log("check this", check);
     return check;
   }
   else {
-    console.log(inOrOut)
+    //console.log(inOrOut)
     if (inOrOut != "OutSideFunction") {
       let param = false;
       let p = 0;
@@ -163,13 +163,13 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
           let funcName;
           param = true;
           ind = p-1;
-          console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
+          //console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
           if(inOrOut.type === "FunctionDeclaration") {
             funcName = inOrOut.id.name;
           }
           else {
             funcName = inOrOut.declarations[0].id.name;
-            console.log(funcName);
+            //console.log(funcName);
           }
           walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
             try{
@@ -182,11 +182,11 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       }
     });
     if(param === true) {
-      console.log(check)
+      //console.log(check)
         return check; 
       }
       if (param === false) {
-        console.log("hier sind wir schon mal an der richtigen stelle")
+        //console.log("hier sind wir schon mal an der richtigen stelle")
         let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, true);
         searchHere.forEach(element => {
           try {
