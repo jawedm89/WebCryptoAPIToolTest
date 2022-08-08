@@ -149,13 +149,26 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       let ind;
       inOrOut.params.forEach(element => {
         p++;
-        if (node.name === element.Identifier.name) {
+        if (node.name === element.name) {
           param = true;
           ind = p-1;
           //Suche alle Function calls, für jeden checken ob in or outside einer Funktion. 
           console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
+        } 
+      });
+      let funcName;
+      if(inOrOut.type === "FunctionDeclaration") {
+        funcName = inOrOut.id.name;
+      }
+      else {
+        walk.findNodeAround(WebCryptoAPIScripts.ast, inOrOut.start, "VariableDeclarator").id.name;
+      }
+      walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
+        if (ancestors.type === "ExpressionStatement" & ancestors.expression.callee.name === funcName) {
+          return ancestors.expression.callee;
         }
       });
+
       if (param === false) {
         console.log("hier sind wir schon mal an der richtigen stelle")
         let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, true);
