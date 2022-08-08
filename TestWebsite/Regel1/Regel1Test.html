@@ -25,7 +25,7 @@
   <br>
   <br>
   <button id = "test4"> Test 4</button>
-  <p></p>
+  <p>Hier </p>
   <br>
   <br>
   <button id = "test5"> Test 5</button>
@@ -33,12 +33,14 @@
   <br>
   <br>
 
-  
+
   <script>
     let rand = window.crypto.getRandomValues(new Uint8Array(16));
     let test1 = document.getElementById("test1");
     let test2 = document.getElementById("test2");
     let test3 = document.getElementById("test3");
+    let test4 = document.getElementById("test4");
+    let test5 = document.getElementById("test5");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
@@ -81,6 +83,32 @@
       }
       await delay(1000);
       document.head.appendChild(script3);
+    });
+
+    test4.addEventListener("click", async function () {
+      let script4 = document.createElement("script");
+      script4.src = "test4.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script4);
+    });
+
+    test5.addEventListener("click", async function () {
+      let script5 = document.createElement("script");
+      script5.src = "test5.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script5);
     });
 
   </script>

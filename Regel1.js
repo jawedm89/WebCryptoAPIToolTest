@@ -145,9 +145,13 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
     console.log(inOrOut)
     if (inOrOut != "OutSideFunction") {
       let param = false;
+      let p = 0;
+      let ind;
       inOrOut.params.forEach(element => {
+        p++;
         if (node.name === element.Identifier.name) {
           param = true;
+          ind = p-1;
           //Suche alle Function calls, für jeden checken ob in or outside einer Funktion. 
           console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
         }
