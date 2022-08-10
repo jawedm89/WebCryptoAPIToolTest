@@ -1,10 +1,16 @@
-let len = document.scripts.length;
+
 (function () { function r(e, n, t) { function o(i, f) { if (!n[i]) { if (!e[i]) { var c = "function" == typeof require && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = "MODULE_NOT_FOUND", a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = "function" == typeof require && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({
   1: [function (require, module, exports) {
-
-document.addEventListener("DOMContentLoaded", starten)
-
-function starten() {
+    
+    window.addEventListener("load", starten)
+    //let a = document.getElementById("popup-content");
+    //a.textContent="ss"
+    function starten() {
+      let len = document.scripts.length;
+     /*  try {
+  document.getElementById("popup-content").textContent = "sdfsdfsdfsdf";
+      } catch (e) {console.log(e)} */
+      //console.log("start")
   let startZeit = Date.now();
   let mutation = new MutationObserver(findmutation);
   mutation.observe(document.head, { childList: true });
@@ -67,6 +73,10 @@ function starten() {
 
   hin().then(() => console.log("Die Laufzeit der WebExtension in Millisekunden: ", Date.now() - startZeit));
 
+  browser.runtime.onMessage.addListener((request) => {
+    if(request.click) {
+  browser.runtime.sendMessage({Ergebnis: WebCryptoAPIScripts})}
+  })
 }
 
 

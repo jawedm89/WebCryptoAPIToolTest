@@ -24,6 +24,7 @@ var loadScript = function (file) {
       }
       else {
         jsscripts[i] = await loadScript(scripts[i].src);
+        //console.log(jsscripts[i])
       }
     }
     return jsscripts;

@@ -14,8 +14,15 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].entrys = [];
         WebCryptoAPIScripts[j].functions = [];
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
-          if (ancestors.type === "FunctionDeclaration" || (ancestors.type === "VariableDeclaration" && ancestors.declarations[0].init.type === "FunctionExpression")) {
+          try {
+          if (ancestors.type === "FunctionDeclaration" || 
+          (ancestors.type === "VariableDeclaration" && ancestors.declarations[0].init.type === "FunctionExpression") || 
+          (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "FunctionExpression") || 
+          (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression")) {
             WebCryptoAPIScripts[j].functions.push(ancestors);
+          }}
+          catch (e) {
+
           }
         });
         WebCryptoAPIScripts[j].regel1 = [];

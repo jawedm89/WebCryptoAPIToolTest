@@ -3,10 +3,19 @@ const acorn = require('acorn');
 const walk = require("acorn-walk");
 
 window.Regel1 = async function (WebCryptoAPIScripts) {
+  let j = 0;
+  let result = []; 
   for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
+    //console.log(WebCryptoAPIScripts.script)
     try {
       let props = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node.arguments[0].properties;
       let encMode = props[0].value.value;
+      //console.log(props)
+      if(props[0].value.type === "Identifier") {
+        //let a = await identifierValueCheck(props[0].value, WebCryptoAPIScripts)
+        //console.log(a)
+        encMode = "AES-GCM"
+      }
       if (encMode == "AES-CTR" || encMode == "AES-GCM" || encMode == "AES-CBC") {
         let arr = [props[1].value];
         let ergebnis = [];
@@ -21,17 +30,29 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
           }
         } while (arr.length > 0)
         if (ergebnis.every(element => element === true)) {
-          console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i])
+          console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
+          //WebCryptoAPIScripts.regel1[i].ergebnis.push(true);
+          
+          result[j] = new Object();
+          result[j].eingehalten = true;
+          result[j].stelle = WebCryptoAPIScripts.regel1[i];
+          result[j].script = WebCryptoAPIScripts.src;
         }
         else {
           console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i])
           window.alert("IV wurde nicht korrekt initialisiert!");
+          //WebCryptoAPIScripts.regel1[i].ergebnis.push(false);
         }
+        browser.storage.sync.set({
+          regel1: result
+        });
       }
     }
     catch (e) {
       console.log("War wohl ein Kommentar und kein richtiger API Call ", e);
     }
+    j++;
+    //console.log(result[0].script)
   }
 }
 
@@ -86,10 +107,13 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
   let arr = [];
   if (inOrOut === "OutSideFunction") {
     arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
+    //console.log("outside hmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
   }
   else {
     arr = await NodeWalk(inOrOut);
   }
+  //console.log(arr)
+  //console.log(WebCryptoAPIScripts.functions)
   let i = arr.length - 1;
   let found = [];
   let SwitchOrIf = [];
@@ -97,9 +121,10 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
     try {
       switch (arr[i].type) {
         case "VariableDeclaration":
-          if (arr[i].declarations[0].id.name === node.name) {
+          arr[i].declarations.forEach(element => {
+          if (element.id.name === node.name) {
             found.push(arr[i].declarations[0].init);
-          }
+          }});
           break;
         case "AssignmentExpression":
           if (arr[i].left.name === node.name) {
@@ -186,7 +211,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
         return check; 
       }
       if (param === false) {
-        //console.log("hier sind wir schon mal an der richtigen stelle")
+        //console.log("hier sind wir schon mal an der richtigen stelle", inOrOut)
         let searchHere = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, true);
         searchHere.forEach(element => {
           try {
