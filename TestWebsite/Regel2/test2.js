@@ -40,15 +40,16 @@ let iv = window.crypto.getRandomValues(new Uint8Array(16));
         },
         key,
         data
-      ).then(result => {
+      ).then(async function(result)  {
         encryption = result;
-        window.crypto.subtle.sign(
+        signatur = await window.crypto.subtle.sign(
           {
             name: "RSASSA-PKCS1-v1_5"
           },
           signkey.privateKey,
           result 
         );
+        return signatur;
       }).then(result => {
         signatur = result;
         console.log("hier kommt die Verschlüssleung", encryption);

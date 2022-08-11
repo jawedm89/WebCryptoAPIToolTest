@@ -11,11 +11,6 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
       let props = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node.arguments[0].properties;
       let encMode = props[0].value.value;
       //console.log(props)
-      if(props[0].value.type === "Identifier") {
-        //let a = await identifierValueCheck(props[0].value, WebCryptoAPIScripts)
-        //console.log(a)
-        encMode = "AES-GCM"
-      }
       if (encMode == "AES-CTR" || encMode == "AES-GCM" || encMode == "AES-CBC") {
         let arr = [props[1].value];
         let ergebnis = [];
@@ -31,25 +26,15 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
         } while (arr.length > 0)
         if (ergebnis.every(element => element === true)) {
           console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
-          //WebCryptoAPIScripts.regel1[i].ergebnis.push(true);
-          
-          result[j] = new Object();
-          result[j].eingehalten = true;
-          result[j].stelle = WebCryptoAPIScripts.regel1[i];
-          result[j].script = WebCryptoAPIScripts.src;
         }
         else {
           console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i])
           window.alert("IV wurde nicht korrekt initialisiert!");
-          //WebCryptoAPIScripts.regel1[i].ergebnis.push(false);
         }
-        browser.storage.sync.set({
-          regel1: result
-        });
       }
     }
     catch (e) {
-      console.log("War wohl ein Kommentar und kein richtiger API Call ", e);
+      console.log("War wohl ein Kommentar und kein richtiger API Call oder die encryption Methode wurde nicht als String sonder als Identifier übergeben", e);
     }
     j++;
     //console.log(result[0].script)
