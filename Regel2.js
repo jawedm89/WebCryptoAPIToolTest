@@ -5,21 +5,51 @@ const walk = require("acorn-walk");
 window.Regel2 = async function (WebCryptoAPIScripts) {
     let sign = [];
     for (let i = 0; i < WebCryptoAPIScripts.regel3.length; i++) {
-        let signTyp = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[i], "CallExpression").node.arguments[0].properties[0].value.value;
+        let sig = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[i], "CallExpression").node
+        let signTyp = sig.arguments[0].properties[0].value.value;
         if (signTyp === "RSASSA-PKCS1-v1_5" || signTyp === "RSA-PSS" || signTyp === "ECDSA" || signTyp === "HMAC") {
-            sign.push(signTyp);
+            sign.push(sig);
         }
     }
     for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
-        let encMode = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression").node.arguments[0].properties[0].value.value;
+        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression");
+        let encMode = encCall.node.arguments[0].properties[0].value.value;
         if (encMode === "AES-CBC" || encMode === "AES-CTR" && sign.length != 0) {
-            console.log("Regel 2")
+          let inoruot = await inOrOutFunction(encCall.node.start, WebCryptoAPIScripts.functions);
+          console.log(inoruot, encCall.node.start);
+          console.log(WebCryptoAPIScripts.functions)
         }
         else {
-            console.log("Verstoß gegen Regel 2!");
+            console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
         }
     }
 }
+
+async function inOrOutFunction(start, functions) {
+  let arr = [];
+  functions.forEach(element => {
+    if (element.start <= start && element.end >= start) {
+      arr.push(element);
+    }
+  });
+  if (arr.length >= 1) {
+    let min = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i].start < min.start) {
+        min = arr[i];
+      }
+    }
+    return min;
+  }
+  else {
+    return "OutSideFunction";
+  }
+}
+
+
+
+
+
 },{"acorn":3,"acorn-walk":2}],2:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :

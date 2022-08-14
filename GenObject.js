@@ -13,6 +13,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].ast = acorn.parse(jsscripts[i]);
         WebCryptoAPIScripts[j].entrys = [];
         WebCryptoAPIScripts[j].functions = [];
+        WebCryptoAPIScripts[j].thenCalls = [];
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
           if (ancestors.type === "FunctionDeclaration" || 
@@ -21,6 +22,20 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
           (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression")) {
             WebCryptoAPIScripts[j].functions.push(ancestors);
           }}
+          catch (e) {
+
+          }
+        });
+        let a = 0;
+        walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
+          try {
+            if (ancestors.type === "CallExpression" && ancestors.callee.property.name === "then") {
+              
+              WebCryptoAPIScripts[j].thenCalls[a] = new Object();
+
+              WebCryptoAPIScripts[j].thenCalls.push(ancestors.arguments[0])
+            }
+          }
           catch (e) {
 
           }

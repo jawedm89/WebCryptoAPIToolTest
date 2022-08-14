@@ -54,7 +54,7 @@ let iv = window.crypto.getRandomValues(new Uint8Array(16));
         signatur = result;
         console.log("hier kommt die Verschlüssleung", encryption);
         console.log("hier kommt die signatur", signatur);
-      })
+      }).then(function () {console.log("hallo")})
     }
 
     start();
