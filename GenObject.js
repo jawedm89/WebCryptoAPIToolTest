@@ -30,10 +30,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
             if (ancestors.type === "CallExpression" && ancestors.callee.property.name === "then") {
-              
-              WebCryptoAPIScripts[j].thenCalls[a] = new Object();
-
-              WebCryptoAPIScripts[j].thenCalls.push(ancestors.arguments[0])
+              WebCryptoAPIScripts[j].thenCalls.push(ancestors);
             }
           }
           catch (e) {
