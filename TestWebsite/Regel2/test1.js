@@ -54,6 +54,7 @@ async function start() {
 }
 
 async function sign(cipher) {
+  console.log(cipher)
   let signkey = await genSignKey();
   signatur = await window.crypto.subtle.sign(
     {
