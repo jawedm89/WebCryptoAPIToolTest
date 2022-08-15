@@ -14,13 +14,23 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
     for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
         let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression");
         let encMode = encCall.node.arguments[0].properties[0].value.value;
-        if (encMode === "AES-CBC" || encMode === "AES-CTR" && sign.length != 0) {
-          let inoruot = await inOrOutFunction(encCall.node.start, WebCryptoAPIScripts.functions);
-          console.log(inoruot, encCall.node.start);
-          console.log(WebCryptoAPIScripts.functions)
-        }
-        else {
-            console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+        if (encMode === "AES-CBC" || encMode === "AES-CTR") {
+          if (sign.length != 0) {
+            let inoruot = await inOrOutFunction(encCall.node.start, WebCryptoAPIScripts.functions);
+            if (inoruot === "OutSideFunction") {
+              console.log("hier einmal prüfen ob es hier ein Then call gibt und wenn ja ob in diesen eine Sign funktion durchgeführt wird");
+              let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.node.start && element.end > encCall.node.end));
+              console.log(thens)
+            }
+            else {
+              console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
+            }
+            console.log(inoruot, encCall.node.start);
+            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1) , WebCryptoAPIScripts.regel2[i])
+          }
+          else {
+              console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+          }
         }
     }
 }
