@@ -1,7 +1,7 @@
 let iv = window.crypto.getRandomValues(new Uint8Array(16));
     let encoder = new TextEncoder();
     let data = encoder.encode("ich bin verschlüsselt");
-    let encryption, signatur;
+    let encryption, signatur = new ArrayBuffer();
 
     async function genKeyAES() {
       let key = await window.crypto.subtle.generateKey(
@@ -47,7 +47,7 @@ let iv = window.crypto.getRandomValues(new Uint8Array(16));
             name: "RSASSA-PKCS1-v1_5"
           },
           signkey.privateKey,
-          result 
+          encryption 
         );
         return signatur;
       }).then(result => {

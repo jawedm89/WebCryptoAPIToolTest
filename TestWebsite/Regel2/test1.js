@@ -66,6 +66,7 @@ async function sign(cipher) {
 }
 
 async function encryp() {
+  let key = genKeyAES();
   let cipher = await window.crypto.subtle.encrypt(
   {
     name: "AES-CBC",
@@ -78,6 +79,7 @@ return cipher;
 }
 
 async function encryp2() {
+  let key = genKeyAES();
   return await window.crypto.subtle.encrypt(
   {
     name: "AES-CBC",
@@ -89,6 +91,7 @@ async function encryp2() {
 }
 
 async function encryp3() {
+  let key = genKeyAES();
   let cipher;
   cipher = await window.crypto.subtle.encrypt(
   {
@@ -102,6 +105,6 @@ return cipher;
 }
 
 let ci = encryp();
-let sig = sign(ci);
+let sig = encryp().then(result => sign(result))
 
 console.log(ci, sig);

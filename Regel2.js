@@ -24,14 +24,44 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             }
             else {
               console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
-              let preposition = getIdentifierForCipher(WebCryptoAPIScripts);
+              let preposition = getIdentifierForCipher(WebCryptoAPIScripts, i);
+              let returnsCipher = false;
+              //console.log(preposition)
               if (preposition.type === "VariableDeclarator" || preposition.type === "AssignmentExpression") {
-                
+                console.log(preposition)
+                let cipherName;
+                if (preposition.type === "AssignmentExpression") {
+                  cipherName = preposition.left.name;
+                }
+                else {
+                  cipherName = preposition.id.name;
+                }
+                let ar = await NodeWalk(inoruot);
+                let filter = ar.filter(element => element.type === "ReturnStatement");
+                filter.forEach(elem => {
+                  try {
+                  if (elem.argument.type === "SequenceExpression") {
+                    elem.argument.expressions.forEach(ele => {
+                      try {
+                        if (ele.name === cipherName) {
+                          returnsCipher = true
+                        }
+                      } catch (e) {}
+                    });
+                  }
+                  if (elem.argument.name === cipherName) {
+                    returnsCipher = true;
+                  }
+                }
+                catch (e) {}
+                });
               }
+              else {console.log(preposition)}
+              console.log(returnsCipher);
             }
-            console.log(inoruot, encCall.node.start);
+            //console.log(inoruot, encCall.node.start);
             let d = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
-            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, d.node.start - 1) , d.node.start)
+            //console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, d.node.start - 1) , d.node.start)
           }
           else {
               console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
@@ -40,13 +70,16 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
     }
 }
 
-function getIdentifierForCipher(WebCryptoAPIScripts) {
-  let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
-  switch (prePosition) {
+function getIdentifierForCipher(WebCryptoAPIScripts, i) {
+  let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1).node;
+  //console.log(prePosition)
+  switch (prePosition.type) {
     case "BlockStatement":
+      //console.log(preposition)
       return prePosition;
     case "AwaitExpression":
-      prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.node.start - 1);
+      prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start - 1).node;
+      //console.log(prePosition)
       return prePosition;
   }
 }
