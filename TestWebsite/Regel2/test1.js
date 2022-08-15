@@ -77,6 +77,30 @@ async function encryp() {
 return cipher;
 }
 
+async function encryp2() {
+  return await window.crypto.subtle.encrypt(
+  {
+    name: "AES-CBC",
+    iv
+  },
+  key,
+  data
+);
+}
+
+async function encryp3() {
+  let cipher;
+  cipher = await window.crypto.subtle.encrypt(
+  {
+    name: "AES-CBC",
+    iv
+  },
+  key,
+  data
+);
+return cipher;
+}
+
 let ci = encryp();
 let sig = sign(ci);
 

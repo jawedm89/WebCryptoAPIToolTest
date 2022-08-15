@@ -20,19 +20,35 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             if (inoruot === "OutSideFunction") {
               console.log("hier einmal prüfen ob es hier ein Then call gibt und wenn ja ob in diesen eine Sign funktion durchgeführt wird");
               let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.node.start && element.end > encCall.node.end));
-              console.log(thens)
+              console.log(thens);
             }
             else {
               console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
+              let preposition = getIdentifierForCipher(WebCryptoAPIScripts);
+              if (preposition.type === "VariableDeclarator" || preposition.type === "AssignmentExpression") {
+                
+              }
             }
             console.log(inoruot, encCall.node.start);
-            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1) , WebCryptoAPIScripts.regel2[i])
+            let d = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
+            console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, d.node.start - 1) , d.node.start)
           }
           else {
               console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
           }
         }
     }
+}
+
+function getIdentifierForCipher(WebCryptoAPIScripts) {
+  let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
+  switch (prePosition) {
+    case "BlockStatement":
+      return prePosition;
+    case "AwaitExpression":
+      prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.node.start - 1);
+      return prePosition;
+  }
 }
 
 async function inOrOutFunction(start, functions) {
