@@ -27,45 +27,56 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
   }
 
   WebCryptoAPIScripts.functions.forEach(element => {
-    findMemberExpressionCall(element[0])
+    try {
+      console.log(element[0])
+      let mem = getMemberExpression(element[0]);
+      if(element[0].type === "MemberExpression") {
+        console.log(mem)
+        findMemberExpressionCall(mem)
+      }
+    }
+    catch (e) {}
   })
 
   function findMemberExpressionCall(memberExpr) {
     let callExpressions = [];
-    walk.fullAncestor(test, ancestors => {
+    walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
       if(ancestors.type === "CallExpression") {
         let node = ancestors.callee;
-        console.log(node)
+        if (node.type === "MemberExpression") {
+          console.log(ancestors)
+        }
         let i = 0;
         weiter = true;
         do {
-          console.log(node.property.type, memberExpr[i].type)
+          //console.log(node.property.type, memberExpr[i].type)
           if (node.property.type === memberExpr[i].type) {
             if(node.property.type === "Identifier" && node.property.name === memberExpr[i].name) {
-              console.log(node)
+              console.log(node.property, memberExpr[i])
+              //console.log(node)
               node = node.object;
               i++;
             }
             else if (node.property.type === "Literal" && node.property.value === memberExpr[i].value) {
-              console.log(node)
+              //console.log(node)
               node = node.object;
               i++;
             }
             else {
-              console.log("aaaaaaa")
+              //console.log("aaaaaaa")
               weiter = false
             }
           }
           else {
-            console.log("ssddsd")
+            //console.log("ssddsd")
             weiter = false;
           }
           if (weiter === true && i === memberExpr.length -1 && node.type === "Identifier") {
             callExpressions.push(ancestors);
-            console.log("bbbbbbbbbbbb")
+            //console.log("bbbbbbbbbbbb")
             weiter = false;
           }
-          console.log(weiter)
+          //console.log(weiter)
         }
         while (weiter === true)
       }
