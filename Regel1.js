@@ -26,6 +26,10 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
     return result;
   }
 
+  WebCryptoAPIScripts.functions.forEach(element => {
+    findMemberExpressionCall(element[0])
+  })
+
   function findMemberExpressionCall(memberExpr) {
     let callExpressions = [];
     walk.fullAncestor(test, ancestors => {
@@ -69,8 +73,8 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
     console.log(callExpressions)
     return callExpressions;
   }
- let find = getMemberExpression(testnode);
-findMemberExpressionCall(find);
+ //let find = getMemberExpression(testnode);
+//findMemberExpressionCall(find);
 //console.log(gefunden());
     for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
     //console.log(WebCryptoAPIScripts.script)

@@ -19,49 +19,49 @@ window.crypto.subtle.generateKey({
     });
 
 
-function test1() {
+function test1f() {
     console.log("test 1");
 }
 
-let test2 = function() {
+let test2f = function() {
     console.log("test 2");
 }
 
-let test3 = () => function() {
+let test3f = () => function() {
     console.log("test 3");
 }
 
-let test4 = [function() {console.log("test 4");}];
+let test4f = [function() {console.log("test 4");}];
 
-let test5 = [{t: function() {console.log("test 4");}}];
+let test5f = [{t: function() {console.log("test 4");}}];
 
-let test6 = {t: function() {console.log("test 6")}};
+let test6f = {t: function() {console.log("test 6")}};
 
-let test7, test8, test9, test10, test11;
+let test7f, test8f, test9f, test10f, test11f;
 
-test7 = function() {
+test7f = function() {
     console.log("test 7");
 }
 
-test8 = () => function() {
+test8f = () => function() {
     console.log("test 8");
 }
 
-test9 = [function() {console.log("test 9");}];
+test9f = [function() {console.log("test 9");}];
 
-test10 = [{t: function() {console.log("test 10");}}];
+test10f = [{t: function() {console.log("test 10");}}];
 
-test11 = {t: function() {console.log("test 11")}};
+test11f = {t: function() {console.log("test 11")}};
 
-test1(); 
-test2(); 
-test3(); 
-test4[0](); 
-test5[0].t(); 
-test6.t(); 
-test7(); 
-test8(); 
-test9[0](); 
-test10[0].t(); 
-test11.t();
+test1f(); 
+test2f(); 
+test3f(); 
+test4f[0](); 
+test5f[0].t(); 
+test6f.t(); 
+test7f(); 
+test8f(); 
+test9f[0](); 
+test10f[0].t(); 
+test11f.t();
 
