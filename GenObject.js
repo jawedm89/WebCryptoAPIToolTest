@@ -66,43 +66,53 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
             });
           }
           if (ancestors.type === "AssignmentExpression") {
-              if(element.init.type === "FunctionExpression") {
-                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init]);   
+              if(ancestors.right.type === "FunctionExpression") {
+                if(ancestors.left.type === "Identifier") {
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left.name, ancestors.right]);   
+                }
+                else {
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right]);
+                }
               }
-              if(element.init.type === "ArrowFunctionExpression" && element.init.body.type === "FunctionExpression") {
-                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init.body]);   
+              if(ancestors.right.type === "ArrowFunctionExpression" && ancestors.right.body.type === "FunctionExpression") {
+                if(ancestors.left.type === "Identifier") {
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left.name, ancestors.right.body]);   
+                }
+                else {
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right.body]);
+                }
               }
-              if(element.init.type === "ObjectExpression") {
-                element.init.properties.forEach(elem => {
+              if(ancestors.right.type === "ObjectExpression") {
+                ancestors.right.properties.forEach(elem => {
                   if(elem.value.type === "FunctionExpression") {
                     let obj = new Object();
                     obj.type = "MemberExpression";
-                    obj.object = {type: "Identifier", name: element.id.name};
+                    obj.object = ancestors.left;
                     obj.property = {type: "Identifier", name: elem.key.name};
                     WebCryptoAPIScripts[j].functions.push([obj, elem.value]); 
                   }
                 });
               }
-              if(element.init.type === "ArrayExpression") {
+              if(ancestors.right.type === "ArrayExpression") {
                 let e = 0;
-                element.init.elements.forEach(elem2 => {
-                  if (elem2.type === "ObjectExpression") {
-                    elem2.properties.forEach(el => {
-                      if (el.value === "FunctionExpression") {
+                ancestors.right.elements.forEach(element2 => {
+                  if (element2.type === "ObjectExpression") {
+                    element2.properties.forEach(el2 => {
+                      if (el2.value === "FunctionExpression") {
                         let obj = new Object();
                         obj.type = "MemberExpression"
-                        obj.object = {type: "Identifier", name: element.id.name, object: {type: "Identifier", name: el.key.name}}
-                        obj.property = {type: "Literal", value: e}
-                        WebCryptoAPIScripts[j].functions.push([obj ,el.value]); 
+                        obj.object = {type: "MemberExpression", object: ancestors.left, property: {type: "Literal", value: e}}
+                        obj.property = {type: "Identifier", value: el2.key.name}
+                        WebCryptoAPIScripts[j].functions.push([obj ,el2.value]); 
                       }
                     })
                   }
-                  if (elem2.type === "FunctionExpression") {
+                  if (element2.type === "FunctionExpression") {
                     let obj = new Object();
                     obj.type = "MemberExpression"
-                    obj.object = {type: "Identifier", name: element.id.name}
+                    obj.object = ancestors.left;
                     obj.property = {type: "Literal", value: e}
-                    WebCryptoAPIScripts[j].functions.push([obj ,elem2]);
+                    WebCryptoAPIScripts[j].functions.push([obj, element2]);
                   }
                   e++;
                 });
@@ -111,11 +121,16 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
 
 
 
+        }
+          catch (e) {
+
+          }
+        });
 
 
 
 
-          if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "ArrowFunctionExpression" && ancestors.expression.right.body.type === "FunctionExpression") {
+/*           if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "ArrowFunctionExpression" && ancestors.expression.right.body.type === "FunctionExpression") {
             if (ancestors.expression.left.type === "Identifier") {
               WebCryptoAPIScripts[j].functions.push([ancestors.expression.left.name ,ancestors.expression.right.body]);
             }
@@ -134,12 +149,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
           if (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression") {
             WebCryptoAPIScripts[j].functions.push([ancestors.key, ancestors.value]);
           }
-        }
-          catch (e) {
-
-          }
-        });
-        let a = 0;
+        let a = 0;  */
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
             if (ancestors.type === "CallExpression" && ancestors.callee.property.name === "then") {

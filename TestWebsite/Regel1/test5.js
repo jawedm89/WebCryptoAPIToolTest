@@ -1,4 +1,4 @@
-let data = new TextEncoder().encode("ich werde verschlüsselt")
+let data12 = new TextEncoder().encode("ich werde verschlüsselt")
 
 window.crypto.subtle.generateKey({
     name: "AES-CBC",
@@ -12,7 +12,7 @@ window.crypto.subtle.generateKey({
                 iv: window.crypto.getRandomValues(new Uint8Array(16)),
             },
             key,
-            data);
+            data12);
             return cipher;
     }).then(result => {
         console.log("hier kommt die Chiffre von AES-CBC aus der then()-Methode", result)
@@ -53,5 +53,15 @@ test10 = [{t: function() {console.log("test 10");}}];
 
 test11 = {t: function() {console.log("test 11")}};
 
-test1(); test2(); test3(); test4[0](); test5[0].t(); test6.t(); test7(); test8(); test9[0](); test10[0].t(); test11.t();
+test1(); 
+test2(); 
+test3(); 
+test4[0](); 
+test5[0].t(); 
+test6.t(); 
+test7(); 
+test8(); 
+test9[0](); 
+test10[0].t(); 
+test11.t();
 
