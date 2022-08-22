@@ -4,23 +4,48 @@
     window.addEventListener("load", starten)
     //let a = document.getElementById("popup-content");
     //a.textContent="ss"
-    function starten() {
+    function starten(scripts) {
       let len = document.scripts.length;
+      let s = [];
+      if(scripts === undefined) {
+        let scripts = document.scripts;
+      }
+
      /*  try {
   document.getElementById("popup-content").textContent = "sdfsdfsdfsdf";
       } catch (e) {console.log(e)} */
       //console.log("start")
   let startZeit = Date.now();
-  let mutation = new MutationObserver(findmutation);
+  let mutationObserved = false;
+  let mutation = new MutationObserver(function mut(mutation) {
+    //console.log(mutation)
+    //mutation.forEach(function(mutation) { 
+      for(let i = 0; i < mutation[0].addedNodes.length; i++) {
+        if(mutation[0].addedNodes[i].nodeName === "SCRIPT") {
+          mutationObserved = true;
+          //console.log(mutation[0].addedNodes[i])
+          s.push(mutation[0].addedNodes[i]);
+        }
+      }
+    //});
+});
+
+  setInterval(function() {
+    if(mutationObserved === true) {
+      console.log("es  gab eine veränderung");
+      mutationObserved = false;
+      mutation.disconnect();
+      starten(s);
+    }
+  }, 1000);
   mutation.observe(document.head, { childList: true });
   mutation.observe(document.body, { childList: true });
-  let scripts = document.scripts;
   let jsscripts = [];
   let WebCryptoAPIScripts = [];
   const acorn = require('acorn');
   const walk = require("acorn-walk");
 
-  function findmutation() {
+ /*  function findmutation() {
     if (len < document.scripts.length) {
       console.log("es  gab eine veränderung");
       len = document.scripts.length;
@@ -29,7 +54,7 @@
     else {
       len = document.scripts.length;
     }
-  }
+  } */
 
   async function RegelVerteiler(WebCryptoAPIScripts) {
     try {

@@ -5,13 +5,84 @@ const walk = require("acorn-walk");
 window.Regel1 = async function (WebCryptoAPIScripts) {
   let j = 0;
   let result = []; 
-  for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
+  let test = acorn.parse("let we = new Object(); we.tr = []; we.tr[0] = function() {window.crypto.getRandomValues(new Uint8Array(16))}; we.tr[0]()");
+  let testnode = walk.findNodeAround(test, 35, "AssignmentExpression").node.left;
+ 
+  function getMemberExpression(node) {
+    let result = [];
+    let stop = false
+    do {
+      if (node.type === "Identifier") {
+        stop = true;
+        result.push(node)
+      }
+      else {
+      result.push(node.property);
+      node = node.object;
+      }
+    }
+    while (stop === false)
+    console.log(result);
+    return result;
+  }
+
+  function findMemberExpressionCall(memberExpr) {
+    let callExpressions = [];
+    walk.fullAncestor(test, ancestors => {
+      if(ancestors.type === "CallExpression") {
+        let node = ancestors.callee;
+        console.log(node)
+        let i = 0;
+        weiter = true;
+        do {
+          console.log(node.property.type, memberExpr[i].type)
+          if (node.property.type === memberExpr[i].type) {
+            if(node.property.type === "Identifier" && node.property.name === memberExpr[i].name) {
+              console.log(node)
+              node = node.object;
+              i++;
+            }
+            else if (node.property.type === "Literal" && node.property.value === memberExpr[i].value) {
+              console.log(node)
+              node = node.object;
+              i++;
+            }
+            else {
+              console.log("aaaaaaa")
+              weiter = false
+            }
+          }
+          else {
+            console.log("ssddsd")
+            weiter = false;
+          }
+          if (weiter === true && i === memberExpr.length -1 && node.type === "Identifier") {
+            callExpressions.push(ancestors);
+            console.log("bbbbbbbbbbbb")
+            weiter = false;
+          }
+          console.log(weiter)
+        }
+        while (weiter === true)
+      }
+    });
+    console.log(callExpressions)
+    return callExpressions;
+  }
+ let find = getMemberExpression(testnode);
+findMemberExpressionCall(find);
+//console.log(gefunden());
+    for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
     //console.log(WebCryptoAPIScripts.script)
     try {
       let props = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node.arguments[0].properties;
       let encMode = props[0].value.value;
+      //let ins = await inOrOutFunction(WebCryptoAPIScripts.regel1[i], WebCryptoAPIScripts.functions);
+      //let obj = walk.findNodeAround(WebCryptoAPIScripts.ast, ins.start, "ObjectExpression").node;
+      //console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, obj.start - 1), ins)
+      //console.log(WebCryptoAPIScripts.ast)
       //console.log(props)
-      if (encMode == "AES-CTR" || encMode == "AES-GCM" || encMode == "AES-CBC") {
+      if (encMode === "AES-CTR" || encMode === "AES-GCM" || encMode === "AES-CBC") {
         let arr = [props[1].value];
         let ergebnis = [];
         do {
@@ -31,6 +102,12 @@ window.Regel1 = async function (WebCryptoAPIScripts) {
           console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i])
           window.alert("IV wurde nicht korrekt initialisiert!");
         }
+      }
+      if (props[0].value.type != "Literal") {
+        console.log("die Property für den Encryption Mode ist hier nicht als String angegeben sonder als " , props[0].value.type, " , wodurch eine Überprüfung zu aufwendig wird")
+      }
+      else {
+        console.log("Die Encryption Mode ist nicht AES-CTR, AES-GCM oder AES-CBC, wodurch eine Überprüfung nicht notwendig ist für Regel 1")
       }
     }
     catch (e) {
@@ -67,8 +144,8 @@ async function typeCheck(node, WebCryptoAPIScripts) {
     let chek = [];
     for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
       try {
-      if (WebCryptoAPIScripts.functions[i].id.name === node.callee.name || WebCryptoAPIScripts.functions[i].declarations.id.name === node.callee.name) {
-        chek = await NodeWalk(WebCryptoAPIScripts.functions[i]);
+      if (WebCryptoAPIScripts.functions[i][0] === node.callee.name || WebCryptoAPIScripts.functions[i][0] === node.callee.name) {
+        chek = await NodeWalk(WebCryptoAPIScripts.functions[i][1]);
       }
     }
     catch (e) {}
@@ -88,7 +165,7 @@ async function typeCheck(node, WebCryptoAPIScripts) {
 async function identifierValueCheck(node, WebCryptoAPIScripts) {
   let RegelEingehalten = true;
   let check = [];
-  let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions);
+  let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions[1]);
   let arr = [];
   if (inOrOut === "OutSideFunction") {
     arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
@@ -160,13 +237,7 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
       let param = false;
       let p = 0;
       let ind;
-      let parameter = [];
-      if (inOrOut.type === "FunctionDeclaration") {
-        parameter = inOrOut.params;
-      }
-      else {
-        parameter = inOrOut.declarations[0].init.params;
-      }
+      let parameter = inOrOut[1].params;
       parameter.forEach(element => {
         p++;
         if (node.name === element.name) {
@@ -174,13 +245,13 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
           param = true;
           ind = p-1;
           //console.log("ToDO: Suche alle Function calls, für jeden checken ob in or outside einer Funktion. ")
-          if(inOrOut.type === "FunctionDeclaration") {
+          /* if(inOrOut.type === "FunctionDeclaration") {
             funcName = inOrOut.id.name;
           }
           else {
             funcName = inOrOut.declarations[0].id.name;
             //console.log(funcName);
-          }
+          } */
           walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
             try{
               if (ancestors.type === "CallExpression" & ancestors.callee.name === funcName) {
@@ -220,34 +291,17 @@ async function identifierValueCheck(node, WebCryptoAPIScripts) {
   }
 }
 
-function findFunction(funtionName, WebCryptoAPIScripts) {
-  let foundFunctions = [];
-  for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
-    if (WebCryptoAPIScripts.functions[i].type === "FunctionDeclaration") {
-      if (WebCryptoAPIScripts.functions[i].id.name === funtionName) {
-        foundFunctions.push(WebCryptoAPIScripts.functions[i]);
-      }
-    }
-    else {
-      if (WebCryptoAPIScripts.functions[i].declarations[0].id.name === funtionName) {
-        foundFunctions.push(WebCryptoAPIScripts.functions[i]);
-      }
-    }
-  }
-  return foundFunctions;
-}
-
 async function inOrOutFunction(start, functions) {
   let arr = [];
   functions.forEach(element => {
-    if (element.start <= start && element.end >= start) {
+    if (element[1].start <= start && element[1].end >= start) {
       arr.push(element);
     }
   });
   if (arr.length >= 1) {
     let min = arr[0];
     for (let i = 1; i < arr.length; i++) {
-      if (arr[i].start < min.start) {
+      if (arr[i][1].start < min[1].start) {
         min = arr[i];
       }
     }
@@ -1168,7 +1222,7 @@ exports.Regel1 = Regel1;
     if (options.allowReserved == null)
       { options.allowReserved = options.ecmaVersion < 5; }
 
-    if (opts.allowHashBang == null)
+    if (options.allowHashBang == null)
       { options.allowHashBang = options.ecmaVersion >= 14; }
 
     if (isArray(options.onToken)) {
