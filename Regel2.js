@@ -25,8 +25,17 @@
             }
             else {
               console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
-              let preposition = getIdentifierForCipher(WebCryptoAPIScripts, i);
+              let preposition = findPreposition(WebCryptoAPIScripts, i);
               let type = await checkPrePostionType(preposition, inoruot);
+              if (type === "check Function Calls") {
+                func(inoruot[0]);
+              }
+              if (type === "check then() calls") {
+
+              }
+              else {
+                console.log("Erorr! Es wurde keine Variable oder Return Statment gefunden, die die Cipher aus " , encMode , " wiedergeben womit eine folgende Signatur der Cipher nicht möglich ist!")
+              }
               //else {console.log(preposition)}
               console.log(type);
             }
@@ -41,31 +50,34 @@
       }
     }
 
-    function getIdentifierForCipher(WebCryptoAPIScripts, i) {
+    function func(func) {
+      
+    }
+
+    function findPreposition(WebCryptoAPIScripts, i) {
       let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1).node;
       //console.log(prePosition)
-      switch (prePosition.type) {
-        case "BlockStatement":
-          //console.log(preposition)
-          return prePosition;
-        case "AwaitExpression":
-          prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start - 1).node;
-          //console.log(prePosition)
-          return prePosition;
+      if (prePosition.type === "AwaitExpression") {
+        prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start - 1).node;
+        //console.log(prePosition)
+        return prePosition;
+      }
+      else {
+        return prePosition;
       }
     }
 
     async function inOrOutFunction(start, functions) {
       let arr = [];
       functions.forEach(element => {
-        if (element.start <= start && element.end >= start) {
+        if (element[1].start <= start && element[1].end >= start) {
           arr.push(element);
         }
       });
       if (arr.length >= 1) {
         let min = arr[0];
         for (let i = 1; i < arr.length; i++) {
-          if (arr[i].start < min.start) {
+          if (arr[i][1].start < min[1].start) {
             min = arr[i];
           }
         }
@@ -81,11 +93,11 @@
       let checkThenCalls = false;
       switch (preposition.type) {
         case "VariableDeclarator":
-          checkFunctionCalls = await checkThis(preposition.id, func);
+          checkFunctionCalls = await checkCipherReturn(preposition.id, func);
           console.log(checkFunctionCalls);
           break;
         case "AssignmentExpression":
-          checkFunctionCalls = await checkThis(preposition.left, func);
+          checkFunctionCalls = await checkCipherReturn(preposition.left, func);
           console.log(checkFunctionCalls);
           break;
         case "ReturnStatement":
@@ -106,11 +118,11 @@
       }
     }
 
-    async function checkThis(type, func) {
+    async function checkCipherReturn(type, func) {
       let returnsCipher = false;
       if (type.type === "Identifier") {
         console.log("sdfsdfsdf")
-        let ar = await NodeWalk(func);
+        let ar = await NodeWalk(func[1]);
         let filter = ar.filter(element => element.type === "ReturnStatement");
         filter.forEach(elem => {
           try {

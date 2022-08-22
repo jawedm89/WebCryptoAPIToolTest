@@ -16,12 +16,125 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].thenCalls = [];
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
-          if (ancestors.type === "FunctionDeclaration" || 
-          (ancestors.type === "VariableDeclaration" && ancestors.declarations[0].init.type === "FunctionExpression") || 
-          (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "FunctionExpression") || 
-          (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression")) {
-            WebCryptoAPIScripts[j].functions.push(ancestors);
-          }}
+          //normale Funktionsdeklaration
+          if (ancestors.type === "FunctionDeclaration") {
+            WebCryptoAPIScripts[j].functions.push([ancestors.id.name ,ancestors]);
+          }
+          if (ancestors.type === "VariableDeclaration") {
+            ancestors.declarations.forEach(element => {
+              if(element.init.type === "FunctionExpression") {
+                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init]);   
+              }
+              if(element.init.type === "ArrowFunctionExpression" && element.init.body.type === "FunctionExpression") {
+                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init.body]);   
+              }
+              if(element.init.type === "ObjectExpression") {
+                element.init.properties.forEach(elem => {
+                  if(elem.value.type === "FunctionExpression") {
+                    let obj = new Object();
+                    obj.type = "MemberExpression";
+                    obj.object = {type: "Identifier", name: element.id.name};
+                    obj.property = {type: "Identifier", name: elem.key.name};
+                    WebCryptoAPIScripts[j].functions.push([obj, elem.value]); 
+                  }
+                });
+              }
+              if(element.init.type === "ArrayExpression") {
+                let e = 0;
+                element.init.elements.forEach(elem2 => {
+                  if (elem2.type === "ObjectExpression") {
+                    elem2.properties.forEach(el => {
+                      if (el.value === "FunctionExpression") {
+                        let obj = new Object();
+                        obj.type = "MemberExpression"
+                        obj.object = {type: "Identifier", name: element.id.name, object: {type: "Identifier", name: el.key.name}}
+                        obj.property = {type: "Literal", value: e}
+                        WebCryptoAPIScripts[j].functions.push([obj ,el.value]); 
+                      }
+                    })
+                  }
+                  if (elem2.type === "FunctionExpression") {
+                    let obj = new Object();
+                    obj.type = "MemberExpression"
+                    obj.object = {type: "Identifier", name: element.id.name}
+                    obj.property = {type: "Literal", value: e}
+                    WebCryptoAPIScripts[j].functions.push([obj ,elem2]);
+                  }
+                  e++;
+                });
+              }
+            });
+          }
+          if (ancestors.type === "AssignmentExpression") {
+              if(element.init.type === "FunctionExpression") {
+                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init]);   
+              }
+              if(element.init.type === "ArrowFunctionExpression" && element.init.body.type === "FunctionExpression") {
+                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init.body]);   
+              }
+              if(element.init.type === "ObjectExpression") {
+                element.init.properties.forEach(elem => {
+                  if(elem.value.type === "FunctionExpression") {
+                    let obj = new Object();
+                    obj.type = "MemberExpression";
+                    obj.object = {type: "Identifier", name: element.id.name};
+                    obj.property = {type: "Identifier", name: elem.key.name};
+                    WebCryptoAPIScripts[j].functions.push([obj, elem.value]); 
+                  }
+                });
+              }
+              if(element.init.type === "ArrayExpression") {
+                let e = 0;
+                element.init.elements.forEach(elem2 => {
+                  if (elem2.type === "ObjectExpression") {
+                    elem2.properties.forEach(el => {
+                      if (el.value === "FunctionExpression") {
+                        let obj = new Object();
+                        obj.type = "MemberExpression"
+                        obj.object = {type: "Identifier", name: element.id.name, object: {type: "Identifier", name: el.key.name}}
+                        obj.property = {type: "Literal", value: e}
+                        WebCryptoAPIScripts[j].functions.push([obj ,el.value]); 
+                      }
+                    })
+                  }
+                  if (elem2.type === "FunctionExpression") {
+                    let obj = new Object();
+                    obj.type = "MemberExpression"
+                    obj.object = {type: "Identifier", name: element.id.name}
+                    obj.property = {type: "Literal", value: e}
+                    WebCryptoAPIScripts[j].functions.push([obj ,elem2]);
+                  }
+                  e++;
+                });
+              }
+          }
+
+
+
+
+
+
+
+          if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "ArrowFunctionExpression" && ancestors.expression.right.body.type === "FunctionExpression") {
+            if (ancestors.expression.left.type === "Identifier") {
+              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left.name ,ancestors.expression.right.body]);
+            }
+            else {
+              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left ,ancestors.expression.right.body]);
+            }
+          }
+          if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "FunctionExpression") {
+            if (ancestors.expression.left.type === "Identifier") {
+              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left.name ,ancestors.expression.right]);
+            }
+            else {
+              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left ,ancestors.expression.right]);
+            }
+          }
+          if (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression") {
+            WebCryptoAPIScripts[j].functions.push([ancestors.key, ancestors.value]);
+          }
+        }
           catch (e) {
 
           }
