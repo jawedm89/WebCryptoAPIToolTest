@@ -14,19 +14,22 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].entrys = [];
         WebCryptoAPIScripts[j].functions = [];
         WebCryptoAPIScripts[j].thenCalls = [];
+        /* walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
+          if(ancestors.type === "CallExpression") {
+            console.log(ancestors)}}); */
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
           //normale Funktionsdeklaration
           if (ancestors.type === "FunctionDeclaration") {
-            WebCryptoAPIScripts[j].functions.push([ancestors.id.name ,ancestors]);
+            WebCryptoAPIScripts[j].functions.push([ancestors.id ,ancestors]);
           }
           if (ancestors.type === "VariableDeclaration") {
             ancestors.declarations.forEach(element => {
               if(element.init.type === "FunctionExpression") {
-                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init]);   
+                WebCryptoAPIScripts[j].functions.push([element.id ,element.init]);   
               }
               if(element.init.type === "ArrowFunctionExpression" && element.init.body.type === "FunctionExpression") {
-                WebCryptoAPIScripts[j].functions.push([element.id.name ,element.init.body]);   
+                WebCryptoAPIScripts[j].functions.push([element.id ,element.init.body]);   
               }
               if(element.init.type === "ObjectExpression") {
                 element.init.properties.forEach(elem => {
@@ -44,11 +47,11 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
                 element.init.elements.forEach(elem2 => {
                   if (elem2.type === "ObjectExpression") {
                     elem2.properties.forEach(el => {
-                      if (el.value === "FunctionExpression") {
+                      if (el.value.type === "FunctionExpression") {
                         let obj = new Object();
                         obj.type = "MemberExpression"
-                        obj.object = {type: "Identifier", name: element.id.name, object: {type: "Identifier", name: el.key.name}}
-                        obj.property = {type: "Literal", value: e}
+                        obj.object = {type: "MemberExpression", object: element.id, property: {type: "Literal", value: e}}
+                        obj.property = {type: "Identifier", name: el.key.name}
                         WebCryptoAPIScripts[j].functions.push([obj ,el.value]); 
                       }
                     })
@@ -68,7 +71,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
           if (ancestors.type === "AssignmentExpression") {
               if(ancestors.right.type === "FunctionExpression") {
                 if(ancestors.left.type === "Identifier") {
-                  WebCryptoAPIScripts[j].functions.push([ancestors.left.name, ancestors.right]);   
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right]);   
                 }
                 else {
                   WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right]);
@@ -76,7 +79,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
               }
               if(ancestors.right.type === "ArrowFunctionExpression" && ancestors.right.body.type === "FunctionExpression") {
                 if(ancestors.left.type === "Identifier") {
-                  WebCryptoAPIScripts[j].functions.push([ancestors.left.name, ancestors.right.body]);   
+                  WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right.body]);   
                 }
                 else {
                   WebCryptoAPIScripts[j].functions.push([ancestors.left, ancestors.right.body]);
@@ -98,11 +101,11 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
                 ancestors.right.elements.forEach(element2 => {
                   if (element2.type === "ObjectExpression") {
                     element2.properties.forEach(el2 => {
-                      if (el2.value === "FunctionExpression") {
+                      if (el2.value.type === "FunctionExpression") {
                         let obj = new Object();
                         obj.type = "MemberExpression"
                         obj.object = {type: "MemberExpression", object: ancestors.left, property: {type: "Literal", value: e}}
-                        obj.property = {type: "Identifier", value: el2.key.name}
+                        obj.property = {type: "Identifier", name: el2.key.name}
                         WebCryptoAPIScripts[j].functions.push([obj ,el2.value]); 
                       }
                     })
