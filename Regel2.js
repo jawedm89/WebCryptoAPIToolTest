@@ -4,6 +4,15 @@
     const walk = require("acorn-walk");
 
     window.Regel2 = async function (WebCryptoAPIScripts) {
+      let str = "test10f = [23, {t: function() {console.log(\"test 10\");}}, {cr: window.crypto.subtle.encrypt({name: \"AES-CBC\",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)},  {cr: function() { window.crypto.subtle.encrypt({name: \"AES-CBC\",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)}}];"
+      let p = acorn.parse(str);
+      let indd = str.indexOf("window.crypto");
+      let ca = walk.findNodeAround(p, indd, "CallExpression");
+      let pre = walk.findNodeAround(p, indd - 1).node;
+      let pree = walk.findNodeAround(p, pre.start - 1);
+      console.log(ca, pre, pree)
+
+
       let sign = [];
       for (let i = 0; i < WebCryptoAPIScripts.regel3.length; i++) {
         let sig = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[i], "CallExpression").node
@@ -25,7 +34,7 @@
             }
             else {
               console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
-              let preposition = findPreposition(WebCryptoAPIScripts, i);
+              let preposition = findPreposition(WebCryptoAPIScripts, encCall);
               let type = await checkPrePostionType(preposition, inoruot);
               if (type === "check Function Calls") {
                 func(inoruot[0]);
@@ -34,7 +43,7 @@
 
               }
               else {
-                console.log("Erorr! Es wurde keine Variable oder Return Statment gefunden, die die Cipher aus " , encMode , " wiedergeben womit eine folgende Signatur der Cipher nicht möglich ist!")
+                console.log("Erorr! Es wurde keine Variable oder Return Statment gefunden, die die Cipher aus ", encMode, " wiedergeben womit eine folgende Signatur der Cipher nicht möglich ist!")
               }
               //else {console.log(preposition)}
               console.log(type);
@@ -51,12 +60,36 @@
     }
 
     function func(func) {
-      
+
     }
 
-    function findPreposition(WebCryptoAPIScripts, i) {
-      let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1).node;
+
+    function findPreposition(WebCryptoAPIScripts, encCall) {
       //console.log(prePosition)
+      //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
+
+      //Andere Option ist schritt für schritt zurück zu gehen.
+      let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1).node;
+      do {
+        switch (prePosition.type) {
+          case "AwaitExpression":
+
+            break;
+          case "AwaitExpression":
+
+            break;
+          case "AwaitExpression":
+
+            break;
+          case "AwaitExpression":
+
+            break;
+          case "AwaitExpression":
+
+            break;
+        }
+
+      } while (stop === false)
       if (prePosition.type === "AwaitExpression") {
         prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start - 1).node;
         //console.log(prePosition)
@@ -141,7 +174,7 @@
           }
           catch (e) { }
         });
-        
+
       }
       return returnsCipher;
     }
@@ -178,7 +211,7 @@
       function simple(node, visitors, baseVisitor, state, override) {
         if (!baseVisitor) {
           baseVisitor = base
-          ;
+            ;
         } (function c(node, st, override) {
           var type = override || node.type, found = visitors[type];
           baseVisitor[type](node, st, c);
@@ -193,7 +226,7 @@
         var ancestors = [];
         if (!baseVisitor) {
           baseVisitor = base
-          ;
+            ;
         } (function c(node, st, override) {
           var type = override || node.type, found = visitors[type];
           var isNew = node !== ancestors[ancestors.length - 1];
@@ -1043,7 +1076,7 @@
 
         if (options.allowReserved == null) { options.allowReserved = options.ecmaVersion < 5; }
 
-        if (opts.allowHashBang == null) { options.allowHashBang = options.ecmaVersion >= 14; }
+        if (options.allowHashBang == null) { options.allowHashBang = options.ecmaVersion >= 14; }
 
         if (isArray(options.onToken)) {
           var tokens = options.onToken;

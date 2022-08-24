@@ -76,19 +76,8 @@
 
     window.Regel1 = async function (WebCryptoAPIScripts) {
       let j = 0;
-      console.log(WebCryptoAPIScripts.functions)
-
-      for (let i = 0; i < WebCryptoAPIScripts.functions.length; i++) {
-        try {
-          let fou = await findCallExpression(WebCryptoAPIScripts.functions[i], WebCryptoAPIScripts)
-          console.log(fou);
-        }
-        catch (e) {
-        }
-      }
-
       for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
-        //console.log(WebCryptoAPIScripts.script)
+        //console.log(WebCryptoAPIScripts.functions)
         try {
           let props = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node.arguments[0].properties;
           let encMode = props[0].value.value;
@@ -96,7 +85,7 @@
           //let obj = walk.findNodeAround(WebCryptoAPIScripts.ast, ins.start, "ObjectExpression").node;
           //console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, obj.start - 1), ins)
           //console.log(WebCryptoAPIScripts.ast)
-          //console.log(props)
+          console.log(props)
           if (encMode === "AES-CTR" || encMode === "AES-GCM" || encMode === "AES-CBC") {
             let arr = [props[1].value];
             let ergebnis = [];
@@ -118,7 +107,7 @@
               window.alert("IV wurde nicht korrekt initialisiert!");
             }
           }
-          if (props[0].value.type != "Literal") {
+          else if (props[0].value.type != "Literal") {
             console.log("die Property für den Encryption Mode ist hier nicht als String angegeben sonder als ", props[0].value.type, " , wodurch eine Überprüfung zu aufwendig wird")
           }
           else {
@@ -145,7 +134,7 @@
 
     async function typeCheck(node, WebCryptoAPIScripts) {
       if (node.type === "Identifier") {
-        //console.log("jetzt wird der Identifier gecheckt für: ", node);
+        console.log("jetzt wird der Identifier gecheckt für: ", node);
         let r = await identifierValueCheck(node, WebCryptoAPIScripts);
         //console.log(r);
         return r;
@@ -186,10 +175,10 @@
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
       }
       else {
-        arr = await NodeWalk(inOrOut);
+        arr = await NodeWalk(inOrOut[1]);
       }
-      //console.log(arr)
-      //console.log(WebCryptoAPIScripts.functions)
+      console.log(arr)
+      //console.log(inOrOut)
       let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];
@@ -245,7 +234,7 @@
         });
       }
       if (found.length >= 1) {
-        //console.log("check this", check);
+        console.log("check this", check);
         return check;
       }
       else {
