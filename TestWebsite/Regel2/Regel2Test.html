@@ -12,6 +12,7 @@
   <script>
     let test1 = document.getElementById("test1");
     let test2 = document.getElementById("test2");
+    let test3 = document.getElementById("test3");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
@@ -41,6 +42,19 @@
       }
       await delay(1000);
       document.head.appendChild(script2);
+    });
+
+    test3.addEventListener("click", async function() {
+      let script3 = document.createElement("script");
+      script3.src = "test3.js";
+      try{
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script3);
     });
     
   </script>

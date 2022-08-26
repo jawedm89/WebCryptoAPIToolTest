@@ -65,6 +65,9 @@
 
 
     function findPreposition(WebCryptoAPIScripts, encCall) {
+      let stop = false;
+      let callee;
+      let type;
       //console.log(prePosition)
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
@@ -73,20 +76,64 @@
       do {
         switch (prePosition.type) {
           case "AwaitExpression":
-
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
-          case "AwaitExpression":
 
-            break;
-          case "AwaitExpression":
+          case "ReturnStatement":
+            stop = true;
+            let callee1 = await inOrOutFunction(prePosition.start, WebCryptoAPIScripts.functions, true);
+            callee = callee1[0];
+            return [callee, "FunctionCall"];
 
-            break;
-          case "AwaitExpression":
+          case "VariableDeclarator":
+            stop = true;
+            if (callee === undefined) {
+              callee = prePosition.id;
+              type = "Identifier";
+            }
+            else {
+              callee.object = prePosition.id;
+              type = "MemberExpression";
+            }
+            return [callee, type];
 
+          case "AssignmentExpression":
+            stop = true;
+            if (callee === undefined) {
+              callee = prePosition.left;
+              if (callee.type = "Identifier") {
+                type = "Identifier"
+              }
+              else {type = "MemberExpression"}
+            }
+            else {
+              callee.object = prePosition.left;
+              type = "MemberExpression";
+            }
+            return [callee, type];
+          case "Property":
+            callee = {type: "MemberExpression", property: prePosition.key};
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
-          case "AwaitExpression":
-
+          case "ObjectExpression":
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
+          case "ArrayExpression":
+            let index = 0;
+            prePosition.elements.forEach(element => {
+              if(element.start <= encCall.start && element.end >= encCall.end) {
+                callee = {type: "MemberExpression", property: {type: "Literal", value: index}}
+              }
+              else {
+                index = index + 1;
+              }
+            });
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
+            break;  
+          case "CallExpression":
+            if(prePosition.property.name === "then") {
+              return [prePosition, "ThenCall"];
+            }
         }
 
       } while (stop === false)
@@ -100,14 +147,17 @@
       }
     }
 
-    async function inOrOutFunction(start, functions) {
+    async function inOrOutFunction(start, functions, inner) {
+      if (inner === undefined) {
+        inner = false;
+      }
       let arr = [];
       functions.forEach(element => {
         if (element[1].start <= start && element[1].end >= start) {
           arr.push(element);
         }
       });
-      if (arr.length >= 1) {
+      if (arr.length >= 1 && inner === false) {
         let min = arr[0];
         for (let i = 1; i < arr.length; i++) {
           if (arr[i][1].start < min[1].start) {
@@ -115,6 +165,15 @@
           }
         }
         return min;
+      }
+      else if (arr.length >= 1 && inner === true) {
+        let max = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+          if (arr[i][1].start > max[1].start) {
+            max = arr[i];
+          }
+        }
+        return max;
       }
       else {
         return "OutSideFunction";
