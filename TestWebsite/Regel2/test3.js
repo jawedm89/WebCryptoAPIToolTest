@@ -6,7 +6,7 @@ let key = async function() {return await window.crypto.subtle.generateKey({
     false,
     ["encrypt", "decrypt"])}
 function testi3() {
-function t1() {return window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)}
+async function t1() {return window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)}
  
 let t2 = await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)
 let t3, t4, t5, t6;
@@ -34,3 +34,5 @@ window.crypto.subtle.generateKey({
         return signatur;
       }).then(result => console.log(result))
     }
+
+    testi3()
