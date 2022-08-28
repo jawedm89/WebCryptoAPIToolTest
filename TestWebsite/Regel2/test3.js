@@ -33,6 +33,6 @@ window.crypto.subtle.generateKey({
         );
         return signatur;
       }).then(result => console.log(result))
+      return [t1(), t2, t3, t4, t5, t6]
     }
- return [t1(), t2, t3, t4, t5, t6]
     testi3()
