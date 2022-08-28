@@ -22,6 +22,7 @@
         }
       }
       for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
+        console.log(await findPreposition(WebCryptoAPIScripts, encCall))
         let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression");
         let encMode = encCall.node.arguments[0].properties[0].value.value;
         if (encMode === "AES-CBC" || encMode === "AES-CTR") {
@@ -68,6 +69,8 @@
       let stop = false;
       let callee;
       let type;
+      let str = "";
+      let deeper = eval("callee" + str)
       //console.log(prePosition)
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
@@ -92,7 +95,7 @@
               type = "Identifier";
             }
             else {
-              callee.object = prePosition.id;
+              deeper.object = prePosition.id;
               type = "MemberExpression";
             }
             return [callee, type];
@@ -107,44 +110,45 @@
               else {type = "MemberExpression"}
             }
             else {
-              callee.object = prePosition.left;
+              deeper.object = prePosition.left;
               type = "MemberExpression";
             }
             return [callee, type];
+
           case "Property":
-            callee = {type: "MemberExpression", property: prePosition.key};
+            deeper = {type: "MemberExpression", property: prePosition.key};
+            str = str + ".object";
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
+
           case "ObjectExpression":
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
+
           case "ArrayExpression":
             let index = 0;
             prePosition.elements.forEach(element => {
               if(element.start <= encCall.start && element.end >= encCall.end) {
-                callee = {type: "MemberExpression", property: {type: "Literal", value: index}}
+                deeper = {type: "MemberExpression", property: {type: "Literal", value: index}};
+                str = str + ".object";
               }
               else {
                 index = index + 1;
               }
             });
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
-            break;  
+            break; 
+
           case "CallExpression":
             if(prePosition.property.name === "then") {
               return [prePosition, "ThenCall"];
             }
+
+          case "Programm":
+            return "Error"
         }
 
       } while (stop === false)
-      if (prePosition.type === "AwaitExpression") {
-        prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start - 1).node;
-        //console.log(prePosition)
-        return prePosition;
-      }
-      else {
-        return prePosition;
-      }
     }
 
     async function inOrOutFunction(start, functions, inner) {
