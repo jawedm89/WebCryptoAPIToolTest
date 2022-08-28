@@ -5,6 +5,7 @@
     //let a = document.getElementById("popup-content");
     //a.textContent="ss"
     function starten(scripts) {
+      //console.log("start")
       let len = document.scripts.length;
       let s = [];
       if(scripts === undefined) {
@@ -14,7 +15,6 @@
      /*  try {
   document.getElementById("popup-content").textContent = "sdfsdfsdfsdf";
       } catch (e) {console.log(e)} */
-      //console.log("start")
   let startZeit = Date.now();
   let mutationObserved = false;
   let mutation = new MutationObserver(function mut(mutation) {

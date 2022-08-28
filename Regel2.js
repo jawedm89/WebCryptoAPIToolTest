@@ -22,8 +22,8 @@
         }
       }
       for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
-        console.log(await findPreposition(WebCryptoAPIScripts, encCall))
         let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression");
+        //console.log(await findPreposition(WebCryptoAPIScripts, encCall))
         let encMode = encCall.node.arguments[0].properties[0].value.value;
         if (encMode === "AES-CBC" || encMode === "AES-CTR") {
           if (sign.length != 0) {
@@ -65,20 +65,20 @@
     }
 
 
-    function findPreposition(WebCryptoAPIScripts, encCall) {
+    async function findPreposition(WebCryptoAPIScripts, encCall) {
       let stop = false;
       let callee;
       let type;
       let str = "";
-      let deeper = eval("callee" + str)
+      let deeper = eval("callee" + str);
+      let prePosition = encCall.node;
       //console.log(prePosition)
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
       //Andere Option ist schritt für schritt zurück zu gehen.
-      let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1).node;
       do {
         switch (prePosition.type) {
-          case "AwaitExpression":
+           case "AwaitExpression":
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
 
@@ -124,7 +124,6 @@
           case "ObjectExpression":
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break;
-
           case "ArrayExpression":
             let index = 0;
             prePosition.elements.forEach(element => {
@@ -139,16 +138,18 @@
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
             break; 
 
-          case "CallExpression":
+          /* case "CallExpression":
             if(prePosition.property.name === "then") {
               return [prePosition, "ThenCall"];
             }
+            break;  */
 
           case "Programm":
+            stop = true;
             return "Error"
         }
-
-      } while (stop === false)
+      } 
+      while (stop === false)
     }
 
     async function inOrOutFunction(start, functions, inner) {
