@@ -8,7 +8,7 @@ let key = async function() {return await window.crypto.subtle.generateKey({
 async function testi3() {
 async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)}
  
-let t2 = await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)
+let t2 = await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key(),data12)
 let t3, t4, t5, t6;
 t3 = await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)
 t4 = {a: 23,b: "sdf", t4: await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},key,data12)}
