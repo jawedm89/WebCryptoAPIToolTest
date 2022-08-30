@@ -22,21 +22,22 @@
         }
       }
       for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
-        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression");
-        //console.log(await findPreposition(WebCryptoAPIScripts, encCall))
-        let encMode = encCall.node.arguments[0].properties[0].value.value;
+        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression").node;
+        //console.log("sdf")
+        let encMode = encCall.arguments[0].properties[0].value.value;
         if (encMode === "AES-CBC" || encMode === "AES-CTR") {
           if (sign.length != 0) {
-            let inoruot = await inOrOutFunction(encCall.node.start, WebCryptoAPIScripts.functions);
+            let inoruot = await inOrOutFunction(encCall.start, WebCryptoAPIScripts.functions);
             if (inoruot === "OutSideFunction") {
               console.log("hier einmal prüfen ob es hier ein Then call gibt und wenn ja ob in diesen eine Sign funktion durchgeführt wird");
-              let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.node.start && element.end > encCall.node.end));
+              let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.start && element.end > encCall.end));
               console.log(thens);
             }
             else {
-              console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
-              let preposition = findPreposition(WebCryptoAPIScripts, encCall);
-              let type = await checkPrePostionType(preposition, inoruot);
+              //console.log(await findPreposition(WebCryptoAPIScripts, encCall))
+              //console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
+              let preposition = await findPreposition(WebCryptoAPIScripts, encCall);
+              /* let type = await checkPrePostionType(preposition, inoruot);
               if (type === "check Function Calls") {
                 func(inoruot[0]);
               }
@@ -45,9 +46,9 @@
               }
               else {
                 console.log("Erorr! Es wurde keine Variable oder Return Statment gefunden, die die Cipher aus ", encMode, " wiedergeben womit eine folgende Signatur der Cipher nicht möglich ist!")
-              }
+              } */
               //else {console.log(preposition)}
-              console.log(type);
+              console.log(preposition);
             }
             //console.log(inoruot, encCall.node.start);
             let d = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
@@ -71,15 +72,14 @@
       let type;
       let str = "";
       let deeper = eval("callee" + str);
-      let prePosition = encCall.node;
-      //console.log(prePosition)
+      let prePosition = encCall;
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
       //Andere Option ist schritt für schritt zurück zu gehen.
       do {
         switch (prePosition.type) {
            case "AwaitExpression":
-            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break;
 
           case "ReturnStatement":
@@ -96,6 +96,7 @@
             }
             else {
               deeper.object = prePosition.id;
+              callee = deeper;
               type = "MemberExpression";
             }
             return [callee, type];
@@ -110,32 +111,43 @@
               else {type = "MemberExpression"}
             }
             else {
-              deeper.object = prePosition.left;
+              //deeper = prePosition.left;
+              //str = "";
+              //callee = deeper;
+              eval("callee"+ str + " = prePosition.left")
+              //console.log(callee, deeper);
               type = "MemberExpression";
             }
             return [callee, type];
 
           case "Property":
-            deeper = {type: "MemberExpression", property: prePosition.key};
+            //deeper = {type: "MemberExpression", property: prePosition.key};
+            eval("callee" + str + " = {type: \"MemberExpression\", property: prePosition.key}")
             str = str + ".object";
-            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
+            //callee = deeper;         
+            //console.log(callee);
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break;
 
           case "ObjectExpression":
-            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break;
+
           case "ArrayExpression":
             let index = 0;
             prePosition.elements.forEach(element => {
+              //console.log(element.start, encCall.start, element.end, encCall.end)
               if(element.start <= encCall.start && element.end >= encCall.end) {
-                deeper = {type: "MemberExpression", property: {type: "Literal", value: index}};
+                eval("callee" + str + " = {type: \"MemberExpression\", property: {type: \"Literal\", value: index}}")
+                //console.log(callee, deeper);
                 str = str + ".object";
+                //callee = deeper;
               }
               else {
                 index = index + 1;
               }
             });
-            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1);
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break; 
 
           /* case "CallExpression":
@@ -147,7 +159,11 @@
           case "Programm":
             stop = true;
             return "Error"
+          
+          default:
+            prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
         }
+        //console.log(callee)
       } 
       while (stop === false)
     }
