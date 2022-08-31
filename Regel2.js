@@ -40,7 +40,7 @@
               //ToDo: bei Variablen deklaration checken wo diese variable in diesen funktionsumfeld genutzt wird. 
               //Bei einer Assinment expression wird es komlizierter, da die Variable auch außerhalb der Funktion gelten kann. 
               //Beim Returnstatment müssen die funktioncalls gefunden werden und untersucht werden was damit gemacht wird. 
-              //
+              //hier anschauen bei den Sign funktionen was als Parameter übergeben wird
 
 
 
@@ -56,7 +56,7 @@
               } */
               //else {console.log(preposition)}
               console.log(preposition);
-              
+
             }
             //console.log(inoruot, encCall.node.start);
             let d = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
