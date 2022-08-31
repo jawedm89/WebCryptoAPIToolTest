@@ -15,6 +15,17 @@ t3 = await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRa
 t4 = {a: 23,b: "sdf", t4: await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),data12)}
 t5 = [1, 2, 3, 4, window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),data12)]
 t6 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),data12)}]
+let signkey = await window.crypto.subtle.generateKey(
+    {
+      name: "RSASSA-PKCS1-v1_5",
+      modulusLength: 2048, 
+      publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+      hash: { name: "SHA-256" },
+    },
+    false,
+    ["sign", "verify"]
+  );
+
 
 window.crypto.subtle.generateKey({
     name: "AES-CBC",
