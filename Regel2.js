@@ -37,6 +37,13 @@
               //console.log(await findPreposition(WebCryptoAPIScripts, encCall))
               //console.log("hier einmal prüfen ob es ein Assign oder deklaration zu dem API Call gibt bei dem die Chiffre gespeichert wird. ");
               let preposition = await findPreposition(WebCryptoAPIScripts, encCall);
+              //ToDo: bei Variablen deklaration checken wo diese variable in diesen funktionsumfeld genutzt wird. 
+              //Bei einer Assinment expression wird es komlizierter, da die Variable auch außerhalb der Funktion gelten kann. 
+              //Beim Returnstatment müssen die funktioncalls gefunden werden und untersucht werden was damit gemacht wird. 
+              //
+
+
+
               /* let type = await checkPrePostionType(preposition, inoruot);
               if (type === "check Function Calls") {
                 func(inoruot[0]);
@@ -49,6 +56,7 @@
               } */
               //else {console.log(preposition)}
               console.log(preposition);
+              
             }
             //console.log(inoruot, encCall.node.start);
             let d = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i] - 1)
@@ -68,10 +76,8 @@
 
     async function findPreposition(WebCryptoAPIScripts, encCall) {
       let stop = false;
-      let callee;
-      let type;
+      let callee, type;
       let str = "";
-      let deeper = eval("callee" + str);
       let prePosition = encCall;
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
@@ -86,46 +92,35 @@
             stop = true;
             let callee1 = await inOrOutFunction(prePosition.start, WebCryptoAPIScripts.functions, true);
             callee = callee1[0];
-            return [callee, "FunctionCall"];
+            return [callee, "ReturnStatment"];
 
           case "VariableDeclarator":
             stop = true;
+            type = "VariableDeclaration";
             if (callee === undefined) {
               callee = prePosition.id;
-              type = "Identifier";
             }
             else {
               deeper.object = prePosition.id;
               callee = deeper;
-              type = "MemberExpression";
             }
             return [callee, type];
 
           case "AssignmentExpression":
             stop = true;
+            type = "Assignment";
             if (callee === undefined) {
               callee = prePosition.left;
-              if (callee.type = "Identifier") {
-                type = "Identifier"
-              }
-              else {type = "MemberExpression"}
             }
             else {
-              //deeper = prePosition.left;
-              //str = "";
-              //callee = deeper;
               eval("callee"+ str + " = prePosition.left")
               //console.log(callee, deeper);
-              type = "MemberExpression";
             }
             return [callee, type];
 
           case "Property":
-            //deeper = {type: "MemberExpression", property: prePosition.key};
             eval("callee" + str + " = {type: \"MemberExpression\", property: prePosition.key}")
             str = str + ".object";
-            //callee = deeper;         
-            //console.log(callee);
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break;
 
@@ -141,7 +136,6 @@
                 eval("callee" + str + " = {type: \"MemberExpression\", property: {type: \"Literal\", value: index}}")
                 //console.log(callee, deeper);
                 str = str + ".object";
-                //callee = deeper;
               }
               else {
                 index = index + 1;
