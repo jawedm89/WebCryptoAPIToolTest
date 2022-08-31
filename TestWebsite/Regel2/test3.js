@@ -47,4 +47,4 @@ window.crypto.subtle.generateKey({
       }).then(result => console.log(result))
       return [t1(), t2, t3, t4, t5, t6]
     }
-    testi3()
+    console.log(testi3());
