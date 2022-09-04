@@ -10,7 +10,7 @@
       let ca = walk.findNodeAround(p, indd, "CallExpression");
       let pre = walk.findNodeAround(p, indd - 1).node;
       let pree = walk.findNodeAround(p, pre.start - 1);
-      console.log(ca, pre, pree)
+      //console.log(ca, pre, pree)
 
 
       let sign = [];
@@ -40,9 +40,38 @@
               //ToDo: bei Variablen deklaration checken wo diese variable in diesen funktionsumfeld genutzt wird. 
               //Bei einer Assinment expression wird es komlizierter, da die Variable auch außerhalb der Funktion gelten kann. 
               //Beim Returnstatment müssen die funktioncalls gefunden werden und untersucht werden was damit gemacht wird. 
-              //hier anschauen bei den Sign funktionen was als Parameter übergeben wird
-
-
+              console.log(preposition[1])
+              //Hierbei handelt es sich auch umm ein Promis, dessen Ergebnis nur mit einer await oder einem then call call gehandelt werden kann.
+              //Das Ergebniss kann einer variable zugewiesen werden oder wird direkt in der sign function genutzt werden 
+            }
+            function checkPrePosition(call) {
+              let preposition = await findPreposition(WebCryptoAPIScripts, encCall);
+              if (preposition[1] === "ReturnStatment") {
+                //find function calls
+                let calls = await findCallExpression(preposition[0], WebCryptoAPIScripts);
+                //1. der wert kann einer Vaiable deklariert oder assignt werden, 
+                //2. es kann danach ein then() call ausgeführt werden, 
+                //3. es kann dirket in dem Sign API call genutzt werden oder 
+                //4. es kann als Argument einem Funktioncall weitergegeben werden. 
+                console.log(calls)
+                for(let i  = 0; i < calls.length; i++) {
+                  let a = await findPreposition(WebCryptoAPIScripts, calls[i]);
+                  console.log(a)
+                }
+              }
+                if (preposition[1] === "Assignment") {
+                  //find calls of this variable after the assingment. 
+                }              
+                if (preposition[1] === "VariableDeclaration") {
+                  //find calls of this variable after the assingment. 
+                }
+                if (preposition[1] === "Then") {
+                  //find calls of this variable after the assingment. 
+                }
+                else {
+                  console.log("Error")
+                }
+              }
 
               /* let type = await checkPrePostionType(preposition, inoruot);
               if (type === "check Function Calls") {
@@ -66,19 +95,16 @@
             console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
           }
         }
-      }
+      
     }
 
-    function func(func) {
-
-    }
 
 
     async function findPreposition(WebCryptoAPIScripts, encCall) {
       let stop = false;
       let callee, type;
       let str = "";
-      let prePosition = encCall;
+      let prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, encCall.start -1).node;
       //eine option wäre über den walker allen Node auszugeben die im bereich des encCalls sind und vorher anfangen. das Rückführen der Call variable bezüglich einer Array expression wäre dann aber schwerer
 
       //Andere Option ist schritt für schritt zurück zu gehen.

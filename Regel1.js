@@ -85,7 +85,7 @@
           //let obj = walk.findNodeAround(WebCryptoAPIScripts.ast, ins.start, "ObjectExpression").node;
           //console.log(walk.findNodeAround(WebCryptoAPIScripts.ast, obj.start - 1), ins)
           //console.log(WebCryptoAPIScripts.ast)
-          console.log(props)
+          //console.log(props)
           if (encMode === "AES-CTR" || encMode === "AES-GCM" || encMode === "AES-CBC") {
             let arr = [props[1].value];
             let ergebnis = [];
@@ -134,7 +134,7 @@
 
     async function typeCheck(node, WebCryptoAPIScripts) {
       if (node.type === "Identifier") {
-        console.log("jetzt wird der Identifier gecheckt für: ", node);
+        //console.log("jetzt wird der Identifier gecheckt für: ", node);
         let r = await identifierValueCheck(node, WebCryptoAPIScripts);
         //console.log(r);
         return r;
@@ -177,7 +177,7 @@
       else {
         arr = await NodeWalk(inOrOut[1]);
       }
-      console.log(arr)
+      //console.log(arr)
       //console.log(inOrOut)
       let i = arr.length - 1;
       let found = [];
@@ -234,7 +234,7 @@
         });
       }
       if (found.length >= 1) {
-        console.log("check this", check);
+        //console.log("check this", check);
         return check;
       }
       else {
