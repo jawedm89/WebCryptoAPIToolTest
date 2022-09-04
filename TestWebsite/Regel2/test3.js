@@ -54,7 +54,7 @@ window.crypto.subtle.generateKey({
     let das = testi3();
 
     async function chain3(argu) {
-        let chain4 = function () {return await argu[6];}
+        let chain4 = async function () {return await argu[6];}
         let signkey = await window.crypto.subtle.generateKey(
             {
               name: "RSASSA-PKCS1-v1_5",
