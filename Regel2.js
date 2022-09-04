@@ -55,8 +55,7 @@
                 //4. es kann als Argument einem Funktioncall weitergegeben werden. 
                 console.log(calls)
                 for(let i  = 0; i < calls.length; i++) {
-                  let a = await findPreposition(WebCryptoAPIScripts, calls[i]);
-                  console.log(a)
+                  return checkPrePosition(calls[i]);
                 }
               }
                 if (preposition[1] === "Assignment") {
@@ -170,7 +169,8 @@
             prePosition = walk.findNodeAround(WebCryptoAPIScripts.ast, prePosition.start -1).node;
             break; 
 
-          /* case "CallExpression":
+          /* Hier kann gesehen werden ob es zu einem then() call kommt, ob es direkt in der Sign Funktion ausgeführt wird, oder ob es als Argument in einer Callexpression weitergegeben wird. 
+          case "CallExpression":
             if(prePosition.property.name === "then") {
               return [prePosition, "ThenCall"];
             }
