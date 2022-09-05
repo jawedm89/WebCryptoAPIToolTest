@@ -77,3 +77,9 @@ window.crypto.subtle.generateKey({
             return signatur;
           });
     }
+
+    async function ee(a) {
+    console.log(await chain3(await testi3()));
+
+    }
+    ee();
