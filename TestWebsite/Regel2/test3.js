@@ -65,7 +65,8 @@ window.crypto.subtle.generateKey({
             false,
             ["sign", "verify"]
           );
-        await chain4().then(async function(result)  {
+
+        return await chain4().then(async function(result)  {
             let signatur = await window.crypto.subtle.sign(
               {
                 name: "RSASSA-PKCS1-v1_5"
@@ -78,7 +79,7 @@ window.crypto.subtle.generateKey({
           });
     }
 
-    async function ee(a) {
+    async function ee() {
     console.log(await chain3(await testi3()));
 
     }

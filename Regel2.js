@@ -58,12 +58,20 @@
                   return checkPrePosition(calls[i]);
                 }
               }
-                if (preposition[1] === "Assignment") {
+                if (preposition[1] === "Assignment" || preposition[1] === "VariableDeclaration") {
                   //find calls of this variable after the assingment. 
+                  //einmal prüfen ob innerhalb einer Funktion oder außerhalb. Dann sich alle Nodes ziehen, in dem die Variable mit dem Wert verwendet werden kann. 
+                  //Dann prüfen weitergegeben wird und in beiden fällen prüfen ob hier die Sign Methode vorkommt und die Variable dafür verwendet wird. 
+                  let nodes;
+                  let inoruot = await inOrOutFunction(call.start, WebCryptoAPIScripts.functions);
+                  if (inoruot === "OutSideFunction") {
+                    nodes = await NodeWalk(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.ast.end, true);
+                  }
+                  else {
+                    nodes = await NodeWalk(inoruot[1]);
+                  }
+                  
                 }              
-                if (preposition[1] === "VariableDeclaration") {
-                  //find calls of this variable after the assingment. 
-                }
                 if (preposition[1] === "Then") {
                   //find calls of this variable after the assingment. 
                 }
