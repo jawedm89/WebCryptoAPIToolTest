@@ -3,21 +3,28 @@
       const acorn = require('acorn');
       const walk = require("acorn-walk");
   
-      window.findCallExpression = async function (func, WebCryptoAPIScripts) {
+      window.findCallExpression = async function (func, WebCryptoAPIScripts, CallorExpression) {
         console.log("starte find function");
         let Expr = await makeArray(func)
         let callEx = [];
         let calls = [];
         walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
           try {
-            if (ancestors.type === "CallExpression") {
+            if (ancestors.type === CallorExpression) {
               calls.push(ancestors)
             }
           } catch (e) { }
         });
         for (let j = 0; j < calls.length; j++) {
           let weiter = true;
-          let node = calls[j].callee;
+          let node;
+          if (CallorExpression === "CallExpression") {
+            node = calls[j].callee;
+          }
+          else {
+            node = calls[j];
+          }
+          //console.log(calls[j])
           let i = 0;
           do {
             if (node.property) {
@@ -41,18 +48,21 @@
             else if (node.type === "Identifier") {
               if (node.name === Expr[i].name && i === Expr.length - 1) {
                 callEx.push(calls[j]);
-                console.log(calls[j])
                 weiter = false;
-              }
-              else {
+            }
+            else {
                 weiter = false;
-              }
+            }
             }
             else {
               weiter = false;
             }
           } while (weiter === true)
         }
+        if (callEx.findIndex(element => element === func) != -1) {
+            callEx.splice(callEx.findIndex(element => element === func), 1)
+        }
+        console.log(callEx)
         return callEx;
       }
   

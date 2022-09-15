@@ -28,6 +28,24 @@ let signkey = await window.crypto.subtle.generateKey(
 
   let chain2 = t3; 
   chain1 = chain2; 
+    let abc = t6[3].t6;
+    abc.then(result => {window.crypto.subtle.sign(
+        {
+          name: "RSASSA-PKCS1-v1_5"
+        },
+        signkey.privateKey,
+        result
+      );})
+      
+      let ab = t6[3];
+
+      ab.t6.then(result => {window.crypto.subtle.sign(
+        {
+          name: "RSASSA-PKCS1-v1_5"
+        },
+        signkey.privateKey,
+        result
+      );})
 
 
 window.crypto.subtle.generateKey({

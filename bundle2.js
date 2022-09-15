@@ -67,7 +67,7 @@
         }
         if (WebCryptoAPIScripts[i].regel2.length != 0) {
           //console.log("starte Regel 2");
-          Regel2(WebCryptoAPIScripts[i]);
+          await Regel2(WebCryptoAPIScripts[i]);
         }
         if (WebCryptoAPIScripts[i].regel3.length != 0) {
           Regel3(WebCryptoAPIScripts[i]);
