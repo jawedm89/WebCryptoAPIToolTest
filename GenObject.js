@@ -160,9 +160,10 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
             }
           }
           catch (e) {
-
           }
         });
+        WebCryptoAPIScripts[j].thenCalls.sort((a, b) => a.end - b.end);
+        console.log(WebCryptoAPIScripts[j].thenCalls);
         WebCryptoAPIScripts[j].regel1 = [];
         WebCryptoAPIScripts[j].regel2 = [];
         WebCryptoAPIScripts[j].regel3 = [];
