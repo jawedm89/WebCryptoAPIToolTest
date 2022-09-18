@@ -24,7 +24,6 @@
           else {
             node = calls[j];
           }
-          //console.log(calls[j])
           let i = 0;
           do {
             if (node.property) {
@@ -62,7 +61,6 @@
         if (callEx.findIndex(element => element === func) != -1) {
             callEx.splice(callEx.findIndex(element => element === func), 1)
         }
-        //console.log(callEx)
         return callEx;
       }
   

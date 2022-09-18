@@ -14,9 +14,6 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].entrys = [];
         WebCryptoAPIScripts[j].functions = [];
         WebCryptoAPIScripts[j].thenCalls = [];
-        /* walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
-          if(ancestors.type === "CallExpression") {
-            console.log(ancestors)}}); */
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
           //normale Funktionsdeklaration
@@ -121,38 +118,10 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
                 });
               }
           }
-
-
-
         }
-          catch (e) {
-
-          }
+          catch (e) {}
         });
 
-
-
-
-/*           if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "ArrowFunctionExpression" && ancestors.expression.right.body.type === "FunctionExpression") {
-            if (ancestors.expression.left.type === "Identifier") {
-              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left.name ,ancestors.expression.right.body]);
-            }
-            else {
-              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left ,ancestors.expression.right.body]);
-            }
-          }
-          if (ancestors.type === "ExpressionStatement" && ancestors.expression.right.type === "FunctionExpression") {
-            if (ancestors.expression.left.type === "Identifier") {
-              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left.name ,ancestors.expression.right]);
-            }
-            else {
-              WebCryptoAPIScripts[j].functions.push([ancestors.expression.left ,ancestors.expression.right]);
-            }
-          }
-          if (ancestors.type === "Property" && ancestors.value.type === "FunctionExpression") {
-            WebCryptoAPIScripts[j].functions.push([ancestors.key, ancestors.value]);
-          }
-        let a = 0;  */
         walk.fullAncestor(WebCryptoAPIScripts[j].ast, ancestors => {
           try {
             if (ancestors.type === "CallExpression" && ancestors.callee.property.name === "then") {
@@ -183,7 +152,6 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
                 WebCryptoAPIScripts[j].regel3.push(indexx);
                 break;
               case "sign":
-                //WebCryptoAPIScripts[j].regel2.push(indexx);
                 WebCryptoAPIScripts[j].regel3.push(indexx);
                 break;
               case "exportKey":
