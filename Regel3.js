@@ -144,7 +144,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
             }
           }
         } else {
-
           
           ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
         }

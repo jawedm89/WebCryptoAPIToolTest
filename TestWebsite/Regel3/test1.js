@@ -31,8 +31,8 @@ let signkey = await window.crypto.subtle.generateKey(
           name: "RSASSA-PKCS1-v1_5"
         },
         signkey.privateKey,
-        result
-      ).then(result => {window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),result)})
+        new ArrayBuffer(16)
+      ).then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16))}, key, result))
       
       let ab = t6[3];
 
