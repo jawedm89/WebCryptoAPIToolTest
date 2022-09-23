@@ -27,7 +27,7 @@ let key = async function() {return await window.crypto.subtle.generateKey({
             }
         ).then(async function (result) {
             console.log(result[1]);
-            let key  = await reuslt[1].privateKey;
+            let key  = await result[1].privateKey;
             let cipher = await result[0];
             return window.crypto.subtle.sign(
             {
