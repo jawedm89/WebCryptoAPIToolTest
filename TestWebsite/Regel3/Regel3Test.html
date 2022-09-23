@@ -1,8 +1,83 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-  
-  <h1 align ="center">Web Crypto API TestWebsite für Regel 3</h1>
+
+  <h1 align="center">Web Crypto API TestWebsite für Regel 2</h1>
+  <button id="test1">Test 1</button>
+  <br>
+  <br>
+  <button id="test2">Test 2</button>
+  <br>
+  <br>
+  <button id="test3">Test 3</button>
+  <br>
+  <br>
+  <button id="test4">Test 4</button>
+
+  <script>
+    let test1 = document.getElementById("test1");
+    let test2 = document.getElementById("test2");
+    let test3 = document.getElementById("test3");
+    let test4 = document.getElementById("test4");
+
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    test1.addEventListener("click", async function() {
+      let script1 = document.createElement("script");
+      script1.src = "test1.js";
+      try{
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+    });
+
+    test2.addEventListener("click", async function() {
+      let script2 = document.createElement("script");
+      script2.src = "test2.js";
+      try{
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script2);
+    });
+
+    test3.addEventListener("click", async function() {
+      let script3 = document.createElement("script");
+      script3.src = "test3.js";
+      try{
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script3);
+    });
+
+    test4.addEventListener("click", async function() {
+      let script4 = document.createElement("script");
+      script4.src = "test4.js";
+      try{
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script4);
+    });
     
+  </script>
 </body>
+
 </html>
