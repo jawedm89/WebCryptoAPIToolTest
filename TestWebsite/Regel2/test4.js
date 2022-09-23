@@ -11,7 +11,7 @@ let key = async function() {return await window.crypto.subtle.generateKey({
         length: 256,
     },
         false,
-        ["encrypt", "decrypt"]).then(result => {window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data12)}).then(
+        ["encrypt", "decrypt"]).then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data12)).then(
             function (res) {
                 let sig = window.crypto.subtle.generateKey(
                     {
@@ -25,7 +25,9 @@ let key = async function() {return await window.crypto.subtle.generateKey({
                   );
                   return [res, sig]
             }
-        ).then(function (result) {return window.crypto.subtle.sign(
+        ).then(async function (result) {
+            console.log(result);
+            return window.crypto.subtle.sign(
             {
               name: "RSASSA-PKCS1-v1_5"
             },

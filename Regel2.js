@@ -23,12 +23,12 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
         }
         else { */
           let inoruot = await inOrOutFunction(encCall.start, WebCryptoAPIScripts.functions);
-          if (inoruot === "OutSideFunction") {
+         /*  if (inoruot === "OutSideFunction") {
             console.log("hier einmal prüfen ob es hier ein Then call gibt und wenn ja ob in diesen eine Sign funktion durchgeführt wird");
             let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.start && element.end > encCall.end));
             console.log(thens);
           }
-          else {
+          else { */
             let results = [[encCall, []]]             
             let result;
             let ergebnis = [];
@@ -53,7 +53,7 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             }
             while (i < results.length ) 
             console.log(ergebnis, results); 
-          }
+          //}
         //}
       }
     }
