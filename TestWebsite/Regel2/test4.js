@@ -26,13 +26,13 @@ let key = async function() {return await window.crypto.subtle.generateKey({
                   return [res, sig]
             }
         ).then(async function (result) {
-            console.log(result);
+            console.log(await result);
             return window.crypto.subtle.sign(
             {
               name: "RSASSA-PKCS1-v1_5"
             },
-            result[1].privateKey,
-            result[0]
+            await result[1].privateKey,
+            await result[0]
           );
         }).then(console.log)
     
