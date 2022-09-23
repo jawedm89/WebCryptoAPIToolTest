@@ -32,7 +32,7 @@ let signkey = await window.crypto.subtle.generateKey(
         },
         signkey.privateKey,
         result
-      ).then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),result))
+      ).then(result => {window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),},await key(),result)})
       
       let ab = t6[3];
 

@@ -134,7 +134,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }              
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
-        try {
+        if (preposition[0].arguments[0].type === "FunctionExpression" || preposition[0].arguments[0].type === "ArrowFunctionExpression") {
           let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
           if (calls.length > 0) {
             for (let j = 0; calls.length > j; j++) {
@@ -143,8 +143,9 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
               }
             }
           }
-        } catch (e) {
-          //console.log(e)
+        } else {
+
+          
           ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
         }
         /* if(await thenCallCheck(WebCryptoAPIScripts, preposition[0], sign)) {
