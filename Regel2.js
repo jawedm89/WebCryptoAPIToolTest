@@ -226,8 +226,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }              
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
-        if(preposition[0].arguments[0].params[0] != undefined) {
-          console.log("hier nicht", preposition[0].arguments[0])
+        if(preposition[0].arguments[0].params != undefined) {
           let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
           if (calls.length > 0) {
             for (let j = 0; calls.length > j; j++) {
@@ -237,14 +236,21 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
             }
           }
         } else {
-          //console.log(e)
-          //Identifier, Memberexpression oder Callexpression
-          console.log("hier muss noch was gemacht werden")
-          ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
+          if (preposition[0].arguments[0].type === "Identifier" || preposition[0].arguments[0].type === "MemberExpression") {
+            let funcall = await compare(WebCryptoAPIScripts, preposition[0].arguments[0]);
+            if (funcall != undefined) {
+              let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
+              for(let j = 0; j < calls.length; j++) {
+                if(funcall[1].start <= calls[j].start && funcall[1].end >= calls[j].end) {
+                  call.push([calls[j], a])
+                }
+              }
+            }
+          }
+          else {
+            ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
+          }
         }
-        /* if(await thenCallCheck(WebCryptoAPIScripts, preposition[0], sign)) {
-          ergebnis.push(true);
-        } */
         i++;
         return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
       }

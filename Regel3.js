@@ -138,7 +138,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
         if(preposition[0].arguments[0].params != undefined) {
-          console.log("hier nicht", preposition[0])
           let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
           if (calls.length > 0) {
             for (let j = 0; calls.length > j; j++) {
@@ -154,20 +153,15 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
               let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
               for(let j = 0; j < calls.length; j++) {
                 if(funcall[1].start <= calls[j].start && funcall[1].end >= calls[j].end) {
-                  console.log("hihi")
                   call.push([calls[j], a])
                 }
               }
             }
           }
           else {
-            console.log("hier muss noch was gemacht werden", preposition[0].arguments[0])
             ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
           }
         }
-        /* if(await thenCallCheck(WebCryptoAPIScripts, preposition[0], sign)) {
-          ergebnis.push(true);
-        } */
         i++;
         return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
       }
@@ -248,7 +242,6 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
           if (prePosition[x].type === "FunctionExpression" || prePosition[x].type === "ArrowFunctionExpression") {
             try {
               if (prePosition[x+2].property.name === "then") {
-                console.log(prePosition)
                 return [prePosition[x+3], "ThenCall", w]
               }
             } catch (e) {}
@@ -297,7 +290,6 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
 
       case "MemberExpression":
         if (prePosition[i].property.name === "then") {
-          console.log(prePosition, "aus der memberexpression")
           return [prePosition[i+1], "ThenCall", w];
         }
         else if (encCall[1].length > 0) {
