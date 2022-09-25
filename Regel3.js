@@ -77,6 +77,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
   if (call[i] != undefined) {
     let preposition = await findPreposition(WebCryptoAPIScripts, fr[i]);
     if (preposition[1] === "ReturnStatment") {
+      //console.log(preposition)
       let calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, "CallExpression");
       let a = preposition[2];
       if (calls.length > 0) {
@@ -97,14 +98,15 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       i++;
       return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
     }
-      else if (preposition[1] === "MemberExpression" || preposition[1] === "Identifier") {
-        let calls;
-        let a = preposition[2];
-        let pre = preposition[3];
-        let inoruot = await inOrOutFunction(preposition[0].start, WebCryptoAPIScripts.functions, true);    
-        if (inoruot === "OutSideFunction") {
-          inoruot = ["OutSideFunction", WebCryptoAPIScripts.ast]
-        }
+    else if (preposition[1] === "MemberExpression" || preposition[1] === "Identifier") {
+      let calls;
+      let a = preposition[2];
+      let pre = preposition[3];
+      //console.log(WebCryptoAPIScripts.functions)
+      let inout = await inOrOutFunction(preposition[0].start, WebCryptoAPIScripts, true);  
+      let inoruot = inout.map((x) => x);  
+      //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)))
+      Object.freeze(WebCryptoAPIScripts);
         for (let x = 0; x < pre.length; x++) {
           if (pre[x].type === "FunctionExpression" || pre[x].type === "ArrowFunctionExpression") {
             if (pre[x].start > inoruot[1].start && pre[x].end <= inoruot[1].end) {
@@ -112,6 +114,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
             }
           }
         }
+        //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)))
         calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, preposition[1]);
         if (calls.length > 0) {
           for (let j = 0; calls.length > j; j++) {
@@ -134,7 +137,8 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }              
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
-        if (preposition[0].arguments[0].type === "FunctionExpression" || preposition[0].arguments[0].type === "ArrowFunctionExpression") {
+        if(preposition[0].arguments[0].params != undefined) {
+          console.log("hier nicht", preposition[0])
           let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
           if (calls.length > 0) {
             for (let j = 0; calls.length > j; j++) {
@@ -144,8 +148,22 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
             }
           }
         } else {
-          
-          ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
+          if (preposition[0].arguments[0].type === "Identifier" || preposition[0].arguments[0].type === "MemberExpression") {
+            let funcall = await compare(WebCryptoAPIScripts, preposition[0].arguments[0]);
+            if (funcall != undefined) {
+              let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
+              for(let j = 0; j < calls.length; j++) {
+                if(funcall[1].start <= calls[j].start && funcall[1].end >= calls[j].end) {
+                  console.log("hihi")
+                  call.push([calls[j], a])
+                }
+              }
+            }
+          }
+          else {
+            console.log("hier muss noch was gemacht werden", preposition[0].arguments[0])
+            ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
+          }
         }
         /* if(await thenCallCheck(WebCryptoAPIScripts, preposition[0], sign)) {
           ergebnis.push(true);
@@ -219,7 +237,7 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
   //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)), encCall, JSON.parse(JSON.stringify(prePosition)))
   //console.log(prePosition);
   let w = encCall[1].map((x) => x)
-  
+  //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)));
   for(let i = 0; i < prePosition.length; i++) {
     switch (prePosition[i].type) {
       case "AwaitExpression":
@@ -230,13 +248,14 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
           if (prePosition[x].type === "FunctionExpression" || prePosition[x].type === "ArrowFunctionExpression") {
             try {
               if (prePosition[x+2].property.name === "then") {
+                console.log(prePosition)
                 return [prePosition[x+3], "ThenCall", w]
               }
             } catch (e) {}
           }
         }
-        let callee1 = await inOrOutFunction(prePosition[i].start, WebCryptoAPIScripts.functions, true);
-        //console.log(prePosition[i], WebCryptoAPIScripts.functions, callee1)
+        let callee1 = await inOrOutFunction(prePosition[i].start, WebCryptoAPIScripts, true);
+        //console.log(prePosition[i], JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)), callee1)
         return [callee1[0], "ReturnStatment", w];
 
       case "VariableDeclarator":
@@ -278,6 +297,7 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
 
       case "MemberExpression":
         if (prePosition[i].property.name === "then") {
+          console.log(prePosition, "aus der memberexpression")
           return [prePosition[i+1], "ThenCall", w];
         }
         else if (encCall[1].length > 0) {
@@ -374,7 +394,8 @@ async function compare(WebCryptoAPIScripts, node) {
 }
 
 
-async function inOrOutFunction(start, functions, inner) {
+async function inOrOutFunction(start, WebCryptoAPIScripts, inner) {
+  let functions = WebCryptoAPIScripts.functions;
   if (inner === undefined) {
     inner = false;
   }
@@ -403,7 +424,7 @@ async function inOrOutFunction(start, functions, inner) {
     return max;
   }
   else {
-    return "OutSideFunction";
+    return ["OutSideFunction", WebCryptoAPIScripts.ast];
   }
 }
 
