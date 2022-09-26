@@ -25,6 +25,24 @@ browser.runtime.onMessage.addListener((request) => {
             let neu2 = document.createElement("div");
             let button = document.createElement("button");
             var text = document.createElement("textarea");
+            neu2.style.width = '350px'
+            neu2.style.height = '150px' 
+            neu2.style.overflow = 'scroll'
+            neu2.textContent = element.script;
+            //neu2.style.backgroundColor = "yellow"
+            const article = neu2.innerText
+//find index of word 'in'
+const index = article.indexOf('getRandom');
+//opening and closing tags
+const openingTag = '<span style="Background-color:yellow">'
+const closingTag = '</span>'
+
+//insert tags into article
+const newHTML 
+  = article.slice(0, index) 
+  + openingTag + 'getRandom' + closingTag 
+  + article.slice(index + 9);
+neu2.innerHTML = newHTML;
             text.cols = "70";
             text.rows = "5";
             text.wrap = "off";

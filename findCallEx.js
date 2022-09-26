@@ -4,7 +4,7 @@
       const walk = require("acorn-walk");
   
       window.findCallExpression = async function (func, WebCryptoAPIScripts, CallorExpression) {
-        //console.log(func, CallorExpression);
+        //console.log(func);
         let Expr = await makeArray(func)
         let callEx = [];
         let calls = [];
@@ -37,7 +37,7 @@
                   i++;
                 }
                 else {
-                  weiter = false
+                  weiter = false;
                 }
               }
               else {
@@ -56,7 +56,8 @@
             else {
               weiter = false;
             }
-          } while (weiter === true)
+            //console.log(i)
+          } while (weiter === true && i <= Expr.length -1)
         }
         if (callEx.findIndex(element => element === func) != -1) {
             callEx.splice(callEx.findIndex(element => element === func), 1)

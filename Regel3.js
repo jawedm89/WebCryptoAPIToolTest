@@ -137,7 +137,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }              
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
-        if(preposition[0].arguments[0].params != undefined) {
+        if(preposition[0].arguments[0].params != undefined && preposition[0].arguments[0].params[0] != undefined) {
           let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
           if (calls.length > 0) {
             for (let j = 0; calls.length > j; j++) {
