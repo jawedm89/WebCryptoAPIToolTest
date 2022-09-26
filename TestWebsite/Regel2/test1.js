@@ -34,8 +34,7 @@ let signkey = window.crypto.subtle.generateKey(
     ["sign", "verify"]
   ).then(result => {return result});
 
-
-t1().then(async function (result) {
+  t1().then(async function (result) {
     let signkey2 = await signkey;
     return window.crypto.subtle.sign(
     {
