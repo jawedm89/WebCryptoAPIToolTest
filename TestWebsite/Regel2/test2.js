@@ -1,13 +1,13 @@
 let data2 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = window.crypto.subtle.generateKey({
+let key = await window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
 },
     false,
-    ["encrypt", "decrypt"]).then(result => {key = result});
+    ["encrypt", "decrypt"]);
 
 
-function test2() {
+function t2() {
     async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}
     let t2 = {a: 23,b: "sdf", t4: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}
     t3 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}]
@@ -34,37 +34,37 @@ function signieren(cipher) {
         cipher)
 }
 
-test2()[0].then(result => window.crypto.subtle.sign(
+t2()[0].then(result => window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
     },
     signkey2.privateKey,
     result));
 
-test2()[1].then(result => window.crypto.subtle.sign(
+t2()[1].then(result => window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
     signkey2.privateKey,
     result));
 
-test2()[2][3].t6.then(result => window.crypto.subtle.sign(
+t2()[2][3].t6.then(result => window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
     signkey2.privateKey,
     result));
 
-test2()[2][3].then(result => window.crypto.subtle.sign(
+t2()[2][3].then(result => window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
     signkey2.privateKey,
     result));
 
-test2()[2][3].t6.then(result => signieren(result));
+t2()[2][3].t6.then(result => signieren(result));
 
-test2()[2][3].t6.then(function (result) {
+t2()[2][3].t6.then(function (result) {
     console.log("gleich wird signiert");
     return result;
     }).then(signieren)

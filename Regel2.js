@@ -290,7 +290,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         }
       }
       else if (preposition === "Error") {
-        ergebnis.push("Error no Prepossition found at ", call[1].start);
+        ergebnis.push("Error no Prepossition found at ", call[i].start);
         i++;
         return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
       }

@@ -1,10 +1,10 @@
 let data1 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = window.crypto.subtle.generateKey({
+let key = await window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
 },
     false,
-    ["encrypt", "decrypt"]).then(result => {key = result});
+    ["encrypt", "decrypt"]);
 
 
 //Eine Funktion die das Promise der Cipher wieder gibt.
