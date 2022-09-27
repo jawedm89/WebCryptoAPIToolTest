@@ -64,15 +64,10 @@ let signkey = window.crypto.subtle.generateKey(
     result
   );}).then(console.log)
 
-  t4a.a.then(async function (result) {
-    let signkey2 = await signkey;
-    return window.crypto.subtle.sign(
-    {
-      name: "RSASSA-PKCS1-v1_5"
-    },
-    signkey2.privateKey,
-    result
-  );}).then(console.log)
+  t4a.t4.then(async function (result) {
+    let a = new TextDecoder().decode(result)
+    return a;
+    }).then(console.log)
 
   t5[4].then(async function (result) {
     let signkey2 = await signkey;
@@ -84,15 +79,10 @@ let signkey = window.crypto.subtle.generateKey(
     result
   );}).then(console.log)
 
-  t5a[1].then(async function (result) {
-    let signkey2 = await signkey;
-    return window.crypto.subtle.sign(
-    {
-      name: "RSASSA-PKCS1-v1_5"
-    },
-    signkey2.privateKey,
-    result
-  );}).then(console.log)
+  t5a[4].then(async function (result) {
+    let a = new TextDecoder().decode(result)
+    return a;
+    }).then(console.log)
 
   t6[3].t6.then(async function (result) {
     let signkey2 = await signkey;
@@ -104,24 +94,8 @@ let signkey = window.crypto.subtle.generateKey(
     result
   );}).then(console.log)
 
-  t6a[0].then(async function (result) {
-    let signkey2 = await signkey;
-    return window.crypto.subtle.sign(
-    {
-      name: "RSASSA-PKCS1-v1_5"
-    },
-    signkey2.privateKey,
-    result
-  );}).then(console.log)
+  t6a[3].t6.then(async function (result) {
+    let a = new TextDecoder().decode(result)
+    return a;
+    }).then(console.log)
 
-  t6a[3].b.then(async function (result) {
-    let signkey2 = await signkey;
-    return window.crypto.subtle.sign(
-    {
-      name: "RSASSA-PKCS1-v1_5"
-    },
-    signkey2.privateKey,
-    result
-  );}).then(console.log)
-
-  
