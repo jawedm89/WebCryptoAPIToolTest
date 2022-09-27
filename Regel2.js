@@ -5,7 +5,6 @@
 
 window.Regel2 = async function (WebCryptoAPIScripts) {
   let sign = [];
-  console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)))
   for (let i = 0; i < WebCryptoAPIScripts.regel3.length; i++) {
     let sig = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[i], "CallExpression").node
     let signTyp = sig.arguments[0].properties[0].value.value;
@@ -35,6 +34,7 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             let i = 0;
             do {
               let a = results[results.length - 1]
+              console.log(JSON.parse(JSON.stringify(results[i])))
               result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
               if (typeof result != "boolean") {
                 result.forEach(element => {
@@ -53,8 +53,6 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             }
             while (i < results.length ) 
             console.log(ergebnis, results); 
-          //}
-        //}
       }
     }
     else {
