@@ -23,48 +23,48 @@ let signkey2 = window.crypto.subtle.generateKey(
     },
     false,
     ["sign", "verify"]
-  ).then(result => {return result})
+  )
 
-function signieren(cipher) {
-    return window.crypto.subtle.sign(
+async function signieren(cipher) {
+    return await window.crypto.subtle.sign(
         {
           name: "RSASSA-PKCS1-v1_5"
         },
-        signkey2.privateKey,
-        cipher)
+        await signkey2.privateKey,
+        await cipher)
 }
 
-t2()[0].then(result => window.crypto.subtle.sign(
+t2().then(async function (result) {window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
     },
-    signkey2.privateKey,
-    result));
+    await signkey2.privateKey,
+    await result[0])});
 
-t2()[1].then(result => window.crypto.subtle.sign(
+t2().then(async function (result) {window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
-    signkey2.privateKey,
-    result));
+    await signkey2.privateKey,
+    await result[1])});
 
-t2()[2][3].t6.then(result => window.crypto.subtle.sign(
+t2().then(async function (result) {window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
-    signkey2.privateKey,
-    result));
+    await signkey2.privateKey,
+    await result[2][3].t6)});
 
-t2()[2][3].then(result => window.crypto.subtle.sign(
+t2().then(async function (result) { window.crypto.subtle.sign(
     {
         name: "RSASSA-PKCS1-v1_5"
     },
-    signkey2.privateKey,
-    result));
+    await signkey2.privateKey,
+    await result[2][3])});
 
-t2()[2][3].t6.then(result => signieren(result));
+t2().then(result => signieren(result[2][3].t6));
 
-t2()[2][3].t6.then(function (result) {
+t2().then(function (result) {
     console.log("gleich wird signiert");
-    return result;
+    return result[2][3].t6;
     }).then(signieren)
