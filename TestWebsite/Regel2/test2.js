@@ -1,5 +1,5 @@
 let data2 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = await window.crypto.subtle.generateKey({
+let key = window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
 },
@@ -7,10 +7,10 @@ let key = await window.crypto.subtle.generateKey({
     ["encrypt", "decrypt"]);
 
 
-function t2() {
-    async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}
-    let t2 = {a: 23,b: "sdf", t4: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}
-    t3 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, key,data2)}]
+async function t2() {
+    async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}
+    let t2 = {a: 23,b: "sdf", t4: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}
+    t3 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}]
 
     return [t1(), t2, t3]
 }
