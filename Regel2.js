@@ -17,42 +17,33 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
     let encMode = encCall.arguments[0].properties[0].value.value;
     if (encMode === "AES-CBC" || encMode === "AES-CTR") {
       if (sign.length != 0) {
-        /* if (await thenCallCheck(WebCryptoAPIScripts, encCall, sign) === true) {
-          console.log("Regel 2 wurde eingehalten an der Stelle: ", encCall.start)
-        }
-        else { */
-          let inoruot = await inOrOutFunction(encCall.start, WebCryptoAPIScripts);
-         /*  if (inoruot === "OutSideFunction") {
-            console.log("hier einmal prüfen ob es hier ein Then call gibt und wenn ja ob in diesen eine Sign funktion durchgeführt wird");
-            let thens = WebCryptoAPIScripts.thenCalls.filter(element => (element.start <= encCall.start && element.end > encCall.end));
-            console.log(thens);
-          }
-          else { */
-            let results = [[encCall, []]]             
-            let result;
-            let ergebnis = [];
-            let i = 0;
-            do {
-              let a = results[results.length - 1]
-              console.log(JSON.parse(JSON.stringify(results[i])))
-              result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
-              if (typeof result != "boolean") {
-                result.forEach(element => {
-                  if (results.includes(JSON.stringify(element))) {
-                    console.log("war schon enthalten")
-                  }
-                  else {
-                    results.push(element)
-                  }
-                });
-              }
-              else {
-                ergebnis.push(result);
-              }
-              i++;
+        let results = [[encCall, []]]             
+        let result;
+        let ergebnis = [];
+        let i = 0;
+        do {
+          result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
+          if (typeof result != "boolean") {
+            if (result === "Ignore") {
             }
-            while (i < results.length ) 
-            console.log(ergebnis, results); 
+            else {
+              result.forEach(element => {
+                if (results.includes(JSON.stringify(element))) {
+                  console.log("war schon enthalten")
+                }
+                else {
+                  results.push(element)
+                }
+              });
+            }
+          }
+          else {
+            ergebnis.push(result);
+          }
+          i++;
+        }
+        while (i < results.length ) 
+        console.log(ergebnis, results); 
       }
     }
     else {
@@ -71,73 +62,6 @@ function getParentNode(WebCryptoAPIScripts, node) {
   });
   let i = parents.filter(element => JSON.stringify(element) != JSON.stringify(node))
   return i;
-}
-
-
-async function thenCallCheck(WebCryptoAPIScripts, encCall, sign) {
-  let insideThen = [];
-  let getSigned = false;
-  let startOfThenCalls = false;
-  let same = false;
-  for (let i = 0; WebCryptoAPIScripts.thenCalls.length > i; i++) {
-    if (encCall.start >= WebCryptoAPIScripts.thenCalls[i].start && encCall.end <= WebCryptoAPIScripts.thenCalls[i].end) {
-      insideThen.push(WebCryptoAPIScripts.thenCalls[i]);
-    }
-  }
-  insideThen.sort((a, b) => a.end - b.end);
-  try{
-    if (encCall.start === insideThen[0].start) {
-      startOfThenCalls = true;
-    }
-  } catch (e) {}
-  for(let i = 0; sign.length > i; i++) {
-    for(let j = 0; insideThen.length > j; j++) {
-      if (sign[i].start >= insideThen[j].start && sign[i].end <= insideThen[j].end) {
-        if (j === 0 && startOfThenCalls === false) {
-          getSigned = false;
-        }
-        else {
-          getSigned = true;
-        }
-      }
-    }
-  }
-
-/*   console.log(insideThen)
-  if (getSigned) {
-    for (let i = 0; i < insideThen.length; i++) {
-      let arguments = [];
-      for (let j = 0; j < insideThen[i].arguments.length; j++) {
-        if (insideThen[i].arguments[j].type === "FunctionExpression") {
-          let a = insideThen[i].arguments[j].params[0];
-          let b = await findCallExpression(a, WebCryptoAPIScripts, "Identifier");
-          let c = [];
-          if (b.length > 0) {
-            b.forEach(element => {
-              if (element.start >= insideThen[i].arguments[j].start && element.end <= insideThen[i].arguments[j].end) {
-                c.push(element);
-              }
-            });
-            console.log(c);
-            c.forEach(ele => console.log(getParentNode(WebCryptoAPIScripts, ele)))
-          }
-          console.log(await checkPrePosition([[c[0], []]], WebCryptoAPIScripts, [], sign));
-        }
-        if (insideThen[i].arguments[j].type === "ArrowFunctionExpression") {
-
-        }
-        if (insideThen[i].arguments[j].type === "MemberExpression") {
-
-        }
-        if (insideThen[i].arguments[j].type === "Identifier") {
-
-        }
-      }
-    }
-  } */
-
-  console.log(await getParentNode(WebCryptoAPIScripts, encCall), encCall, getSigned)
-  return getSigned;
 }
 
 
@@ -215,7 +139,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
           }
         }
         else {
-          ergebnis.push("No Callexpresstions found for " + preposition[0]);
+          ergebnis.push("No Callexpresstions found for " , preposition[0]);
           i++;
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
         }
@@ -253,10 +177,8 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
       }
       else if (preposition[1] === "FunctionCall") { 
-        //console.log(JSON.parse(JSON.stringify(preposition)))
         let calls, result = [];
         result = await compare(WebCryptoAPIScripts, preposition[0].callee)
-        //console.log(result)
         if(result) {
           calls = await findCallExpression(result[1].params[preposition[2]], WebCryptoAPIScripts, result[0].type);
           for(let j = 0; j < calls.length; j++) {
@@ -273,7 +195,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
         }
         else {
-          //console.log(signCheck(preposition[0]))
           if(signCheck(preposition[0])) {
             ergebnis.push(true);
             i++;
@@ -292,6 +213,10 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         i++;
         return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
       }
+      else if (preposition === "Ignore") {
+        i++;
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+      }
       else {
         ergebnis.push("Error in finding Prepositionat ", call[i].start)
         i++;
@@ -299,11 +224,15 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }
   }
   else {
+    console.log(JSON.parse(JSON.stringify(ergebnis)), JSON.parse(JSON.stringify(funcCalls)))
     if (ergebnis.includes(true)) {
       return true;
     }
     else if (funcCalls.length > 0) {
       return funcCalls;
+    }
+    else if (ergebnis.length < 1) {
+      return "Ignore";
     }
     else {
       return false;
@@ -316,7 +245,6 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
   let type;
   let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
   //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)), encCall, JSON.parse(JSON.stringify(prePosition)))
-  //console.log(prePosition);
   let w = encCall[1].map((x) => x)
   
   for(let i = 0; i < prePosition.length; i++) {
@@ -335,7 +263,6 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
           }
         }
         let callee1 = await inOrOutFunction(prePosition[i].start, WebCryptoAPIScripts, true);
-        //console.log(prePosition[i], WebCryptoAPIScripts.functions, callee1)
         return [callee1[0], "ReturnStatment", w];
 
       case "VariableDeclarator":
@@ -385,7 +312,7 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
               w.pop();
             }
             else {
-              return "Error";
+              return "Ignore";
             }
           }
           else {
@@ -393,7 +320,7 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
               w.pop();
             }
             else {
-              return "Error";
+              return "Ignore";
             }
           }
         }

@@ -29,7 +29,9 @@
       let script1 = document.createElement("script");
       script1.src = "test1.js";
       try{
-        document.head.removeChild(document.scripts[0]);
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
       }
       catch (e) {
         console.log(e);
@@ -42,8 +44,9 @@
       let script2 = document.createElement("script");
       script2.src = "test2.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -55,8 +58,9 @@
       let script3 = document.createElement("script");
       script3.src = "test3.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -68,8 +72,9 @@
       let script4 = document.createElement("script");
       script4.src = "test4.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }

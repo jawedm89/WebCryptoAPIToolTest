@@ -5,36 +5,53 @@
 
   <h1 align="center">Web Crypto API TestWebsite für Regel 2</h1>
   <button id="test1">Test 1</button>
-  <p>Hier wird in der Funktion "start" ein Text über AES-CBC Verschlüsselt und dann signiert. Hier sollte keine Fehler gefunden werden. Außerdem Wird eine Verschlüsselungs und eine 
-    Signier Funktion erstellt. Dann wird die Verschlüsselungs Mthode aufgerufen und dann über die "then()" Methode wird dann die Cipher Verschlüsselt. Her sollte entsprechend auch 
-    kein Fehler gefunden werden. Außerdem Wird eine Funktion für das Verschlüsseln erstellt, die aber nirgenswo aufgerufen wird und entsprechend auch keine signatur folgt. Hier 
-    müsste ein Fehler angezigt werden. 
-    1. true 
-    2. true
-    3. false
-    4. true
-    5. false
-    6. true
-    7. false
-    8. true
-    9. false
-    10. false
+  <p>Der erste Test soll aufzeigen, dass bei Zuweisen des Ciphertextes zu einer Variable, erkannt wird welche Variable den Ciphertext hält.
+    <br>
+    1. die erste Cipher kommt aus der Funktion "t1()" und mündet in der Sign Funktion. Ergebniss sollte true sein.
+    <br>
+    2. die zweite Cipher kommt aus der Variable "t2" und mündet in der Sign Funktion. Ergebniss sollte true sein.
+    <br>
+    3. die dritte Cipher kommt aus der Variable "t3" und wird nicht aufgerufen. Ergebniss sollte false sein.
+    <br>
+    4. die vierte Cipher kommt aus einem Objekt mit dem Key "t4" das in der Variable "t4" enthalten ist und mündet in der Sign Funktion. Ergebniss sollte true sein.
+    <br>
+    5. die fünfte Cipher kommt aus einem Objekt mit dem Key "t4" das in der Variable "t4" enthalten ist und mündet in keiner Sign Funktion. Ergebniss sollte false sein.
+    <br>
+    6. die sechste Cipher kommt aus dem Array "t5" am Index 4 und mündet in der Sign Funktion. Ergebniss sollte true sein.
+    <br>
+    7. die siebte Cipher kommt aus dem Array "t5a" am Index 4 und mündet in keiner Sign Funktion. Ergebniss sollte false sein.
+    <br>
+    8. die achte Cipher kommt aus einem Objekt mit dem Key "t6", welches in einem Array ist am Index 3 und ist in der Variable "t6" entahlten und mündet in der Sign Funktion. Ergebniss sollte true sein.
+    <br>
+    9. die neunte Cipher kommt aus einem Objekt mit dem Key "t6", welches in einem Array ist am Index 3 und ist in der Variable "t6" entahlten  und mündet in keiner Sign Funktion. Ergebniss sollte false sein.
+    <br>
   </p>
   <br>
   <br>
   <button id="test2">Test 2</button>
   <p>
-    1. true
-    2. false
-    3. true
-    4. false
-    5. true
-    6. true
+    Der zweite Test soll aufzeigen das bei einer Funktion die den Ciphertext wiedergibt, auch nachverfolgt werden kann, dass jeder Funktionscall in einer Sign Methode mündet. 
+    Hier soll auch aufgezeigt werden, dass wenn die Funktion bspw. ein Array wiedergibt, in dem der Ciphertext enthalten ist, dass auch erkannt wird ob der Ciphertext an der 
+    korrekten Stelle des Arrays abgerufen wird und in der Sign Methode mündet. 
+    <br>
+    Es gibt 3 Encrypt API Calls, die aus der Funktion "t2()" in einem Array wiedergegeben werden durch "return". Die erste ist selber eine Funktion "t1()", die die Cipher wiedergibt. 
+    Diese wird einmal korrekt aufgerufen und Signiert. Das Ergebnis sollte true sein.
+    <br>
+    Die zweite Cipher ist in der Variable "t2" enthalten, als ein Objekt mit dem Key "t4". Diese wird 2 mal aufgerufen, wobei sie einmal in einer Sign Funktion mündet und einmal 
+    nicht. Das Ergebnis sollte true und false sein. 
+    <br>
+    Die dritte Cipher ist in der Variable "t3" enthalten, als ein Objekt mit dem Key "t6", welches in einem Array ist an dem Index 3. Diese wird 4 mal aufgerufen, sie 3 mal in einer
+    Sign Funktion mündet und einmal nicht. Hier wird auch 2 mal die Cipher an die Funktion "signieren()" weitergegeben, die dann die Cipher signiert. Das Ergebnis sollte true, false,
+    true, true sein. 
   </p>
   <br>
   <br>
   <button id="test3">Test 3</button>
-  <p>chaining testen</p>
+  <p>Der dritte Test soll aufzeigen, dass wenn der Ciphertext an eine andere Variable weitergegeben wird, dies auch erkannt wird. Wenn ausgehend von Encrytion Call, der Ciphertext
+    an unterschiedliche Variablen weitergegeben wird und nur eine in der Sign Methode mündet, wird die Regel als eingehalten erachetet. Wenn aber der Ciphertext von einer Funktion
+    wiedergegeben wird durch "return", dann muss jeder Call der Funktion in der Sign Methode münden. 
+
+  </p>
   <br>
   <br>
   <button id="test4">Test 4</button>
@@ -53,8 +70,9 @@
       let script1 = document.createElement("script");
       script1.src = "test1.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -66,8 +84,9 @@
       let script2 = document.createElement("script");
       script2.src = "test2.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -79,8 +98,9 @@
       let script3 = document.createElement("script");
       script3.src = "test3.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -92,8 +112,9 @@
       let script4 = document.createElement("script");
       script4.src = "test4.js";
       try{
-        document.head.removeChild(document.scripts[0]);
-      }
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
