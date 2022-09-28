@@ -171,7 +171,6 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         j++;
       }
     }
-    Object.freeze(WebCryptoAPIScripts.functions);
     return WebCryptoAPIScripts;
   }
 },{"acorn":3,"acorn-walk":2}],2:[function(require,module,exports){

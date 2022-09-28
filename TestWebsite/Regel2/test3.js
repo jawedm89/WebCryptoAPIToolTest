@@ -10,11 +10,10 @@ let key = async function () {
 async function testi3() {
   async function t1() { return await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }
 
-  let t2 = await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3)
   let t3, t4, t5, t6, chain1;
   t3 = await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3)
   t4 = { a: 23, b: "sdf", t4: await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }
-  t5 = [1, 2, 3, 4, window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3)]
+  t5 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }]
   t6 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }]
   let signkey = await window.crypto.subtle.generateKey(
     {
@@ -75,13 +74,13 @@ async function testi3() {
       );
       return signatur;
     }).then(result => console.log(result))
-  return [t1(), t2, t3, t4, t5, t6, chain1]
+
+  return [t1(), t3, t4, t5, t6, chain1]
 }
-console.log(testi3());
 let das = testi3();
 
 async function chain3(argu) {
-  let chain4 = async function () { return await argu[6]; }
+  let chain4 = async function () { return await argu[5]; }
   let signkey = await window.crypto.subtle.generateKey(
     {
       name: "RSASSA-PKCS1-v1_5",
@@ -108,6 +107,30 @@ async function chain3(argu) {
 
 async function ee() {
   console.log(await chain3(await testi3()));
+  let chain5 = await das;
+  let chain6 = await chain5[3][3].t6;
+  let chain7 = das;
+  let signkey = await window.crypto.subtle.generateKey(
+    {
+      name: "RSASSA-PKCS1-v1_5",
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+      hash: { name: "SHA-256" },
+    },
+    false,
+    ["sign", "verify"]
+  );
 
+  chain7.then(async function(result) {
+    return await result[2].t4
+  }).then(result2 => console.log(result2, "halo"))
+
+  window.crypto.subtle.sign(
+    {
+      name: "RSASSA-PKCS1-v1_5"
+    },
+    signkey.privateKey,
+    chain6
+  ).then(result => console.log("huhu", result));
 }
 ee();
