@@ -1,5 +1,5 @@
 let data2 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = window.crypto.subtle.generateKey({
+let key2 = window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
 },
@@ -7,10 +7,10 @@ let key = window.crypto.subtle.generateKey({
     ["encrypt", "decrypt"]);
 
 
-async function t2() {
-    async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}
-    let t2 = {a: 23,b: "sdf", t4: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}
-    t3 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data2)}]
+async function testi2() {
+    async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key2,data2)}
+    let t2 = {a: 23,b: "sdf", t4: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key2,data2)}
+    t3 = [1, 2, {a: 3}, {t6: window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key2,data2)}]
 
     return [t1(), t2, t3]
 }
@@ -35,7 +35,7 @@ async function signieren(cipher) {
         await cipher)
 }
 
-t2().then(async function (result) {
+testi2().then(async function (result) {
   let signkey = await signkey2;
   window.crypto.subtle.sign(
     {
@@ -44,7 +44,7 @@ t2().then(async function (result) {
     signkey.privateKey,
     await result[0])});
 
-t2().then(async function (result) {
+testi2().then(async function (result) {
   let signkey = await signkey2;
   window.crypto.subtle.sign(
     {
@@ -53,13 +53,13 @@ t2().then(async function (result) {
     signkey.privateKey,
     await result[1].t4)});
 
-t2().then(async function (result) {
+testi2().then(async function (result) {
   let a = await result[1].t4;
   let b = new TextDecoder().decode(a)
   console.log(a, b)
   });
 
-t2().then(async function (result) {
+testi2().then(async function (result) {
   let signkey = await signkey2;
   window.crypto.subtle.sign(
     {
@@ -68,15 +68,15 @@ t2().then(async function (result) {
     signkey.privateKey,
     await result[2][3].t6)});
 
-t2().then(async function (result) { 
+testi2().then(async function (result) { 
   let a = await result[2][3].t6;
   let b = new TextDecoder().decode(a)
   console.log(a, b)
   });
 
-t2().then(result => signieren(result[2][3].t6));
+testi2().then(result => signieren(result[2][3].t6));
 
-t2().then(function (result) {
+testi2().then(function (result) {
     console.log("gleich wird signiert");
     return result[2][3].t6;
     }).then(signieren)

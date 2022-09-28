@@ -1,5 +1,5 @@
 let data3 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = async function () {
+let key3 = async function () {
   return await window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
@@ -8,13 +8,13 @@ let key = async function () {
     ["encrypt", "decrypt"])
 }
 async function testi3() {
-  async function t1() { return await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }
+  async function t1() { return await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key3(), data3) }
 
   let t3, t4, t5, t6, chain1;
-  t3 = await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3)
-  t4 = { a: 23, b: "sdf", t4: await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }
-  t5 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }]
-  t6 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key(), data3) }]
+  t3 = await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key3(), data3)
+  t4 = { a: 23, b: "sdf", t4: await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key3(), data3) }
+  t5 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key3(), data3) }]
+  t6 = [1, 2, { a: 3 }, { t6: window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, await key3(), data3) }]
   let signkey = await window.crypto.subtle.generateKey(
     {
       name: "RSASSA-PKCS1-v1_5",
