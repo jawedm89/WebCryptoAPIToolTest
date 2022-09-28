@@ -4,8 +4,8 @@
 <body>
 
   <h1 align="center">Web Crypto API TestWebsite für Regel 2</h1>
-  <button id="test1">Test 1</button>
   <p>Der erste Test soll aufzeigen, dass bei Zuweisen des Ciphertextes zu einer Variable, erkannt wird welche Variable den Ciphertext hält.
+    <br>
     <br>
     1. die erste Cipher kommt aus der Funktion "t1()" und mündet in der Sign Funktion. Ergebniss sollte <span style="color: green">true</span> sein.
     <br>
@@ -24,67 +24,53 @@
     8. die achte Cipher kommt aus einem Objekt mit dem Key "t6", welches in einem Array ist am Index 3 und ist in der Variable "t6" entahlten und mündet in der Sign Funktion. Ergebniss sollte <span style="color: green">true</span> sein.
     <br>
     9. die neunte Cipher kommt aus einem Objekt mit dem Key "t6", welches in einem Array ist am Index 3 und ist in der Variable "t6" entahlten  und mündet in keiner Sign Funktion. Ergebniss sollte <span style="color: red">false</span> sein.
+  </p>
+  <br>
+  <br>
+  <button id="test1">Test 1</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Der zweite Test soll aufzeigen das bei einer Funktion die den Ciphertext wiedergibt, auch nachverfolgt werden kann, dass jeder Funktionscall in einer Sign Methode mündet. Hier soll auch aufgezeigt werden, dass wenn die Funktion bspw. ein Array wiedergibt, in dem der Ciphertext enthalten ist, dass auch erkannt wird ob der Ciphertext an der korrekten Stelle des Arrays abgerufen wird und in der Sign Methode mündet. Es gibt 3 Encrypt API Calls, die aus der Funktion "t2()" in einem Array wiedergegeben werden durch "return".
     <br>
+    <br>
+     1. Die erste Cipher ist selber in einer Funktion "t1()", die die Cipher wiedergibt. Diese wird einmal korrekt aufgerufen und Signiert. Das Ergebnis sollte <span style="color: green">true</span> sein.
+    <br>
+    2. Die zweite Cipher ist in der Variable "t2" enthalten, als ein Objekt mit dem Key "t4". Diese wird 2 mal aufgerufen, wobei sie einmal in einer Sign Funktion mündet und einmal nicht. Das Ergebnis sollte <span style="color: green">true</span> sein. 
+    <br>
+    3. Die dritte Cipher ist in der Variable "t3" enthalten, als ein Objekt mit dem Key "t6", welches in einem Array ist an dem Index 3. Diese wird 4 mal aufgerufen, sie 3 mal in einer Sign Funktion mündet und einmal nicht. Hier wird auch 2 mal die Cipher an die Funktion "signieren()" weitergegeben, die dann die Cipher signiert. Das Ergebnis sollte <span style="color: green">true</span> sein. 
   </p>
   <br>
   <br>
   <button id="test2">Test 2</button>
-  <p>
-    Der zweite Test soll aufzeigen das bei einer Funktion die den Ciphertext wiedergibt, auch nachverfolgt werden kann, dass jeder Funktionscall in einer Sign Methode mündet. 
-    Hier soll auch aufgezeigt werden, dass wenn die Funktion bspw. ein Array wiedergibt, in dem der Ciphertext enthalten ist, dass auch erkannt wird ob der Ciphertext an der 
-    korrekten Stelle des Arrays abgerufen wird und in der Sign Methode mündet. 
+  <br>
+  <br>
+  <br>
+  <p>Der dritte Test soll aufzeigen, dass wenn der Ciphertext an eine andere Variable weitergegeben wird, dies auch erkannt wird. Wenn ausgehend von Encrytion Call, der Ciphertext an unterschiedliche Variablen weitergegeben wird und nur eine in der Sign Methode mündet, wird die Regel als eingehalten erachetet. Wenn aber der Ciphertext von einer Funktion wiedergegeben wird durch "return", dann ist es hier auch ausreichend, wenn ein Funktionscall in der Sign Methode mündet. In diesen Test gibt es 7 Encrytion Calls. Alle werden in der Funktion "testi3()" über die "return" Methode in einem Array ausgegeben.
     <br>
-    Es gibt 3 Encrypt API Calls, die aus der Funktion "t2()" in einem Array wiedergegeben werden durch "return". Die erste ist selber eine Funktion "t1()", die die Cipher wiedergibt. 
-    Diese wird einmal korrekt aufgerufen und Signiert. Das Ergebnis sollte <span style="color: green">true</span> sein.
     <br>
-    Die zweite Cipher ist in der Variable "t2" enthalten, als ein Objekt mit dem Key "t4". Diese wird 2 mal aufgerufen, wobei sie einmal in einer Sign Funktion mündet und einmal 
-    nicht. Das Ergebnis sollte <span style="color: green">true</span> sein. 
+    1. Die erste Cipher wird an die Funktion "t1()" gebunden und mündet in der Funktion in keiner Sign Methode. Sie wird mit dem Index 0 aus der Funktion nirgendwo aufgerufen. Das Ergebnis sollte <span style="color: red">false</span> sein.
     <br>
-    Die dritte Cipher ist in der Variable "t3" enthalten, als ein Objekt mit dem Key "t6", welches in einem Array ist an dem Index 3. Diese wird 4 mal aufgerufen, sie 3 mal in einer
-    Sign Funktion mündet und einmal nicht. Hier wird auch 2 mal die Cipher an die Funktion "signieren()" weitergegeben, die dann die Cipher signiert. Das Ergebnis sollte 
-    <span style="color: green">true</span> sein. 
+    2. Die zweite Cipher wird an die Variable "t3" gebunden und wird dann an die Variablen "chain1" und "chain2" gebunden. In der Funktion "testi3()" mündet keine der Variablen in der Sign Methode. "t3" wird mit dem Index 1 und chain1 wird mit dem Index 5 aus der Funktion wiedergegeben. Die Funktion "testi3" wird als Argument in der Funktion "chain3()" übergeben. In der Funktion "chain3()" ist eine Funktion "chain4()" definiert, die die Chipher am Index 5 des Arrays aus dem "testi3()" call wiedergibt. "chain4()" wird in der "chain3()" Funktion aufgerufen und dann mit der "then()" Methode wird das Ergebnis signiert. Die Funktion "testi3()" mit dem Index 1 wird nie aufgerufen und mündet entsprechend nie in der Sign Methode. Weil aber ein Funktionscall in der Sign Methode müdet, sollte das Ergebnis <span style="color: green">true</span> sein. 
+    <br>
+    3. Die dritte Cipher ist in einem Objekt mit dem Key "t4" an die Variable "t4" gebunden. Sie wird mit dem Index 2 aus der Funktion "testi3()" wiedergegeben. Die Variable mündet in der Funktion in keiner Sign Methode. Die Funktion "testi3()" wird an die Variable "das" gebunden. "das" wird dann in der Funktion "ee" an die Variable "chain7" gebunden. Über die "then()" Methode wird dann "chain7" aufgerufen und über eine eine Funktion in der "then()" Methode die Cipher am Index 2 und mit dem Key "t4" wiedergegeben. Mit einer weiteren "then()" Methode wird dann das Ergebnis über "console.log" in der Konsole ausgegeben. Damit wird zwar auf die Cipher zugegriffen aber Sie müdet nie in der Sign Methode. Das Ergebnis sollte <span style="color: red">false</span> sein. 
+    <br>
+    4. Die vierte Cipher ist in einem Objekt mit dem Key "t6", das in einem Array enthalten ist am Index 3. Dieses Array ist an die Variable "t5" gebunden. Die Variable mündet in der Funktion "testi3()" in keiner Sign Methode. "testi3()" gibt die Variable mit dem Index 3 wieder. "testi3()" wird an die Variable "das" gebunden. In der Funktion "ee()" wird das Ergebnis aus "das" über die "await" Funktion in der Variable "chain5" gespeichert. Die Cipher wird über "await chain5[3][3].t6" in der Variable "chain6" gespeichert. In der Funktion "ee()" wird dann die Sign Methode aufgerufen, wobei "chain6" als Argument des zu signierenden Textes übergeben wird. Das Ergebnis sollte <span style="color: green">true</span> sein. 
+    <br>
+    5. Die fünfte Cipher ist in einem Objekt mit dem Key "t6", das in einem Array enthalten ist am Index 3. Dieses Array ist an die Variable "t6" gebunden. Die Cipher aus "t6" wird über "let abc = t6[3].t6;" an die Variable "abc" gebunde. Die Cipher wird dann über einen "then()" Signiert und mündet damit in einer Sign Methode. "t6[3]" wird auch an die Variable "ab" weitergegeben. Diese müdent über den call "ab.t6.then()" ebenfalls in einer Sign Methode. Außerdem wird "t6" am Index 4 aus der "testi3()" Funktion wiedergegeben. Diese wird aber nie aufgerufen. Da aber in der Funktion "t6" die Cipher in einer Sign Methode mündet, sollte das Ergebnis <span style="color: green">true</span> sein.
+    <br>
+    6. Die sechste Cipher ist in einer "FunctionExpression" enthalten, die in einem "then()" call enthalten ist, bei dem vorher der Key generiert wird. Die Cipher wird in der "FunctionExpression" in der Variable "cip" gespeichert und dann über "return" an den nächsten "then()" call weitergegeben. In dem "then()" call mündet dann die Cipher in einer Sign Methode. Das Ergebins sollte <span style="color: green">true</span> sein.
   </p>
-  <br>
-  <br>
   <button id="test3">Test 3</button>
-  <p>Der dritte Test soll aufzeigen, dass wenn der Ciphertext an eine andere Variable weitergegeben wird, dies auch erkannt wird. Wenn ausgehend von Encrytion Call, der Ciphertext
-    an unterschiedliche Variablen weitergegeben wird und nur eine in der Sign Methode mündet, wird die Regel als eingehalten erachetet. Wenn aber der Ciphertext von einer Funktion
-    wiedergegeben wird durch "return", dann ist es hier auch ausreichend, wenn ein Funktionscall in der Sign Methode mündet. In diesen Test gibt es 7 Encrytion Calls. Alle werden
-    in der Funktion "testi3()" über die "return" Methode in einem Array ausgegeben.
-    <br>
-    Die erste Cipher wird an die Funktion "t1()" gebunden und mündet in der Funktion in keiner Sign Methode. Sie wird mit dem Index 0 aus der Funktion nirgendwo aufgerufen. Das 
-    Ergebnis sollte <span style="color: red">false</span> sein.
-    <br>
-    Die zweite Cipher wird an die Variable "t3" gebunden und wird dann an die Variablen "chain1" und "chain2" gebunden. In der Funktion "testi3()" mündet keine der Variablen in der
-    Sign Methode. "t3" wird mit dem Index 1 und chain1 wird mit dem Index 5 aus der Funktion wiedergegeben. Die Funktion "testi3" wird als Argument in der Funktion "chain3()" übergeben.
-    In der Funktion "chain3()" ist eine Funktion "chain4()" definiert, die die Chipher am Index 5 des Arrays aus dem "testi3()" call wiedergibt. "chain4()" wird in der "chain3()" 
-    Funktion aufgerufen und dann mit der "then()" Methode wird das Ergebnis signiert. Die Funktion "testi3()" mit dem Index 1 wird nie aufgerufen und mündet entsprechend nie in der
-    Sign Methode. Weil aber ein Funktionscall in der Sign Methode müdet, sollte das Ergebnis <span style="color: green">true</span> sein. 
-    <br>
-    Die dritte Cipher ist in einem Objekt mit dem Key "t4" an die Variable "t4" gebunden. Sie wird mit dem Index 2 aus der Funktion "testi3()" wiedergegeben. Die Variable mündet in der
-    Funktion in keiner Sign Methode. Die Funktion "testi3()" wird an die Variable "das" gebunden. "das" wird dann in der Funktion "ee" an die Variable "chain7" gebunden. Über die 
-    "then()" Methode wird dann "chain7" aufgerufen und über eine eine Funktion in der "then()" Methode die Cipher am Index 2 und mit dem Key "t4" wiedergegeben. Mit einer weiteren
-    "then()" Methode wird dann das Ergebnis über "console.log" in der Konsole ausgegeben. Damit wird zwar auf die Cipher zugegriffen aber Sie müdet nie in der Sign Methode. Das 
-    Ergebnis sollte <span style="color: red">false</span> sein. 
-    <br>
-    Die vierte Cipher ist in einem Objekt mit dem Key "t6", das in einem Array enthalten ist am Index 3. Dieses Array ist an die Variable "t5" gebunden. Die Variable mündet in der
-    Funktion "testi3()" in keiner Sign Methode. "testi3()" gibt die Variable mit dem Index 3 wieder. "testi3()" wird an die Variable "das" gebunden. In der Funktion "ee()" wird
-    das Ergebnis aus "das" über die "await" Funktion in der Variable "chain5" gespeichert. Die Cipher wird über "await chain5[3][3].t6" in der Variable "chain6" gespeichert. In der 
-    Funktion "ee()" wird dann die Sign Methode aufgerufen, wobei "chain6" als Argument des zu signierenden Textes übergeben wird. Das Ergebnis sollte 
-    <span style="color: green">true</span> sein. 
-    <br>
-    Die fünfte Cipher ist in einem Objekt mit dem Key "t6", das in einem Array enthalten ist am Index 3. Dieses Array ist an die Variable "t6" gebunden. Die Cipher aus "t6" wird
-    über "let abc = t6[3].t6;" an die Variable "abc" gebunde. Die Cipher wird dann über einen "then()" Signiert und mündet damit in einer Sign Methode. "t6[3]" wird auch an die
-    Variable "ab" weitergegeben. Diese müdent über den call "ab.t6.then()" ebenfalls in einer Sign Methode. Außerdem wird "t6" am Index 4 aus der "testi3()" Funktion wiedergegeben. 
-    Diese wird aber nie aufgerufen. Da aber in der Funktion "t6" die Cipher in einer Sign Methode mündet, sollte das Ergebnis <span style="color: green">true</span> sein.
-    <br>
-    Die sechste Cipher ist in einer "FunctionExpression" enthalten, die in einem "then()" call enthalten ist, bei dem vorher der Key generiert wird. Die Cipher wird in der 
-    "FunctionExpression" in der Variable "cip" gespeichert und dann über "return" an den nächsten "then()" call weitergegeben. In dem "then()" call mündet dann die Cipher in einer
-    Sign Methode. Das Ergebins sollte <span style="color: green">true</span> sein.
-
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test aller 3 Scripte aufeinmal.
   </p>
-  <br>
-  <br>
   <button id="test4">Test 4</button>
 
   <script>
@@ -140,8 +126,12 @@
     });
 
     test4.addEventListener("click", async function() {
-      let script4 = document.createElement("script");
-      script4.src = "test4.js";
+      let script1 = document.createElement("script");
+      let script2 = document.createElement("script");
+      let script3 = document.createElement("script");
+      script1.src = "test1.js";
+      script2.src = "test2.js";
+      script3.src = "test3.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
@@ -150,7 +140,9 @@
         console.log(e);
       }
       await delay(1000);
-      document.head.appendChild(script4);
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+      document.head.appendChild(script3);
     });
     
   </script>

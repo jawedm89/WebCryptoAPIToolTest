@@ -43,11 +43,17 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
           i++;
         }
         while (i < results.length ) 
-        console.log(ergebnis, results); 
+        //console.log(ergebnis, results); 
+        if (ergebnis.includes(true)) {
+          console.log("Regel 2 wurde eingehalten an der Stelle ", encCall.start)
+        }
+        else {
+          console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure.")
+        }
       }
     }
     else {
-      console.log("Verstoß gegen Regel 2! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+      console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
     }
   }
 }
@@ -224,7 +230,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }
   }
   else {
-    console.log(JSON.parse(JSON.stringify(ergebnis)), JSON.parse(JSON.stringify(funcCalls)))
+    //console.log(JSON.parse(JSON.stringify(ergebnis)), JSON.parse(JSON.stringify(funcCalls)))
     if (ergebnis.includes(true)) {
       return true;
     }
