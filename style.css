@@ -1,0 +1,88 @@
+.toggle {
+    margin:0 0 0 2rem;
+    position: relative;
+    display: inline-block;
+    width: 1.5rem;
+    height: 0.85rem;
+    float: right;
+}
+
+.toggle input {
+    display: none;
+}
+
+.roundbutton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background-color: #33455e;
+    display: block;
+    transition: all 0.15s;
+    border-radius: 1.7rem;
+    cursor: pointer;
+}
+
+.roundbutton:before {
+    position: absolute;
+    content: "";
+    height: 0.6rem;
+    width: 0.625rem;
+    border-radius: 100%;
+    display: block;
+    left: 0.125rem;
+    bottom: 0.125rem;
+    background-color: white;
+    transition: all 0.15s;
+}
+
+input:checked + .roundbutton {
+    background-color: #FF6E48;
+}
+
+input:checked + .roundbutton:before  {
+    transform: translate(0.65rem, 0);
+}
+
+.mode {
+    float: left;
+}
+
+.Content {
+    clear: both;
+    padding: 10px 10px 10px 10px;
+    border-top: solid black;
+}
+
+.scriptContent {
+    width: 350px;
+    height: 250px;
+    overflow: scroll;
+    float: left;
+    background-color: antiquewhite;
+    scroll-behavior: smooth;
+}
+
+.description {
+    float: right;
+    text-align: left;
+    vertical-align: top;
+}
+
+.verstoßBeschreibung {
+    text-align: left;
+    width: 333px;
+    padding-left: 10px;
+}
+
+.EntwicklerSwitch {
+    clear: both;
+    padding-top: 20px;
+    border-top: solid black;
+}
+
+.Verstoß {
+
+}

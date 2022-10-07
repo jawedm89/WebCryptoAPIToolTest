@@ -1,18 +1,27 @@
 <html>
-  <head>
-    <meta charset="utf-8">
-    <script type="text/javascript" src="/jq.js"></script>
-    <link rel="stylesheet" href="node_modules/highlight-within-textarea/jquery.highlight-within-textarea.css">
-    <script src="node_modules/highlight-within-textarea/jquery.highlight-within-textarea.js"></script>
-  </head>
+
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="/jq.js"></script>
+  <link rel="stylesheet" href="node_modules/highlight-within-textarea/jquery.highlight-within-textarea.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="node_modules/highlight-within-textarea/jquery.highlight-within-textarea.js"></script>
+</head>
 
 <body>
-  <div id="popup-content">
-      <div id="divi"></div>
-    <button id="butti">Ergebnisse anzeigen</button>
+  <h2 style="text-align: center;">Web Crypto API konsistenz Überprüfung für kryptographische Regeln</h2>
+  <div class="Verstoß" id="popup-content" style="scroll-behavior: smooth;">
+    <p id="info">Auf der akuellten Seite wird die Web Crypto API nicht genutzt</p>
+    <div id="Ergebnis"></div>
+  </div>
+  <div class="EntwicklerSwitch">
+    <label class="toggle">
+      <input id="toggleswitch" type="checkbox">
+      <span class="roundbutton"></span>
+    </label>
+    <div class="mode">Entwickler Modus: <span id="EntwicklerModusStatus">deaktiviert</span></div>
   </div>
   <script src="pop.js"></script>
-
 </body>
 
 </html>

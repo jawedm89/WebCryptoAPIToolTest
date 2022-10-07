@@ -1,89 +1,93 @@
 (function () { function r(e, n, t) { function o(i, f) { if (!n[i]) { if (!e[i]) { var c = "function" == typeof require && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = "MODULE_NOT_FOUND", a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = "function" == typeof require && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({
   1: [function (require, module, exports) {
-    
-    window.addEventListener("load", function() {starten()})
+
+    window.addEventListener("load", function () { starten() })
     function starten(scripts) {
       let len = document.scripts.length;
       let s = [];
-      
-      if(scripts === undefined) {
+
+      if (scripts === undefined) {
         scripts = document.scripts;
       }
-  let startZeit = Date.now();
-  let mutationObserved = false;
-  let mutation = new MutationObserver(function mut(mutation) {
-      for(let i = 0; i < mutation[0].addedNodes.length; i++) {
-        if(mutation[0].addedNodes[i].nodeName === "SCRIPT") {
-          mutationObserved = true;
-          s.push(mutation[0].addedNodes[i]);
+      let startZeit = Date.now();
+      let mutationObserved = false;
+      let mutation = new MutationObserver(function mut(mutation) {
+        for (let j = 0; j < mutation.length; j++) {
+          for (let i = 0; i < mutation[j].addedNodes.length; i++) {
+            if (mutation[j].addedNodes[i].nodeName === "SCRIPT") {
+              mutationObserved = true;
+              s.push(mutation[j].addedNodes[i]);
+              console.log(mutation)
+            }
+          }
+        }
+      });
+
+      setInterval(function () {
+        if (mutationObserved === true) {
+          console.log("es  gab eine veränderung");
+          mutationObserved = false;
+          mutation.disconnect();
+          starten(s);
+        }
+      }, 1000);
+      mutation.observe(document.head, { childList: true });
+      mutation.observe(document.body, { childList: true });
+      let jsscripts = [];
+      let WebCryptoAPIScripts = [];
+      const acorn = require('acorn');
+      const walk = require("acorn-walk");
+
+      async function RegelVerteiler(WebCryptoAPIScripts) {
+        try {
+          for (let i = 0; i < Object.keys(WebCryptoAPIScripts).length; i++) {
+            if (WebCryptoAPIScripts[i].regel1.length != 0) {
+              //console.log("starte regel 1", WebCryptoAPIScripts[i].regel1, i);
+              await Regel1(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel2.length != 0) {
+              //console.log("starte Regel 2");
+              await Regel2(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel3.length != 0) {
+              Regel3(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel4.length != 0) {
+              Regel4(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel5.length != 0) {
+              Regel5(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel6.length != 0) {
+              Regel6(WebCryptoAPIScripts[i]);
+            }
+            if (WebCryptoAPIScripts[i].regel7.length != 0) {
+              Regel7(WebCryptoAPIScripts[i]);
+            }
+          }
+        }
+        catch (e) {
+          console.log(e);
         }
       }
-});
 
-  setInterval(function() {
-    if(mutationObserved === true) {
-      console.log("es  gab eine veränderung");
-      mutationObserved = false;
-      mutation.disconnect();
-      starten(s);
-    }
-  }, 1000);
-  mutation.observe(document.head, { childList: true });
-  mutation.observe(document.body, { childList: true });
-  let jsscripts = [];
-  let WebCryptoAPIScripts = [];
-  const acorn = require('acorn');
-  const walk = require("acorn-walk");
-
-  async function RegelVerteiler(WebCryptoAPIScripts) {
-    try {
-      for (let i = 0; i < Object.keys(WebCryptoAPIScripts).length; i++) {
-        if (WebCryptoAPIScripts[i].regel1.length != 0) {
-          //console.log("starte regel 1", WebCryptoAPIScripts[i].regel1, i);
-          await Regel1(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel2.length != 0) {
-          //console.log("starte Regel 2");
-          await Regel2(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel3.length != 0) {
-          Regel3(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel4.length != 0) {
-          Regel4(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel5.length != 0) {
-          Regel5(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel6.length != 0) {
-          Regel6(WebCryptoAPIScripts[i]);
-        }
-        if (WebCryptoAPIScripts[i].regel7.length != 0) {
-          Regel7(WebCryptoAPIScripts[i]);
-        }
+      async function hin() {
+        jsscripts = await laden(scripts, jsscripts);
+        WebCryptoAPIScripts = await objectGen(WebCryptoAPIScripts, jsscripts, scripts);
+        await RegelVerteiler(WebCryptoAPIScripts);
       }
+
+      hin().then(() => console.log("Die Laufzeit der WebExtension in Millisekunden: ", Date.now() - startZeit, WebCryptoAPIScripts));
+
+      browser.runtime.onMessage.addListener((request) => {
+        if (request.click) {
+            browser.runtime.sendMessage({ Ergebnis: WebCryptoAPIScripts})
+        }
+      })
     }
-    catch (e) {
-      console.log(e);
-    }
-  }
-
-  async function hin() {
-    jsscripts = await laden(scripts, jsscripts);
-    WebCryptoAPIScripts = await objectGen(WebCryptoAPIScripts, jsscripts, scripts);
-    await RegelVerteiler(WebCryptoAPIScripts);
-  }
-
-  hin().then(() => console.log("Die Laufzeit der WebExtension in Millisekunden: ", Date.now() - startZeit));
-
-  browser.runtime.onMessage.addListener((request) => {
-    if(request.click) {
-  browser.runtime.sendMessage({Ergebnis: WebCryptoAPIScripts})}
-  })
-}
 
 
-}, { "acorn": 3, "acorn-walk": 2 }], 2: [function (require, module, exports) {
+  }, { "acorn": 3, "acorn-walk": 2 }], 2: [function (require, module, exports) {
     (function (global, factory) {
       typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
         typeof define === 'function' && define.amd ? define(['exports'], factory) :

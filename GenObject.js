@@ -139,6 +139,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
         WebCryptoAPIScripts[j].regel5 = [];
         WebCryptoAPIScripts[j].regel6 = [];
         WebCryptoAPIScripts[j].regel7 = [];
+        WebCryptoAPIScripts[j].verstöße = [];
         let start = 0;
         do {
           indexx = WebCryptoAPIScripts[j].script.indexOf("window.crypto.subtle", start)

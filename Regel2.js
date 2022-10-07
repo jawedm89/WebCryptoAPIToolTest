@@ -38,21 +38,29 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
             }
           }
           else {
+            console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
+            if (!result) {
+              if (results[i][0].start === encCall.start) {
+                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+                WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+              }
+              else {
+                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+                WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
+              }
+            }
             ergebnis.push(result);
           }
+          console.log(result, results, i)
           i++;
         }
         while (i < results.length ) 
-        //console.log(ergebnis, results); 
-        if (ergebnis.includes(true)) {
-          console.log("Regel 2 wurde eingehalten an der Stelle ", encCall.start)
-        }
-        else {
-          console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure.")
-        }
+        //console.log(results)
       }
     }
     else {
+      let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+      WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
       console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
     }
   }
@@ -230,7 +238,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       }
   }
   else {
-    //console.log(JSON.parse(JSON.stringify(ergebnis)), JSON.parse(JSON.stringify(funcCalls)))
     if (ergebnis.includes(true)) {
       return true;
     }
@@ -250,7 +257,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
 async function findPreposition(WebCryptoAPIScripts, encCall) {
   let type;
   let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
-  //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)), encCall, JSON.parse(JSON.stringify(prePosition)))
   let w = encCall[1].map((x) => x)
   
   for(let i = 0; i < prePosition.length; i++) {

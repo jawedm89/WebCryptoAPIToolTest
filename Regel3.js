@@ -35,6 +35,12 @@ window.Regel3 = async function (WebCryptoAPIScripts) {
       }
       while (i < results.length ) 
       console.log(ergebnis, results); 
+      if (ergebnis.includes(true)) {
+        console.log("Verstoß gegen Regel 3 an der Stelle ", sign.start, "! es wird " + signTyp + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ")
+      }
+      else {
+        console.log("Regel 2 wurde eingehalten an der Stelle ", sign.start)
+      }
     }
   }
 }
@@ -106,8 +112,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
       let pre = preposition[3];
       let inout = await inOrOutFunction(preposition[0].start, WebCryptoAPIScripts, true);  
       let inoruot = inout.map((x) => x);  
-      //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)))
-      Object.freeze(WebCryptoAPIScripts);
         for (let x = 0; x < pre.length; x++) {
           if (pre[x].type === "FunctionExpression" || pre[x].type === "ArrowFunctionExpression") {
             if (pre[x].start > inoruot[1].start && pre[x].end <= inoruot[1].end) {
@@ -232,7 +236,6 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
 async function findPreposition(WebCryptoAPIScripts, encCall) {
   let type;
   let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
-  //console.log(JSON.parse(JSON.stringify(WebCryptoAPIScripts.functions)), encCall, JSON.parse(JSON.stringify(prePosition)))
   let w = encCall[1].map((x) => x)
   for(let i = 0; i < prePosition.length; i++) {
     switch (prePosition[i].type) {
