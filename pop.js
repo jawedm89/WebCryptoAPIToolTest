@@ -10,13 +10,13 @@ browser.tabs.query({
     active: true
     }).then(sendMessageToTabs);
 
-browser.runtime.onMessage.addListener((request) => {
-    if (request.Ergebnis && request.Ergebnis.length > 0) {
-        info.innerText = "Auf der aktuellen Seite kommt es zu folgenden Verstößen: "
-        request.Ergebnis.forEach(element => {
-            if (element.verstöße.length > 0) {
-                verstöße.push(element);
-            }
+    browser.runtime.onMessage.addListener((request) => {
+        if (request.Ergebnis && request.Ergebnis.length > 0) {
+            info.innerText = "Auf der aktuellen Seite kommt es zu folgenden Verstößen: ";
+            request.Ergebnis.forEach(element => {
+                if (element.verstöße.length > 0) {
+                    verstöße.push(element);
+                }   
             else {
                 info.innerText = "Alle kryptographischen Regeln bei der nutzungder Web Crypto API werden auf der aktuellen Seite eingehalten"
             }
@@ -78,9 +78,8 @@ function entwicklerContent() {
     for (let i = 0; i < verstöße.length; i++) {
         divs[i].innerHTML = "";
         let script = document.createElement('div');
-        script.className = "scriptContent";
         let scriptContent = verstöße[i].script;
-        let newHTML;
+        let newHTML = "";
         const openingTag = '<span style="Background-color:yellow" id="';
         const closingTag = '</span>'
         let descrition = document.createElement('div');
@@ -93,7 +92,7 @@ function entwicklerContent() {
             }
             let idTag = 'scrollToPostion' + i + ',' + j;
             newHTML = newHTML + scriptContent.slice(x, verstöße[i].verstöße[j][0].start)
-                + openingTag + idTag + '">' + scriptContent.substring(verstöße[i].verstöße[j][0].start, verstöße[i].verstöße[j][0].end) + closingTag;
+            + openingTag + idTag + '">' + scriptContent.substring(verstöße[i].verstöße[j][0].start, verstöße[i].verstöße[j][0].end) + closingTag;
             let para = document.createElement('p');
             para.className = "verstoßBeschreibung"
             para.innerHTML = '<a href="#' + idTag + '">' + (j+1) +'. Markeirte Stelle:</a>' + verstöße[i].verstöße[j][1];
@@ -103,6 +102,7 @@ function entwicklerContent() {
             }
         } 
         script.innerHTML = newHTML;
+        script.className = "scriptContent";
         divs[i].appendChild(script);
         descrition.className = "description";
         divs[i].appendChild(descrition);
@@ -111,12 +111,15 @@ function entwicklerContent() {
 
 function normalerContent() {
     popUpContent.innerHTML = "";
-    let verstoßAnzahl = 1
+    let verstoßAnzahl = 1;
+    let normaleVerstoßErklärung = document.createElement('div');
+    normaleVerstoßErklärung.className = "normaleVerstoßErklärung";
+    popUpContent.appendChild(normaleVerstoßErklärung);
     for(let i = 0; i < verstöße.length; i++) {
         verstöße[i].verstöße.forEach(element => {
             let verstoß = document.createElement('p');
             verstoß.innerText = verstoßAnzahl    + ". Verstoß: " + element[1];
-            popUpContent.appendChild(verstoß);
+            normaleVerstoßErklärung.appendChild(verstoß);
             verstoßAnzahl++;
         })
     }

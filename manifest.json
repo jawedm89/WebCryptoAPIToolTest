@@ -22,6 +22,10 @@
     "js": ["bundle2.js", "GenObject.js", "loadScripts.js", "findCallEx.js", "Regel1.js", "Regel2.js", "Regel3.js", "Regel4.js", "Regel5.js", "Regel6.js", "Regel7.js", "NodeWalk.js"]
     }
   ],
+  
+  "background": {
+    "scripts": ["background.js"]
+  },
 
    
     

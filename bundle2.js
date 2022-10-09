@@ -1,11 +1,9 @@
 (function () { function r(e, n, t) { function o(i, f) { if (!n[i]) { if (!e[i]) { var c = "function" == typeof require && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = "MODULE_NOT_FOUND", a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = "function" == typeof require && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({
   1: [function (require, module, exports) {
-
+    
     window.addEventListener("load", function () { starten() })
     function starten(scripts) {
-      let len = document.scripts.length;
       let s = [];
-
       if (scripts === undefined) {
         scripts = document.scripts;
       }
@@ -50,7 +48,7 @@
               await Regel2(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel3.length != 0) {
-              Regel3(WebCryptoAPIScripts[i]);
+              await Regel3(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel4.length != 0) {
               Regel4(WebCryptoAPIScripts[i]);
@@ -75,13 +73,27 @@
         jsscripts = await laden(scripts, jsscripts);
         WebCryptoAPIScripts = await objectGen(WebCryptoAPIScripts, jsscripts, scripts);
         await RegelVerteiler(WebCryptoAPIScripts);
+        let verstöße = await verstoßZähler();
+        if (verstöße > 0) {
+          browser.runtime.sendMessage({ verstoßAnzahl: verstöße})
+        }
       }
 
       hin().then(() => console.log("Die Laufzeit der WebExtension in Millisekunden: ", Date.now() - startZeit, WebCryptoAPIScripts));
 
-      browser.runtime.onMessage.addListener((request) => {
+      async function verstoßZähler() {
+        let verstöße = 0;
+        for (let i = 0; i < WebCryptoAPIScripts.length; i++) {
+          for (let j = 0; j < WebCryptoAPIScripts[i].verstöße.length; j++) {
+            verstöße = verstöße +1;
+          }
+        }
+        return verstöße
+      }
+
+      browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.click) {
-            browser.runtime.sendMessage({ Ergebnis: WebCryptoAPIScripts})
+          browser.runtime.sendMessage({ Ergebnis: WebCryptoAPIScripts})          
         }
       })
     }
