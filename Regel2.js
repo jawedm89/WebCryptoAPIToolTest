@@ -57,11 +57,14 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
         while (i < results.length ) 
         //console.log(results)
       }
+      else {
+        let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+        WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+        console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+      }
     }
     else {
-      let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-      WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-      console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+      console.log("keine Signatur nötig")
     }
   }
 }
