@@ -7,7 +7,7 @@
   <br>
   <br>
   <br>
-  <p>Der erste Test soll aufzeigen, dass bei Zuweisen des Ciphertextes zu einer Variable, erkannt wird welche Variable den Ciphertext hält.
+  <p>Der erste Test soll aufzeigen, dass bei Zuweisen des API Calls zu einer Variable, erkannt wird welche Variable den API Call hält. Außerdem wird gezeigt, dass wenn der API Call verschachtelt in einer Variable enthalten ist, dies auch erkannt wird. Bspw. wenn ein Objekt der Variable "T1" zugewiesen wird und der API Call im Objekt unter dem Key "O1" enthalten ist. Ebenfalls wird gezeigt, das dies auch korrekt aufgelöst wird, wenn auf die Variable zugegriffen wird. 
     <br>
     <br>
     1. die erste Cipher kommt aus der Funktion "t1()" und mündet in der Sign Funktion. 
@@ -51,7 +51,7 @@
   <br>
   <br>
   <p>
-    Der zweite Test soll aufzeigen das bei einer Funktion die den Ciphertext wiedergibt, auch nachverfolgt werden kann, dass jeder Funktionscall in einer Sign Methode mündet. Hier soll auch aufgezeigt werden, dass wenn die Funktion bspw. ein Array wiedergibt, in dem der Ciphertext enthalten ist, dass auch erkannt wird ob der Ciphertext an der korrekten Stelle des Arrays abgerufen wird und in der Sign Methode mündet. Es gibt 3 Encrypt API Calls, die aus der Funktion "t2()" in einem Array wiedergegeben werden durch "return".
+    Der zweite Test soll aufzeigen das bei einer Funktion die den API Call wiedergibt, auch nachverfolgt werden kann, dass zumindes ein Funktionscall in einem API Call der Sign Methode mündet. Hier soll auch aufgezeigt werden, dass wenn die Funktion bspw. ein Array wiedergibt, in dem der Ciphertext enthalten ist, dass auch erkannt wird ob der Ciphertext an der korrekten Stelle des Arrays abgerufen wird und in der Sign Methode mündet. In diesen Test gibt 3 Encrypt API Calls, die aus der Funktion "t2()" in einem Array wiedergegeben werden durch "return".
     <br>
     <br>
      1. Die erste Cipher ist selber in einer Funktion "t1()", die die Cipher wiedergibt. Diese wird einmal korrekt aufgerufen und Signiert. 
@@ -70,7 +70,7 @@
   <br>
   <br>
   <br>
-  <p>Der dritte Test soll aufzeigen, dass wenn der Ciphertext an eine andere Variable weitergegeben wird, dies auch erkannt wird. Wenn ausgehend von Encrytion Call, der Ciphertext an unterschiedliche Variablen weitergegeben wird und nur eine in der Sign Methode mündet, wird die Regel als eingehalten erachetet. Wenn aber der Ciphertext von einer Funktion wiedergegeben wird durch "return", dann ist es hier auch ausreichend, wenn ein Funktionscall in der Sign Methode mündet. In diesen Test gibt es 7 Encrytion Calls. Alle werden in der Funktion "testi3()" über die "return" Methode in einem Array ausgegeben.
+  <p>Der dritte Test soll aufzeigen, dass wenn der API Call von einer Variable an eine andere Variable weitergegeben wird, dies auch erkannt wird. Wenn ausgehend vom Encrytion Call, der Ciphertext an unterschiedliche Variablen weitergegeben wird und nur eine in der Sign Methode mündet, wird die Regel als eingehalten erachetet. Wenn aber der API Call von einer Funktion wiedergegeben wird durch "return", dann muss jeder Funktionscall in der Sign Methode münden. In diesen Test gibt es 7 Encrytion Calls. Alle werden in der Funktion "testi3()" über die "return" Methode in einem Array ausgegeben.
     <br>
     <br>
     1. Die erste Cipher wird an die Funktion "t1()" gebunden und mündet in der Funktion in keiner Sign Methode. Sie wird mit dem Index 0 aus der Funktion nirgendwo aufgerufen. 
@@ -118,7 +118,7 @@
 
     test1.addEventListener("click", async function() {
       let script1 = document.createElement("script");
-      script1.src = "test1.js";
+      script1.src = "Variablenbinndung.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
@@ -132,7 +132,7 @@
 
     test2.addEventListener("click", async function() {
       let script2 = document.createElement("script");
-      script2.src = "test2.js";
+      script2.src = "Funktionswiedergabe.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);

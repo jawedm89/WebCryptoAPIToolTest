@@ -1,5 +1,5 @@
-let data1 = new TextEncoder().encode("ich werde verschlüsselt");
-let key = window.crypto.subtle.generateKey({
+let klarTextR2T1 = new TextEncoder().encode("ich werde verschlüsselt");
+let AESKeyR2T1 = window.crypto.subtle.generateKey({
     name: "AES-CBC",
     length: 256,
 },
@@ -7,23 +7,18 @@ let key = window.crypto.subtle.generateKey({
     ["encrypt", "decrypt"]);
 
 
-//Eine Funktion die das Promise der Cipher wieder gibt.
-async function t1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await key,data1)}
-//Hier wird das Promis der Cipher in t2 gespeichert
-let t2 = key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))
+async function EncCall1R2T1() {return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await AESKeyR2T1,klarTextR2T1)}
+let EncCall2R2T1 = AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))
 
-let t3 = key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))
-let t4, t5, t6;
-//Hier wird das Promis der Cipher in einem Objekt gespeichter unter dem Key t4. 
-t4 = {a: 23,b: "sdf", t4: key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))}
-let t4a = {a: 23,b: "sdf", t4: key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))}
-//Hier wird das Promis der Cipher in einem Array gespeichert unter dem Index 4.
-t5 = [1, 2, 3, 4, key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))]
-let t5a = [1, 2, 3, 4, key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))]
-//Hier wird das Promis der Cipher in einem Array gespeichert unter dem Index 2. Hier wird es als Objekt unter dem Key t6 aufrufbar. 
-t6 = [1, 2, {a: 3}, {t6: key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1))}]
-let t6a = [1, 2, {a: 3}, {t6: key.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,data1)), b: 12}]
-let signkey = window.crypto.subtle.generateKey(
+let EncCall3R2T1 = AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))
+let EncCall4R2T1, t5, t6;
+EncCall4R2T1 = {O1: 23,O2: "sdf", O3: AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))}
+let t4a = {a: 23,b: "sdf", t4: AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))}
+t5 = [1, 2, 3, 4, AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))]
+let t5a = [1, 2, 3, 4, AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))]
+t6 = [1, 2, {a: 3}, {t6: AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1))}]
+let t6a = [1, 2, {a: 3}, {t6: AESKeyR2T1.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T1)), b: 12}]
+let signkeyR2T1 = window.crypto.subtle.generateKey(
     {
       name: "RSASSA-PKCS1-v1_5",
       modulusLength: 2048, 
@@ -34,8 +29,8 @@ let signkey = window.crypto.subtle.generateKey(
     ["sign", "verify"]
   ).then(result => {return result});
 
-  t1().then(async function (result) {
-    let signkey2 = await signkey;
+  EncCall1R2T1().then(async function (result) {
+    let signkey2 = await signkeyR2T1;
     return window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
@@ -44,8 +39,8 @@ let signkey = window.crypto.subtle.generateKey(
     result
   );}).then(console.log)
 
-  t2.then(async function (result) {
-    let signkey2 = await signkey;
+  EncCall2R2T1.then(async function (result) {
+    let signkey2 = await signkeyR2T1;
     return window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
@@ -55,7 +50,7 @@ let signkey = window.crypto.subtle.generateKey(
   );}).then(console.log)
 
   t4.t4.then(async function (result) {
-    let signkey2 = await signkey;
+    let signkey2 = await signkeyR2T1;
     return window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
@@ -70,7 +65,7 @@ let signkey = window.crypto.subtle.generateKey(
     }).then(console.log)
 
   t5[4].then(async function (result) {
-    let signkey2 = await signkey;
+    let signkey2 = await signkeyR2T1;
     return window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
@@ -85,7 +80,7 @@ let signkey = window.crypto.subtle.generateKey(
     }).then(console.log)
 
   t6[3].t6.then(async function (result) {
-    let signkey2 = await signkey;
+    let signkey2 = await signkeyR2T1;
     return window.crypto.subtle.sign(
     {
       name: "RSASSA-PKCS1-v1_5"
