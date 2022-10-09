@@ -51,23 +51,23 @@ input:checked + .roundbutton:before  {
 }
 
 .Content {
-    clear: both;
+    display: grid;
+    grid-template-columns: 50% 50%;
     padding: 10px 10px 10px 10px;
     border-bottom: solid black;
 }
 
 .scriptContent {
-    width: 350px;
+    grid-column: 1 / 2;
     height: 250px;
     margin-top: 20px;
     overflow: scroll;
-    float: left;
     background-color: antiquewhite;
     scroll-behavior: smooth;
 }
 
 .description {
-    float: right;
+    grid-column: 2 / 2;
     text-align: left;
     vertical-align: top;
 }

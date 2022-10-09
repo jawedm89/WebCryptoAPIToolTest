@@ -69,18 +69,17 @@ function entwicklerContent() {
     popUpContent.innerHTML = "";
     for(let i = 0; i < verstöße.length; i++) {
         if (verstöße[i].verstöße.length > 0) {
-            let content = document.createElement("div");
-            content.className = "Content";
-            popUpContent.appendChild(content);
         }
     }
     const divs = document.getElementsByClassName('Content');
     for (let i = 0; i < verstöße.length; i++) {
-        divs[i].innerHTML = "";
-        let script = document.createElement('div');
-        let scriptContent = verstöße[i].script;
-        let newHTML = "";
-        const openingTag = '<span style="Background-color:yellow" id="';
+        if (verstöße[i].verstöße.length > 0) {
+            let content = document.createElement("div");
+            //divs[i].innerHTML = "";
+            let script = document.createElement('div');
+            let scriptContent = verstöße[i].script;
+            let newHTML = "";
+            const openingTag = '<span style="Background-color:yellow" id="';
         const closingTag = '</span>'
         let descrition = document.createElement('div');
         for (let j = 0; j < verstöße[i].verstöße.length; j++) {
@@ -103,10 +102,13 @@ function entwicklerContent() {
         } 
         script.innerHTML = newHTML;
         script.className = "scriptContent";
-        divs[i].appendChild(script);
         descrition.className = "description";
-        divs[i].appendChild(descrition);
+        content.appendChild(script);
+        content.appendChild(descrition);
+        content.className = "Content";
+        popUpContent.appendChild(content);
     } 
+}
 }
 
 function normalerContent() {
