@@ -34,12 +34,12 @@ window.Regel3 = async function (WebCryptoAPIScripts) {
         i++;
       }
       while (i < results.length ) 
-      console.log(ergebnis, results); 
+      //console.log(ergebnis, results); 
       if (ergebnis.includes(true)) {
-        console.log("Verstoß gegen Regel 3 an der Stelle ", sign.start, "! es wird " + signTyp + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ")
+        //console.log("Verstoß gegen Regel 3 an der Stelle ", sign.start, "! es wird " + signTyp + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ")
       }
       else {
-        console.log("Regel 2 wurde eingehalten an der Stelle ", sign.start)
+        //console.log("Regel 2 wurde eingehalten an der Stelle ", sign.start)
       }
     }
   }

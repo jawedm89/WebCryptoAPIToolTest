@@ -8,7 +8,7 @@
   <br>
   <br>
   <p>
-    
+
   </p>
   <button id="test1">Test 1</button>
   <br>
@@ -29,12 +29,32 @@
   <br>
   <br>
   <button id="test4">Test 4</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 5
+  </p>
+  <button id="test5">Test 5</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test aller Scripts auf einmal.
+  </p>
+  <button id="test6">Test 6</button>
+  <br>
+  <br>
+  <br>
+
 
   <script>
     let test1 = document.getElementById("test1");
     let test2 = document.getElementById("test2");
     let test3 = document.getElementById("test3");
     let test4 = document.getElementById("test4");
+    let test5 = document.getElementById("test5");
+    let test6 = document.getElementById("test6");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
@@ -42,12 +62,11 @@
 
     test1.addEventListener("click", async function() {
       let script1 = document.createElement("script");
-      script1.src = "test1.js";
+      script1.src = "Variablenbinndung.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }
-      }
+        }      }
       catch (e) {
         console.log(e);
       }
@@ -57,7 +76,7 @@
 
     test2.addEventListener("click", async function() {
       let script2 = document.createElement("script");
-      script2.src = "test2.js";
+      script2.src = "Funktionswiedergabe.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
@@ -71,7 +90,7 @@
 
     test3.addEventListener("click", async function() {
       let script3 = document.createElement("script");
-      script3.src = "test3.js";
+      script3.src = "Chaining.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
@@ -85,7 +104,7 @@
 
     test4.addEventListener("click", async function() {
       let script4 = document.createElement("script");
-      script4.src = "test4.js";
+      script4.src = "Funktionsaufruf.js";
       try{
         for(let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
@@ -95,6 +114,46 @@
       }
       await delay(1000);
       document.head.appendChild(script4);
+    });
+
+    test5.addEventListener("click", async function() {
+      let script5 = document.createElement("script");
+      script5.src = "Then()Call.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script5);
+    });
+
+    test6.addEventListener("click", async function() {
+      let script1 = document.createElement("script");
+      let script2 = document.createElement("script");
+      let script3 = document.createElement("script");
+      let script4 = document.createElement("script");
+      let script5 = document.createElement("script");
+      script1.src = "Variablenbinndung.js";
+      script2.src = "Funktionswiedergabe.js";
+      script3.src = "Chaining.js";
+      script4.src = "Funktionsaufruf.js";
+      script5.src = "Then()Call.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+      document.head.appendChild(script3);
+      document.head.appendChild(script4);
+      document.head.appendChild(script5);
     });
     
   </script>

@@ -18,10 +18,7 @@ signkeyR2T5 = window.crypto.subtle.generateKey(
 async function EncCall1R2T5() {
     return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await AESKeyR2T5,klarTextR2T5);
 }
-function EncCall11R2T1() {
-    let obj = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, AESKeyR2T5.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T5)), 3, 4]};
-    return obj;
-}
+let EncCall11R2T1 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, AESKeyR2T5.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T5)), 3, 4]};
 
 async function func1(cipher) {
     let signkey = await signkeyR2T5;
@@ -48,15 +45,15 @@ AESKeyR2T5.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: wind
     async function(result) {return result}).then(console.log);
 EncCall1R2T5().then(async function(result) {let signkey = await signkeyR2T5; window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, signkey.privateKey, result)}).then(console.log);
 EncCall1R2T5().then(async function(result) {return result}).then(console.log);
-EncCall11R2T1().O4[2].then(async function(result) {let signkey = await signkeyR2T5; window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, signkey.privateKey, result)}).then(console.log);
-EncCall11R2T1().O4[2].then(async function(result) {return [result, await signkeyR2T5]}).then(result => window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, result[1].privateKey, result[0])).then(console.log);
-EncCall11R2T1().O4[2].then(async function(result) {return [result, await signkeyR2T5]}).then(result => console.log(result)).then(console.log);
+EncCall11R2T1.O4[2].then(async function(result) {let signkey = await signkeyR2T5; window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, signkey.privateKey, result)}).then(console.log);
+EncCall11R2T1.O4[2].then(async function(result) {return [result, await signkeyR2T5]}).then(result => window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, result[1].privateKey, result[0])).then(console.log);
+EncCall11R2T1.O4[2].then(async function(result) {return [result, await signkeyR2T5]}).then(result => console.log(result)).then(console.log);
 EncCall1R2T5().then(func1).then(console.log);
 EncCall1R2T5().then(func2).then(console.log);
-EncCall11R2T1().O4[2].then(func1).then(console.log);
-EncCall11R2T1().O4[2].then(func2).then(console.log);
+EncCall11R2T1.O4[2].then(func1).then(console.log);
+EncCall11R2T1.O4[2].then(func2).then(console.log);
 EncCall1R2T5().then(func3).then(func1).then(console.log);
 EncCall1R2T5().then(result => {return result}).then(
     async function(result) {let signkey = await signkeyR2T5; window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, signkey.privateKey, result)}).then(console.log);
-EncCall11R2T1().O4[2].then(function (result) {return result}).then(
+EncCall11R2T1.O4[2].then(function (result) {return result}).then(
     async function(result) {let signkey = await signkeyR2T5; window.crypto.subtle.sign({name: "RSASSA-PKCS1-v1_5"}, signkey.privateKey, result)}).then(console.log);
