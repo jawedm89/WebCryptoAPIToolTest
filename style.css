@@ -61,7 +61,7 @@ input:checked + .roundbutton:before  {
     grid-column: 1 / 2;
     height: 250px;
     margin-top: 20px;
-    overflow: scroll;
+    overflow: auto;
     background-color: antiquewhite;
     scroll-behavior: smooth;
 }
