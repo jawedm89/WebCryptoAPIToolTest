@@ -9,25 +9,25 @@ async function EncCall1R2T3() {
     return await window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, await AESKeyR2T3,klarTextR2T3);
 }
 
-let EncCall2R2T3 = AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3));
-let EncCall4R2T3 = {O1: 23,O2: "sdf", O3: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))};
-let EncCall6R2T3 = [0, 1, 2, 3, 4, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))];
-let EncCall7R2T3 = [0, 1, 2, 3, 4, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))];
-let EncCall9R2T3 = [0, 1, {O1: 3}, 3, {O2: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))}];
-let EncCall10R2T3 = [0, 1, {O1: 3}, 3, {O2: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))}];
-let EncCall11R2T3 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3)), 3, 4]};
 
 async function Regel2Test3() {
     let signkeyR2T1 = await window.crypto.subtle.generateKey(
         {
-          name: "RSASSA-PKCS1-v1_5",
-          modulusLength: 2048, 
-          publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-          hash: { name: "SHA-256" },
+            name: "RSASSA-PKCS1-v1_5",
+            modulusLength: 2048, 
+            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+            hash: { name: "SHA-256" },
         },
         false,
         ["sign", "verify"]);
-    
+        
+    let EncCall2R2T3 = AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3));
+    let EncCall4R2T3 = {O1: 23,O2: "sdf", O3: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))};
+    let EncCall6R2T3 = [0, 1, 2, 3, 4, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))];
+    let EncCall7R2T3 = [0, 1, 2, 3, 4, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))];
+    let EncCall9R2T3 = [0, 1, {O1: 3}, 3, {O2: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))}];
+    let EncCall10R2T3 = [0, 1, {O1: 3}, 3, {O2: AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3))}];
+    let EncCall11R2T3 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, AESKeyR2T3.then(result => window.crypto.subtle.encrypt({name: "AES-CBC",iv: window.crypto.getRandomValues(new Uint8Array(16)),}, result,klarTextR2T3)), 3, 4]};
     let chain1 = await EncCall1R2T3();
     let chain2 = [1, 2, 3, chain1];
     let chain3 = EncCall2R2T3;

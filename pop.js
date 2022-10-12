@@ -94,7 +94,12 @@ function entwicklerContent() {
             + openingTag + idTag + '">' + scriptContent.substring(verstöße[i].verstöße[j][0].start, verstöße[i].verstöße[j][0].end) + closingTag;
             let para = document.createElement('p');
             para.className = "verstoßBeschreibung"
-            para.innerHTML = '<a href="#' + idTag + '">' + (j+1) +'. Markeirte Stelle:</a>' + verstöße[i].verstöße[j][1];
+            //para.innerHTML = '<a href="#' + idTag + '">' + (j+1) +'. Markeirte Stelle:</a>' + verstöße[i].verstöße[j][1];
+            para.innerHTML = (j+1) + '. Markierte Stelle:' + verstöße[i].verstöße[j][1]  + "  ";
+            let button = document.createElement('button');
+            button.textContent = "Zur Markierung"
+            button.onclick = function () {let markirung = document.getElementById(idTag); markirung.scrollIntoView({ behavior: 'smooth', block: 'nearest'})}
+            para.appendChild(button);
             descrition.appendChild(para);
             if (j + 1 === verstöße[i].verstöße.length) {
                 newHTML = newHTML + scriptContent.slice(verstöße[i].verstöße[j][0].end);

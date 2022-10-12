@@ -165,6 +165,7 @@
       else {
         arr = await NodeWalk(inOrOut[1]);
       }
+      console.log(arr);
       let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];
