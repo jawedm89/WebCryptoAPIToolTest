@@ -53,6 +53,7 @@
           }
         } while (weiter === true)
       }
+      console.log(callEx)
       return callEx;
     }
 
@@ -154,16 +155,23 @@
     }
 
 
-    async function identifierValueCheck(node, WebCryptoAPIScripts) {
+    async function identifierValueCheck(node, WebCryptoAPIScripts, memberExpr) {
+      if (memberExpr === undefined) {
+        memberExpr = false;
+      }
+      else {
+        memberExpr = true;
+      }
       let RegelEingehalten = true;
       let check = [];
       let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions);
       let arr = [];
       if (inOrOut === "OutSideFunction") {
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
+        return false;
       }
       else {
-        arr = await NodeWalk(inOrOut[1]);
+        arr = await NodeWalk(inOrOut[1], node.end);
       }
       console.log(arr);
       let i = arr.length - 1;
@@ -174,12 +182,18 @@
           switch (arr[i].type) {
             case "VariableDeclaration":
               arr[i].declarations.forEach(element => {
+                if (memberExpr) {
+                  verschachtelungsCheck(element, node)
+                }
                 if (element.id.name === node.name) {
                   found.push(arr[i].declarations[0].init);
                 }
               });
               break;
             case "AssignmentExpression":
+              if (memberExpr) {
+                verschachtelungsCheck(arr[i], node)
+              }
               if (arr[i].left.name === node.name) {
                 found.push(arr[i].right);
               }
@@ -196,7 +210,7 @@
         i = i - 1;
       } while (i > 0)
       if(found.length >= 1) {
-        check.push(found[found.length - 1]);
+        check.push(found[0]);
       }
       if (SwitchOrIf.length > 0) {
         for (let i = 0; found.length > i; i++) {
@@ -223,16 +237,17 @@
           let param = false;
           let p = 0;
           let parameter = inOrOut[1].params;
-          parameter.forEach(element => {
-            if (node.name === element.name) {
+          for (let i = 0; i < parameter.length; i++) {
+            if (node.name === parameter[i].name) {
               param = true;
-              let call = findCallExpression(inOrOut, WebCryptoAPIScripts);
+              let call = await findCallExpression(inOrOut, WebCryptoAPIScripts);
+              console.log(call)
               call.forEach(element => {
                 check.push(element.arguments[p])
               });
             }
             p++;
-          });
+          }
           if (param === true) {
             return check;
           }
