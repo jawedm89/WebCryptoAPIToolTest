@@ -138,11 +138,19 @@
           return r;
         }
         else {
-          r = await compare(WebCryptoAPIScripts, node.callee);
+          let callCheck = makeArray2(node, true);
+          for (let i = callCheck.length -1; i >= 0; i--) {
+            if (callCheck[i].type === "CallExpression") {
+              containsCallex = callCheck[i];
+              callCheck = callCheck.slice(i + 1);
+              break;
+            }
+          }
+          r = await compare(WebCryptoAPIScripts, containsCallex.callee);
           let chek = await NodeWalk(r[1]);
           let filter = chek.filter(element => element.type === "ReturnStatement");
           filter.forEach(function (element, index, arr) {
-            arr[index] = element.argument;
+            arr[index] = verschachtelungsCheck(element.argument, callCheck);
           });
         return filter;
         }
@@ -166,11 +174,11 @@
           let chek = await NodeWalk(r[1]);
           let filter = chek.filter(element => element.type === "ReturnStatement");
           filter.forEach(function (element, index, arr) {
-            let newNode = element.argument;
+            /* let newNode = element.argument;
               for (let j = 0; j < callCheck.length; j++) {
                   newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
-              }
-            arr[index] = newNode;
+              } */
+            arr[index] = verschachtelungsCheck(element.argument, callCheck);
           });
         return filter;
         }

@@ -1,15 +1,19 @@
 function verschachtelungsCheck(found, node) {
     let foundId, foundInit, returnElement;
     if (found.type === "VariableDeclarator") {
-        foundId = found.id;
+        foundId = makeArray2(found.id);
         foundInit = found.init;
+        node = makeArray2(node);
+    }
+    else if (found.type = "AssignmentExpression") {
+        foundId = makeArray2(found.left);
+        foundInit = found.right;
+        node = makeArray2(node);
     }
     else {
-        foundId = found.left;
-        foundInit = found.right;
+        foundId = [];
+        foundInit = found;
     }
-    node = makeArray2(node);
-    foundId = makeArray2(foundId);
     for (let i = 0; i < foundId.length; i++) {
         if (node[i].type === "Identifier" && foundId[i].type === "Identifier") {
             if (node[i].name === foundId[i].name) {
