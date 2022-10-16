@@ -4,31 +4,166 @@
 <body>
 
   <h1 align="center">Web Crypto API TestWebsite für Regel 1</h1>
-  <p>Test auf einhaltung der Regel im bei einem einfachen Aufruf der Web Crypto API</p>
   <br>
   <br>
+  <br>
+  <p>
+    Test 1 Variablenbinndung
+   <br>
+    1. true
+    <br>
+    2. false
+    <br>
+    3. true
+    <br>
+    4. false
+    <br>
+    5. true
+    <br>
+    6. false
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
+    <br>
+  </p>
   <button id="test1">Test 1</button>
-  <P>Hier wird in den Verschlüsselungs-Modi #AES-CTR, #AES-GCM und #AES-CBC die window.crypto.getRandomValues() direkt aufgerufen. 
-    Dies wird jeweilt in über die then() Methode und über eine async Funktion getan. Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein.</P>
   <br>
   <br>
+  <br>
+  <p>
+    Test 2 Variablenbinndung
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. false
+    <br>
+    4. true
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
+    <br>
+  </p>
   <button id="test2">Test 2</button>
-  <p>Hier wird einmal der IV als globale Variable initialisiert und dann in der then()-Methode und in einer async Funktion bei den Verschlüsselungs-Modi #AES-CBC und #AES-GCM 
-    verwendet. Außerdem wird in einer async Funktion ein IV initialisiert, der dann beim Verschlüsselungs-Modi #AES-CTR verwendet wird.
-     Das Ergebnis sollte entsprechend eine Einhaltung der Regel sein</p>
   <br>
   <br>
-  <button id = "test3">Test 3</button>
-  <p>Hier wird getestet ob erkannt wird das der IV Wert von einem Funktionscall kommt. Außerdem wird getestet ob die if-else Varianten alle überprüft werden. 
-  Bei der zweiten Funktion sollte erkannt werden, dass es hier eine Möglichkeit gibt, bei der der IV nicht als window.crypto.getRandomValues() initialisiert werden kann. 
-  entsprechend sollte hier ein Fehler angezeigt werden.</p>
+  <br>
+  <p>
+    Test 3 Variablenbinndung
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. false
+    <br>
+    4. true
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
+    <br>
+  </p>
+  <button id="test3">Test 3</button>
   <br>
   <br>
-  <button id = "test4"> Test 4</button>
-  <p>Hier wird getestet, ob die Extension erkennt wenn der IV als Parameter der Funktion übergeben wird und dies auch korrekt nachverfolgen kann.</p>
+  <br>
+  <p>
+    Test 5 Variablenbinndung
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. false
+    <br>
+    4. true
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
+    <br>
+  </p>
+  <button id="test4">Test 4</button>
   <br>
   <br>
-  <button id = "test5"> Test 5</button>
+  <br>
+  <p>
+    Test 5 alle Scripts
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. false
+    <br>
+    4. true
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
+    <br>
+  </p>
+  <button id="test5">Test 5</button>
   <p></p>
   <br>
   <br>
@@ -59,7 +194,7 @@
     test1.addEventListener("click", Test1);
     async function Test1() {
       let script1 = document.createElement("script");
-      script1.src = "test1.js";
+      script1.src = "Variablenbinndung.js";
       try {
         document.head.removeChild(document.scripts[0]);
       }
@@ -73,7 +208,7 @@
     test2.addEventListener("click", Test2);
     async function Test2() {
       let script2 = document.createElement("script");
-      script2.src = "test2.js";
+      script2.src = "Funktionsaufruf.js";
       try {
         document.head.removeChild(document.scripts[0]);
       }
@@ -87,7 +222,7 @@
     test3.addEventListener("click", Test3);
     async function Test3() {
       let script3 = document.createElement("script");
-      script3.src = "test3.js";
+      script3.src = "VariablenAußerhalbFunktion.js";
       try {
         document.head.removeChild(document.scripts[0]);
       }
@@ -101,7 +236,7 @@
     test4.addEventListener("click", Test4);
     async function Test4() {
       let script4 = document.createElement("script");
-      script4.src = "test4.js";
+      script4.src = "If-undSwitchStatement.js";
       try {
         document.head.removeChild(document.scripts[0]);
       }
@@ -114,16 +249,26 @@
 
     test5.addEventListener("click", Test5);
     async function Test5() {
-      let script5 = document.createElement("script");
-      script5.src = "test5.js";
-      try {
-        document.head.removeChild(document.scripts[0]);
-      }
+      let script1 = document.createElement("script");
+      let script2 = document.createElement("script");
+      let script3 = document.createElement("script");
+      let script4 = document.createElement("script");
+      script1.src = "Variablenbinndung.js";
+      script2.src = "Funktionsaufruf.js";
+      script3.src = "VariablenAußerhalbFunktion.js";
+      script4.src = "If-undSwitchStatement.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
       await delay(1000);
-      document.head.appendChild(script5);
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+      document.head.appendChild(script3);
+      document.head.appendChild(script4);
     }
 
     test6.addEventListener("click", Test6);

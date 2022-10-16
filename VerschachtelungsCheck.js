@@ -13,7 +13,6 @@ function verschachtelungsCheck(found, node) {
     for (let i = 0; i < foundId.length; i++) {
         if (node[i].type === "Identifier" && foundId[i].type === "Identifier") {
             if (node[i].name === foundId[i].name) {
-                node.shift();
             }
             else {
                 return false;
@@ -21,7 +20,6 @@ function verschachtelungsCheck(found, node) {
         }
         else if (node[i].type === "Literal" && foundId[i].type === "Literal") {
             if (node[i].value === foundId[i].value) {
-                node.shift();
             }
             else {
                 return false;
@@ -30,18 +28,21 @@ function verschachtelungsCheck(found, node) {
         else {
             return false;
         }
+        if (i + 1 === foundId.length) {
+            node = node.slice(i + 1);
+        }
     }
     for (let i = 0; i < node.length; i++) {
         if (node[i].type === "Identifier" && foundInit.type === "ObjectExpression") {
             let weiter = false;
             foundInit.properties.forEach(element => {
+                console.log(JSON.parse(JSON.stringify(node[i].name)), JSON.parse(JSON.stringify(element.key.name)))
                 if (element.key.name === node[i].name) {
                     foundInit = element.value;
                     weiter = true;
                 }
             });
             if (weiter === true) {
-                node.shift();
             }
             else {
                 return false; 
@@ -50,16 +51,37 @@ function verschachtelungsCheck(found, node) {
         else if (node[i].type === "Literal" && foundInit.type === "ArrayExpression") {
             if (foundInit.elements[node[i].value]) {
                 foundInit = foundInit.elements[node[i].value];
-                node[i].shift;
             }
             else {
                 return false; 
             }
         }
+        else if (foundInit.type === "Identifier") {
+            let newNode = foundInit;
+            for (let j = node.length; j >= node.length; j--) {
+                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            }
+            return newNode;
+        }
+        else if (foundInit.type === "CallExpression") {
+            let newNode = foundInit;
+            for (let j = node.length; j >= node.length; j--) {
+                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            }
+            return newNode;
+        }
+        else if (foundInit.type === "MemberExpression") {
+            let newNode = foundInit;
+            for (let j = node.length; j >= node.length; j--) {
+                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            }
+            return newNode;
+        }
         else {
             return false;
         }
     }
+    console.log(foundInit)
     return foundInit;
 }
 

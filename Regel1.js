@@ -93,7 +93,7 @@
                 s.forEach(element => { arr.push(element) })
               }
             } while (arr.length > 0)
-            if (ergebnis.every(element => element === true)) {
+            if (ergebnis.every(element => element === true) && ergebnis.length > 0) {
               console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
             }
             else {
@@ -131,13 +131,29 @@
       }
       if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
+        if(r) {
+          return r;
+        }
+        else {
+          r = await compare(WebCryptoAPIScripts, node.callee);
+          let chek = await NodeWalk(r[1]);
+          let filter = chek.filter(element => element.type === "ReturnStatement");
+          filter.forEach(function (element, index, arr) {
+            arr[index] = element.argument;
+          });
+        return filter;
+        }
+      }
+      if (node.type === "MemberExpression") {
+        
+        let r = await identifierValueCheck(node, WebCryptoAPIScripts, true);
         return r;
       }
       if (node.type === "CallExpression" && node.callee.type != "MemberExpression") {
         let chek = [];
         for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
           try {
-            if (WebCryptoAPIScripts.functions[i][0] === node.callee.name || WebCryptoAPIScripts.functions[i][0] === node.callee.name) {
+            if (WebCryptoAPIScripts.functions[i][0] === node.callee.name) {
               chek = await NodeWalk(WebCryptoAPIScripts.functions[i][1]);
             }
           }
@@ -156,6 +172,7 @@
 
 
     async function identifierValueCheck(node, WebCryptoAPIScripts, memberExpr) {
+      console.log(node);
       if (memberExpr === undefined) {
         memberExpr = false;
       }
@@ -183,7 +200,10 @@
             case "VariableDeclaration":
               arr[i].declarations.forEach(element => {
                 if (memberExpr) {
-                  verschachtelungsCheck(element, node)
+                  let foundMember = verschachtelungsCheck(element, node);
+                  if (foundMember) {
+                    found.push(foundMember)
+                  }
                 }
                 if (element.id.name === node.name) {
                   found.push(arr[i].declarations[0].init);
@@ -192,7 +212,10 @@
               break;
             case "AssignmentExpression":
               if (memberExpr) {
-                verschachtelungsCheck(arr[i], node)
+                let foundMember = verschachtelungsCheck(arr[i], node);
+                if (foundMember) {
+                  found.push(foundMember)
+                }
               }
               if (arr[i].left.name === node.name) {
                 found.push(arr[i].right);
@@ -209,9 +232,9 @@
         catch (e) {}
         i = i - 1;
       } while (i > 0)
-      if(found.length >= 1) {
+      /* if(found.length >= 1) {
         check.push(found[0]);
-      }
+      } */
       if (SwitchOrIf.length > 0) {
         for (let i = 0; found.length > i; i++) {
           SwitchOrIf.forEach(element => {
@@ -223,13 +246,20 @@
             }
           });
         }
-        found.forEach(element => {
-          if (element.keepMe === true) {
-            check.push(element);
-          }
-        });
+        if (found[0].keepMe) {
+          found.forEach(element => {
+            if (element.keepMe === true) {
+              check.push(element);
+            }
+          });
+        }
       }
-      if (found.length >= 1) {
+      else {
+        if (found[0] != undefined) {
+          check.push(found[0]);
+        }
+      }
+      if (check.length >= 1) {
         return check;
       }
       else {
@@ -249,6 +279,7 @@
             p++;
           }
           if (param === true) {
+            console.log(check)
             return check;
           }
           if (param === false) {

@@ -5,8 +5,7 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
     let j = 0;
     let indexx;
     for (let i = 0; i < jsscripts.length; i++) {
-
-      if (jsscripts[i].indexOf('window.crypto.subtle') != -1) {
+      if (jsscripts[i].indexOf('window.crypto.subtle') != -1) {//if (callEx){
         WebCryptoAPIScripts[j] = new Object();
         WebCryptoAPIScripts[j].src = scripts[i].src;
         WebCryptoAPIScripts[j].script = jsscripts[i];
