@@ -145,9 +145,32 @@
         }
       }
       if (node.type === "MemberExpression") {
-        
-        let r = await identifierValueCheck(node, WebCryptoAPIScripts, true);
-        return r;
+        let callCheck = makeArray2(node, true);
+        let containsCallex = false;
+        for (let i = callCheck.length -1; i >= 0; i--) {
+          if (callCheck[i].type === "CallExpression") {
+            containsCallex = callCheck[i];
+            callCheck = callCheck.slice(i + 1);
+            break;
+          }
+        }
+        if (containsCallex === false) {
+          let r = await identifierValueCheck(node, WebCryptoAPIScripts, true);
+          return r;
+        }
+        else {
+          r = await compare(WebCryptoAPIScripts, containsCallex.callee);
+          let chek = await NodeWalk(r[1]);
+          let filter = chek.filter(element => element.type === "ReturnStatement");
+          filter.forEach(function (element, index, arr) {
+            let newNode = element.argument;
+              for (let j = 0; j < callCheck.length; j++) {
+                  newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
+              }
+            arr[index] = newNode;
+          });
+        return filter;
+        }
       }
       if (node.type === "CallExpression" && node.callee.type != "MemberExpression") {
         let chek = [];
@@ -205,8 +228,10 @@
                     found.push(foundMember)
                   }
                 }
-                if (element.id.name === node.name) {
-                  found.push(arr[i].declarations[0].init);
+                else {
+                  if (element.id.name === node.name) {
+                    found.push(arr[i].declarations[0].init);
+                  }
                 }
               });
               break;
@@ -217,8 +242,10 @@
                   found.push(foundMember)
                 }
               }
-              if (arr[i].left.name === node.name) {
-                found.push(arr[i].right);
+              else {
+                if (arr[i].left.name === node.name) {
+                  found.push(arr[i].right);
+                }
               }
               break;
             case "IfStatement":

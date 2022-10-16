@@ -30,6 +30,7 @@ function verschachtelungsCheck(found, node) {
         }
         if (i + 1 === foundId.length) {
             node = node.slice(i + 1);
+            console.log(node)
         }
     }
     for (let i = 0; i < node.length; i++) {
@@ -58,22 +59,22 @@ function verschachtelungsCheck(found, node) {
         }
         else if (foundInit.type === "Identifier") {
             let newNode = foundInit;
-            for (let j = node.length; j >= node.length; j--) {
-                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            for (let j = 0; j < node.length; j++) {
+                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
             }
             return newNode;
         }
         else if (foundInit.type === "CallExpression") {
             let newNode = foundInit;
-            for (let j = node.length; j >= node.length; j--) {
-                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            for (let j = 0; j < node.length; j++) {
+                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
             }
             return newNode;
         }
         else if (foundInit.type === "MemberExpression") {
             let newNode = foundInit;
-            for (let j = node.length; j >= node.length; j--) {
-                newNode = {property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            for (let j = 0; j < node.length; j++) {
+                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
             }
             return newNode;
         }
@@ -85,13 +86,17 @@ function verschachtelungsCheck(found, node) {
     return foundInit;
 }
 
-function makeArray2(node) {
+function makeArray2(node, callex) {
     let result = [];
     let stop = false
     do {
       if (node.type === "Identifier") {
         stop = true;
         result.unshift(node)
+      }
+      else if (callex && node.type === "CallExpression") {
+        result.unshift(node);
+        node = node.callee;
       }
       else {
         result.unshift(node.property);
