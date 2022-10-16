@@ -79,7 +79,8 @@
       let j = 0;
       for (let i = 0; i < WebCryptoAPIScripts.regel1.length; i++) {
         try {
-          let props = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node.arguments[0].properties;
+          let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node;
+          let props = encCall.arguments[0].properties;
           let encMode = props[0].value.value;
           if (encMode === "AES-CTR" || encMode === "AES-GCM" || encMode === "AES-CBC") {
             let arr = [props[1].value];
@@ -97,8 +98,10 @@
               console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
             }
             else {
-              console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i])
-              window.alert("IV wurde nicht korrekt initialisiert!");
+              console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
+              let verstoßDefinition = " Hier wird bei der Verschlüsselungsmethode " + encMode + " ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+              //window.alert("IV wurde nicht korrekt initialisiert!");
             }
           }
           else if (props[0].value.type != "Literal") {
@@ -109,7 +112,7 @@
           }
         }
         catch (e) {
-          console.log("War wohl ein Kommentar und kein richtiger API Call oder die encryption Methode wurde nicht als String sonder als Identifier übergeben", e);
+          console.log(e);
         }
         j++;
       }
@@ -159,7 +162,7 @@
           return r;
         }
         else {
-          r = await compare(WebCryptoAPIScripts, containsCallex.callee);
+          let r = await compare(WebCryptoAPIScripts, containsCallex.callee);
           let chek = await NodeWalk(r[1]);
           let filter = chek.filter(element => element.type === "ReturnStatement");
           filter.forEach(function (element, index, arr) {
@@ -176,7 +179,7 @@
         let chek = [];
         for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
           try {
-            if (WebCryptoAPIScripts.functions[i][0] === node.callee.name) {
+            if (WebCryptoAPIScripts.functions[i][0].name === node.callee.name) {
               chek = await NodeWalk(WebCryptoAPIScripts.functions[i][1]);
             }
           }
@@ -195,7 +198,6 @@
 
 
     async function identifierValueCheck(node, WebCryptoAPIScripts, memberExpr) {
-      console.log(node);
       if (memberExpr === undefined) {
         memberExpr = false;
       }
@@ -213,7 +215,6 @@
       else {
         arr = await NodeWalk(inOrOut[1], node.end);
       }
-      console.log(arr);
       let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];

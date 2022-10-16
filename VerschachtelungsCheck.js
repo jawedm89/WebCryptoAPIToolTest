@@ -30,14 +30,12 @@ function verschachtelungsCheck(found, node) {
         }
         if (i + 1 === foundId.length) {
             node = node.slice(i + 1);
-            console.log(node)
         }
     }
     for (let i = 0; i < node.length; i++) {
         if (node[i].type === "Identifier" && foundInit.type === "ObjectExpression") {
             let weiter = false;
             foundInit.properties.forEach(element => {
-                console.log(JSON.parse(JSON.stringify(node[i].name)), JSON.parse(JSON.stringify(element.key.name)))
                 if (element.key.name === node[i].name) {
                     foundInit = element.value;
                     weiter = true;
@@ -82,7 +80,6 @@ function verschachtelungsCheck(found, node) {
             return false;
         }
     }
-    console.log(foundInit)
     return foundInit;
 }
 

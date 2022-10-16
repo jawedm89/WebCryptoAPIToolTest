@@ -112,6 +112,9 @@ function entwicklerContent() {
         content.appendChild(descrition);
         content.className = "Content";
         popUpContent.appendChild(content);
+        if (script.clientHeight < descrition.clientHeight) {
+            script.style.height = descrition.clientHeight;
+        }
     } 
 }
 }

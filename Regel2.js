@@ -409,7 +409,8 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
 async function compare(WebCryptoAPIScripts, node) {
   let result;
   for(let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
-    let comp = WebCryptoAPIScripts.functions[i][0]
+    let comp = WebCryptoAPIScripts.functions[i][0];
+    let stop = false;
     do {
       if (comp.type === "MemberExpression" && node.type === "MemberExpression") {
         if (comp.property.type === node.property.type) {
