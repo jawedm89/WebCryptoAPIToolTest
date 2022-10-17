@@ -1,4 +1,4 @@
-function verschachtelungsCheck(found, node) {
+async function verschachtelungsCheck(found, node) {
     let foundId, foundInit, returnElement;
     if (found.type === "VariableDeclarator") {
         console.log(found, node)
@@ -12,6 +12,7 @@ function verschachtelungsCheck(found, node) {
         node = makeArray2(node);
     }
     else {
+        returnElement = true;
         foundId = [];
         foundInit = found;
     }
@@ -63,6 +64,9 @@ function verschachtelungsCheck(found, node) {
         }
         else if (foundInit.type === "Identifier") {
             let newNode = foundInit;
+            if (returnElement === undefined) {
+                i = i+1;
+            }
             for (i = i; i < node.length; i++) {
                 newNode = { property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
@@ -70,17 +74,40 @@ function verschachtelungsCheck(found, node) {
         }
         else if (foundInit.type === "CallExpression") {
             let newNode = foundInit;
-            for (let j = 0; j < node.length; j++) {
-                newNode = { property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
+            if (returnElement === undefined) {
+                i = i+1;
             }
+            for (i = i; i < node.length; i++) {
+                newNode = { property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
+            }
+            console.log(newNode)
             return newNode;
         }
         else if (foundInit.type === "MemberExpression") {
             let newNode = foundInit;
-            for (let j = 0; j < node.length; j++) {
-                newNode = { property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
+            if (returnElement === undefined) {
+                i = i+1;
+            }
+            for (i = i; i < node.length; i++) {
+                newNode = { property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
             return newNode;
+        }
+        else if (foundInit.type === "FunctionDeclaration" || foundInit.type === "FunctionExpression" || foundInit.type === "ArrowFunctionExpression") {
+            let chek = await NodeWalk(foundInit.body, foundInit.end, true);
+            let filter = chek.filter(element => element.type === "ReturnStatement");
+            filter.forEach(function (element, index, arr) {
+                console.log(element.argument)
+                arr[index] = element.argument;
+            });
+            for (let j = 0; j < filter.length; j++) {
+                filter[j] = [filter[j], node.slice(i)]
+            }
+            console.log(filter, node, i)
+            filter.reRun = true;
+            return filter;
+            foundInit = filter[0]
+            i = i -1;
         }
         else {
             return false;

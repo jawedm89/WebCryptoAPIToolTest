@@ -135,7 +135,7 @@
       }
       if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
-        if(r) {
+        if (r) {
           return r;
         }
         else {
@@ -153,15 +153,23 @@
             }
           } */
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
-          console.log(r)
-          let chek = await NodeWalk(r[1].body, r[1].end, true);
-          let filter = chek.filter(element => element.type === "ReturnStatement");
-          filter.forEach(function (element, index, arr) {
-            console.log(element.argument)
-            arr[index] = verschachtelungsCheck(element.argument, callCheck[0]);
-          });
-          console.log(filter)
-        return filter;
+          if (r) {
+            console.log(r)
+            let chek = await NodeWalk(r[1].body, r[1].end, true);
+            let filter = chek.filter(element => element.type === "ReturnStatement");
+            filter.forEach(function (element, index, arr) {
+              console.log(element.argument)
+              arr[index] = element.argument;
+            });
+            for (let j = 0; j < filter.length; j++) {
+              filter[j] = await verschachtelungsCheck(filter[j], callCheck[0]);
+            }
+            console.log(filter)
+            return filter;
+          }
+          else {
+            return false;
+          }
         }
       }
       if (node.type === "MemberExpression") {
@@ -182,18 +190,25 @@
           let slicer = makeArray2(callCheck[1], true)
           callCheck[0] = callCheck[0].slice(slicer[0].length);
           console.log(callCheck)
-          let r = await compare(WebCryptoAPIScripts, callCheck[0].callee);
-          let chek = await NodeWalk(r[1].body, r[1].end, true);
-          let filter = chek.filter(element => element.type === "ReturnStatement");
-          filter.forEach(function (element, index, arr) {
-            /* let newNode = element.argument;
-              for (let j = 0; j < callCheck.length; j++) {
-                  newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
-              } */
-              console.log(element.argument)
-            arr[index] = verschachtelungsCheck(element.argument, callCheck[0]);
-          });
-        return filter;
+          let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
+          if (r) {
+            let chek = await NodeWalk(r[1].body, r[1].end, true);
+            let filter = chek.filter(element => element.type === "ReturnStatement");
+            filter.forEach(function (element, index, arr) {
+              /* let newNode = element.argument;
+                for (let j = 0; j < callCheck.length; j++) {
+                    newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
+                } */
+              arr[index] = element.argument;
+            });
+            for (let j = 0; j < filter.length; j++) {
+              filter[j] = await verschachtelungsCheck(filter[j], callCheck[0]);
+            }
+            return filter;
+          }
+          else {
+            return false
+          }
         }
       }
       if (node.type === "CallExpression" && node.callee.type != "MemberExpression") {
@@ -211,10 +226,6 @@
           arr[index] = element.argument;
         });
         return filter;
-      }
-      if (node.type === "FunctionDeclaration" || node.type === "FunctionExpression" || node.type === "ArrowFunctionExpression") {
-        let chek = await NodeWalk(node.body, r[1].end, true);   
-        
       }
       else {
         return false;
@@ -238,34 +249,54 @@
         return false;
       }
       else {
-        arr = await NodeWalk(inOrOut[1], node.end);
+        arr = await NodeWalk(inOrOut[1].body, node.end, true);
       }
-      let i = arr.length - 1;
+      //let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];
-      do {
+      for (let i = arr.length - 1; i >= 0; i--) {
         try {
           switch (arr[i].type) {
             case "VariableDeclaration":
-              arr[i].declarations.forEach(element => {
+              for (let j = 0; j < arr[i].declarations.length; j++) {
                 if (memberExpr) {
-                  let foundMember = verschachtelungsCheck(element, node);
+                  let foundMember = await verschachtelungsCheck(arr[i].declarations[j], node);
                   if (foundMember) {
-                    found.push(foundMember)
+                    if (foundMember.reRun) {
+                      for (let y = 0; y < foundMember.length; y++) {
+                        let foundMember2 = await verschachtelungsCheck(foundMember[y][0], foundMember[y][1]);
+                        if (foundMember2) {
+                          found.push(foundMember2)
+                        }
+                      }
+                    }
+                    else {
+                      found.push(foundMember)
+                    }
                   }
                 }
                 else {
-                  if (element.id.name === node.name) {
-                    found.push(arr[i].declarations[0].init);
+                  if (arr[i].declarations[j].id.name === node.name) {
+                    found.push(arr[i].declarations[j].init);
                   }
                 }
-              });
+              }
               break;
             case "AssignmentExpression":
               if (memberExpr) {
-                let foundMember = verschachtelungsCheck(arr[i], node);
+                let foundMember = await verschachtelungsCheck(arr[i], node);
                 if (foundMember) {
-                  found.push(foundMember)
+                  if (foundMember.reRun) {
+                    for (let y = 0; y < foundMember.length; y++) {
+                      let foundMember2 = await verschachtelungsCheck(foundMember[y][0], foundMember[y][1]);
+                      if (foundMember2) {
+                        found.push(foundMember2)
+                      }
+                    }
+                  }
+                  else {
+                    found.push(foundMember)
+                  }
                 }
               }
               else {
@@ -282,9 +313,8 @@
               break;
           }
         }
-        catch (e) {}
-        i = i - 1;
-      } while (i > 0)
+        catch (e) { }
+      }
       /* if(found.length >= 1) {
         check.push(found[0]);
       } */
@@ -397,7 +427,7 @@
       function simple(node, visitors, baseVisitor, state, override) {
         if (!baseVisitor) {
           baseVisitor = base
-          ;
+            ;
         } (function c(node, st, override) {
           var type = override || node.type, found = visitors[type];
           baseVisitor[type](node, st, c);
@@ -412,7 +442,7 @@
         var ancestors = [];
         if (!baseVisitor) {
           baseVisitor = base
-          ;
+            ;
         } (function c(node, st, override) {
           var type = override || node.type, found = visitors[type];
           var isNew = node !== ancestors[ancestors.length - 1];
