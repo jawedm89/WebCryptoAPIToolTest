@@ -1,11 +1,12 @@
 function verschachtelungsCheck(found, node) {
     let foundId, foundInit, returnElement;
     if (found.type === "VariableDeclarator") {
+        console.log(found, node)
         foundId = makeArray2(found.id);
         foundInit = found.init;
         node = makeArray2(node);
     }
-    else if (found.type = "AssignmentExpression") {
+    else if (found.type === "AssignmentExpression") {
         foundId = makeArray2(found.left);
         foundInit = found.right;
         node = makeArray2(node);
@@ -37,6 +38,7 @@ function verschachtelungsCheck(found, node) {
         }
     }
     for (let i = 0; i < node.length; i++) {
+        console.log(node, foundInit)
         if (node[i].type === "Identifier" && foundInit.type === "ObjectExpression") {
             let weiter = false;
             foundInit.properties.forEach(element => {
@@ -48,7 +50,7 @@ function verschachtelungsCheck(found, node) {
             if (weiter === true) {
             }
             else {
-                return false; 
+                return false;
             }
         }
         else if (node[i].type === "Literal" && foundInit.type === "ArrayExpression") {
@@ -56,27 +58,27 @@ function verschachtelungsCheck(found, node) {
                 foundInit = foundInit.elements[node[i].value];
             }
             else {
-                return false; 
+                return false;
             }
         }
         else if (foundInit.type === "Identifier") {
             let newNode = foundInit;
-            for (let j = 0; j < node.length; j++) {
-                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+            for (i = i; i < node.length; i++) {
+                newNode = { property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
             return newNode;
         }
         else if (foundInit.type === "CallExpression") {
             let newNode = foundInit;
             for (let j = 0; j < node.length; j++) {
-                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+                newNode = { property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
             return newNode;
         }
         else if (foundInit.type === "MemberExpression") {
             let newNode = foundInit;
             for (let j = 0; j < node.length; j++) {
-                newNode = {property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end}
+                newNode = { property: node[j], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
             return newNode;
         }
@@ -89,21 +91,29 @@ function verschachtelungsCheck(found, node) {
 
 function makeArray2(node, callex) {
     let result = [];
-    let stop = false
+    let stop = false;
+    let callExpr;
     do {
-      if (node.type === "Identifier") {
-        stop = true;
-        result.unshift(node)
-      }
-      else if (callex && node.type === "CallExpression") {
-        result.unshift(node);
-        node = node.callee;
-      }
-      else {
-        result.unshift(node.property);
-        node = node.object;
-      }
+        if (node.type === "Identifier") {
+            stop = true;
+            result.unshift(node)
+        }
+        else if (callex === true && node.type === "CallExpression") {
+            console.log(callex, node.type)
+            //result.unshift(node);
+            callExpr = node;
+            node = node.callee;
+        }
+        else {
+            result.unshift(node.property);
+            node = node.object;
+        }
     }
-    while (stop === false)
-    return result;
-  }
+    while (stop === false);
+    if (callex) {
+        return [result, callExpr]
+    }
+    else {
+        return result;
+    }
+}

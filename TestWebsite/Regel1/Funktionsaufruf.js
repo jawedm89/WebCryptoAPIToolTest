@@ -38,12 +38,14 @@ function func5R1T2() {
 
 function func6R1T2() {
     let iv = window.crypto.getRandomValues(new Uint8Array(16));
-    let obj = {O1: 12, O2: function () {return iv}};
-    return [0, 1, 2, obj];
+    let obj = {O1: 12, O2: function () {let iv = [window.crypto.getRandomValues(new Uint8Array(16)), new Uint8Array(16)]; return iv}};
+    let obj2 = {O1: 12, O2: function () {return [window.crypto.getRandomValues(new Uint8Array(16)), new Uint8Array(16)]}};
+    return [0, 1, 2, obj, obj2];
 }
 
 async function Regel1T2() {
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[3].O2()}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[4].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[3].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func5R1T2()[3]}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func4R1T2().O2[4],}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func4R1T2().O3[4],}, await AESKeyR1T2, klarTextR1T2));

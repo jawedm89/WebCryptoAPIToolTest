@@ -128,6 +128,7 @@
     }
 
     async function typeCheck(node, WebCryptoAPIScripts) {
+      console.log(node)
       if (node.type === "Identifier") {
         let r = await identifierValueCheck(node, WebCryptoAPIScripts);
         return r;
@@ -139,46 +140,58 @@
         }
         else {
           let callCheck = makeArray2(node, true);
-          for (let i = callCheck.length -1; i >= 0; i--) {
+          let slicer = makeArray2(callCheck[1], true)
+          callCheck[0] = callCheck[0].slice(slicer[0].length);
+          console.log(callCheck, slicer)
+          /*
+          for (let i = 0; i < callCheck.length; i++) {
             if (callCheck[i].type === "CallExpression") {
               containsCallex = callCheck[i];
               callCheck = callCheck.slice(i + 1);
+              console.log(callCheck)
               break;
             }
-          }
-          r = await compare(WebCryptoAPIScripts, containsCallex.callee);
-          let chek = await NodeWalk(r[1]);
+          } */
+          let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
+          console.log(r)
+          let chek = await NodeWalk(r[1].body, r[1].end, true);
           let filter = chek.filter(element => element.type === "ReturnStatement");
           filter.forEach(function (element, index, arr) {
-            arr[index] = verschachtelungsCheck(element.argument, callCheck);
+            console.log(element.argument)
+            arr[index] = verschachtelungsCheck(element.argument, callCheck[0]);
           });
+          console.log(filter)
         return filter;
         }
       }
       if (node.type === "MemberExpression") {
         let callCheck = makeArray2(node, true);
-        let containsCallex = false;
+        /* let containsCallex = false;
         for (let i = callCheck.length -1; i >= 0; i--) {
           if (callCheck[i].type === "CallExpression") {
             containsCallex = callCheck[i];
             callCheck = callCheck.slice(i + 1);
             break;
           }
-        }
-        if (containsCallex === false) {
+        } */
+        if (callCheck[1] === undefined) {
           let r = await identifierValueCheck(node, WebCryptoAPIScripts, true);
           return r;
         }
         else {
-          let r = await compare(WebCryptoAPIScripts, containsCallex.callee);
-          let chek = await NodeWalk(r[1]);
+          let slicer = makeArray2(callCheck[1], true)
+          callCheck[0] = callCheck[0].slice(slicer[0].length);
+          console.log(callCheck)
+          let r = await compare(WebCryptoAPIScripts, callCheck[0].callee);
+          let chek = await NodeWalk(r[1].body, r[1].end, true);
           let filter = chek.filter(element => element.type === "ReturnStatement");
           filter.forEach(function (element, index, arr) {
             /* let newNode = element.argument;
               for (let j = 0; j < callCheck.length; j++) {
                   newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
               } */
-            arr[index] = verschachtelungsCheck(element.argument, callCheck);
+              console.log(element.argument)
+            arr[index] = verschachtelungsCheck(element.argument, callCheck[0]);
           });
         return filter;
         }
@@ -198,6 +211,10 @@
           arr[index] = element.argument;
         });
         return filter;
+      }
+      if (node.type === "FunctionDeclaration" || node.type === "FunctionExpression" || node.type === "ArrowFunctionExpression") {
+        let chek = await NodeWalk(node.body, r[1].end, true);   
+        
       }
       else {
         return false;
