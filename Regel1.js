@@ -173,11 +173,11 @@
           }
           catch (e) { }
         }
-        console.log(chek)
         let filter = chek.filter(element => element.type === "ReturnStatement");
         filter.forEach(function (element, index, arr) {
           arr[index] = element.argument;
         });
+        console.log(filter)
         return filter;
       }
       else if (node.type === "MemberExpression") {
