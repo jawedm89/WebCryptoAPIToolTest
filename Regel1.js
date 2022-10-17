@@ -133,7 +133,7 @@
         let r = await identifierValueCheck(node, WebCryptoAPIScripts);
         return r;
       }
-      if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
+      else if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
         if (r) {
           return r;
@@ -142,16 +142,7 @@
           let callCheck = makeArray2(node, true);
           let slicer = makeArray2(callCheck[1], true)
           callCheck[0] = callCheck[0].slice(slicer[0].length);
-          console.log(callCheck, slicer)
-          /*
-          for (let i = 0; i < callCheck.length; i++) {
-            if (callCheck[i].type === "CallExpression") {
-              containsCallex = callCheck[i];
-              callCheck = callCheck.slice(i + 1);
-              console.log(callCheck)
-              break;
-            }
-          } */
+          console.log(callCheck, slicer);
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
           if (r) {
             console.log(r)
@@ -172,16 +163,25 @@
           }
         }
       }
-      if (node.type === "MemberExpression") {
-        let callCheck = makeArray2(node, true);
-        /* let containsCallex = false;
-        for (let i = callCheck.length -1; i >= 0; i--) {
-          if (callCheck[i].type === "CallExpression") {
-            containsCallex = callCheck[i];
-            callCheck = callCheck.slice(i + 1);
-            break;
+      else if (node.type === "CallExpression" && node.callee.type === "Identifier") {
+        let chek = [];
+        for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
+          try {
+            if (WebCryptoAPIScripts.functions[i][0].name === node.callee.name) {
+              chek = await NodeWalk(WebCryptoAPIScripts.functions[i][1]);
+            }
           }
-        } */
+          catch (e) { }
+        }
+        console.log(chek)
+        let filter = chek.filter(element => element.type === "ReturnStatement");
+        filter.forEach(function (element, index, arr) {
+          arr[index] = element.argument;
+        });
+        return filter;
+      }
+      else if (node.type === "MemberExpression") {
+        let callCheck = makeArray2(node, true);
         if (callCheck[1] === undefined) {
           let r = await identifierValueCheck(node, WebCryptoAPIScripts, true);
           return r;
@@ -195,10 +195,6 @@
             let chek = await NodeWalk(r[1].body, r[1].end, true);
             let filter = chek.filter(element => element.type === "ReturnStatement");
             filter.forEach(function (element, index, arr) {
-              /* let newNode = element.argument;
-                for (let j = 0; j < callCheck.length; j++) {
-                    newNode = {property: callCheck[j], object: newNode, type: "MemberExpression", start: element.argument.start, end: element.argument.end}
-                } */
               arr[index] = element.argument;
             });
             for (let j = 0; j < filter.length; j++) {
@@ -210,22 +206,6 @@
             return false
           }
         }
-      }
-      if (node.type === "CallExpression" && node.callee.type != "MemberExpression") {
-        let chek = [];
-        for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
-          try {
-            if (WebCryptoAPIScripts.functions[i][0].name === node.callee.name) {
-              chek = await NodeWalk(WebCryptoAPIScripts.functions[i][1]);
-            }
-          }
-          catch (e) { }
-        }
-        let filter = chek.filter(element => element.type === "ReturnStatement");
-        filter.forEach(function (element, index, arr) {
-          arr[index] = element.argument;
-        });
-        return filter;
       }
       else {
         return false;
