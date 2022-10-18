@@ -1,6 +1,6 @@
 let klarTextR1T2 = new TextEncoder().encode("ich werde verschlüsselt");
 let AESKeyR1T2 = window.crypto.subtle.generateKey({
-    name: "AES-CBC",
+    name: "AES-GCM",
     length: 256,},
     false,
     ["encrypt", "decrypt"]);
@@ -48,15 +48,15 @@ function func7R1T2() {
 }
 
 async function Regel1T2() {    
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[4].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[3].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func5R1T2()[3]}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func4R1T2().O2[4],}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func4R1T2().O3[4],}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func3R1T2(),}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func2R1T2()}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func1R1T2()}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: a.b()[2]}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func7R1T2()()}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: func6R1T2()[4].O2()[1]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[4].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[3].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func5R1T2()[3]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func4R1T2().O2[4],}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func4R1T2().O3[4],}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func3R1T2(),}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func2R1T2()}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func1R1T2()}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: a.b()[2]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func7R1T2()()}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[4].O2()[1]}, await AESKeyR1T2, klarTextR1T2));
 }

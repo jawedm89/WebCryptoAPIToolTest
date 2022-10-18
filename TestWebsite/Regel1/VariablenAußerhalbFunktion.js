@@ -1,23 +1,23 @@
 let klarTextR1T3 = new TextEncoder().encode("ich werde verschlüsselt");
 let AESKeyR1T3 = window.crypto.subtle.generateKey({
-    name: "AES-CBC",
+    name: "AES-GCM",
     length: 256,},
     false,
     ["encrypt", "decrypt"]);
   
 async function func1R1T3(iv) {
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv}, await AESKeyR1T3, klarTextR1T3));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: iv}, await AESKeyR1T3, klarTextR1T3));
 }
 async function func2R1T3(placeholder1, iv, placeholder2) {
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
 }
 
 async function func3R1T3(iv, placeholder2, placeholder1) {
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
 }
 
 async function func4R1T3(placeholder1, placeholder2, iv) {
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: iv}, await AESKeyR1T3, klarTextR1T3), placeholder1, placeholder2);
 }
 
 function func5R1T3() {
