@@ -98,7 +98,7 @@
   <p>
     Test 4 If- und Switch-Statments
    <br>
-    Die Browser Extension sollte hier 5 Fehler Erkennen. Bei den 7 anderen API Calls wurde die Regel eingehalten. 
+    Die Browser Extension sollte hier 5 Fehler Erkennen. Bei den 8 anderen API Calls wurde die Regel eingehalten. 
     <br>
     1. true
     <br>
@@ -124,6 +124,8 @@
     <br>
     12. false
     <br>
+    13. true
+    <br>
   </p>
   <button id="test4">Test 4</button>
   <br>
@@ -146,8 +148,6 @@
     let test3 = document.getElementById("test3");
     let test4 = document.getElementById("test4");
     let test5 = document.getElementById("test5");
-    let test6 = document.getElementById("test6");
-    let testAll = document.getElementById("testAll");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
@@ -232,34 +232,6 @@
       document.head.appendChild(script3);
       document.head.appendChild(script4);
     }
-
-    test6.addEventListener("click", Test6);
-    async function Test6() {
-      let script6 = document.createElement("script");
-      script6.src = "test6.js";
-      try {
-        document.head.removeChild(document.scripts[0]);
-      }
-      catch (e) {
-        console.log(e);
-      }
-      await delay(1000);
-      document.head.appendChild(script6);
-    }
-
-    testAll.addEventListener("click", TestAll);
-    async function TestAll() {
-      let scriptAll = document.createElement("script");
-      scriptAll.src = "testall.js";
-      try {
-        document.head.removeChild(document.scripts[0]);
-      }
-      catch (e) {
-        console.log(e);
-      }
-      await delay(1000);
-      document.head.appendChild(scriptAll);
-    } 
 
   </script>
 

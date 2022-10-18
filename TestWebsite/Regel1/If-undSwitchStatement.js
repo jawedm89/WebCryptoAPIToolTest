@@ -166,9 +166,22 @@ function func12R1T4() {
     return iv;
 }
 
-async function func13R1T4() {
+function func13R1T4() {
+    let bool = true;
+    let iv;
+    if(bool) {
+        iv = window.crypto.getRandomValues(new Uint8Array(16));
+    }
+    else {
+        iv = window.crypto.getRandomValues(new Uint8Array(16));
+    }
+    return iv;
+}
+
+async function func14R1T4() {
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func11R1T4()}, await AESKeyR1T4, klarTextR1T4));
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func12R1T4()}, await AESKeyR1T4, klarTextR1T4));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func13R1T4()}, await AESKeyR1T4, klarTextR1T4));
 }
 
 func1R1T4();
@@ -181,4 +194,4 @@ func7R1T4();
 func8R1T4();
 func9R1T4();
 func10R1T4();
-func13R1T4();
+func14R1T4();
