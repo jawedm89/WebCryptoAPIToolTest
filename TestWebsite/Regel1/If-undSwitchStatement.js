@@ -7,12 +7,13 @@ let AESKeyR1T4 = window.crypto.subtle.generateKey({
 
 async function func1R1T4() {
     let bool = true;
-    let iv = window.crypto.getRandomValues(new Uint8Array(16));
+    let iv;
+    let iv2 = window.crypto.getRandomValues(new Uint8Array(16));
     if(bool) {
-        iv = iv;
+        iv = iv2;
     }
     else {
-        iv = iv;
+        iv = iv2;
     }
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: iv}, await AESKeyR1T4, klarTextR1T4));
 }
