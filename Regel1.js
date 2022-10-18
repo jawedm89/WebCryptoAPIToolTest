@@ -327,7 +327,7 @@
       } */
       if (SwitchOrIf.length > 0 && found.length > 0) {
         console.log(found, SwitchOrIf)
-        for (let i = 1; found.length > i; i++) {
+        for (let i = 0; found.length > i; i++) {
           SwitchOrIf.forEach(element => {
             if (found[i].start > element.start && found[i].end < element.end) {
               found[i].keepMe = true;
@@ -337,12 +337,16 @@
             }
           });
         }
-        found[0].keepMe = true;
-        found.forEach(element => {
-          if (element.keepMe === true) {
-            check.push(element);
-          }
-        });
+        if(found[0].keepMe) {
+          found.forEach(element => {
+            if (element.keepMe === true) {
+              check.push(element);
+            }
+          });
+        }
+        else {
+          check.push(found[0])
+        }
       }
       else {
         if (found[0] != undefined) {

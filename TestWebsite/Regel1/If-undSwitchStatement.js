@@ -39,7 +39,7 @@ async function func3R1T4() {
     else {
         iv = new Uint8Array(16);
     }
-    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv2}, await AESKeyR1T4, klarTextR1T4));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-CBC",iv: iv}, await AESKeyR1T4, klarTextR1T4));
 }
 
 async function func4R1T4() {
