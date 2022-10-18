@@ -3,6 +3,39 @@
 <body>
   
   <h1 align ="center">Web Crypto API TestWebsite für Regel 4</h1>
-    
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 1 
+   <br>
+   Die Browser Extension sollte hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
+   <br>
+   
+    <br>
+  </p>
+  <button id="test1">Test 1</button>
+
+  <script>
+    let test1 = document.getElementById("test1");
+
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    test1.addEventListener("click", Test1);
+    async function Test1() {
+      let script1 = document.createElement("script");
+      script1.src = "test1.js";
+      try {
+        document.head.removeChild(document.scripts[0]);
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+    }
+  </script>
 </body>
 </html>
