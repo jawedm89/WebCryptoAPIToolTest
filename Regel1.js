@@ -135,6 +135,7 @@
       }
       else if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
+        console.log(r)
         if (r) {
           return r;
         }
@@ -179,6 +180,32 @@
         });
         console.log(filter)
         return filter;
+      }
+      else if (node.type === "CallExpression" && node.callee.type === "CallExpression") {
+        if (node.callee.callee.type === "Identifier") {
+          let check = await compare(WebCryptoAPIScripts, node.callee.callee);
+          console.log("1")
+          if(check) {
+            let filter = await NodeWalk(check[1].body, check[1].end, true);
+            filter = filter.filter(element => element.type === "ReturnStatement");
+            filter = filter.filter(element => element.argument.type === "FunctionExpression");
+            console.log(filter)
+            let filter2 = []
+            for(let i = 0; i < filter.length; i++) {
+              let arr = await NodeWalk(filter[i].argument.body, filter[i].end, true);
+              console.log(arr, filter[i])
+              filter2 = filter2.concat(arr)
+            }
+            filter2 = filter2.filter(element => element.type === "ReturnStatement");
+            filter2.forEach(function (element, index, arr) {
+              arr[index] = element.argument;
+            });
+            console.log(check, filter2);
+            return filter2
+          }
+          return false
+        }
+        return false;
       }
       else if (node.type === "MemberExpression") {
         let callCheck = makeArray2(node, true);
@@ -239,7 +266,7 @@
           switch (arr[i].type) {
             case "VariableDeclaration":
               for (let j = 0; j < arr[i].declarations.length; j++) {
-                if (memberExpr) {
+                if (memberExpr && arr[i].declarations[j].init != null) {
                   let foundMember = await verschachtelungsCheck(arr[i].declarations[j], node);
                   if (foundMember) {
                     if (foundMember.reRun) {
@@ -256,7 +283,7 @@
                   }
                 }
                 else {
-                  if (arr[i].declarations[j].id.name === node.name) {
+                  if (arr[i].declarations[j].id.name === node.name && arr[i].declarations[j].init != null) {
                     found.push(arr[i].declarations[j].init);
                   }
                 }
@@ -280,7 +307,7 @@
                 }
               }
               else {
-                if (arr[i].left.name === node.name) {
+                if (arr[i].left.name === node.name && arr[i].left.name != arr[i].right.name) {
                   found.push(arr[i].right);
                 }
               }
@@ -298,8 +325,9 @@
       /* if(found.length >= 1) {
         check.push(found[0]);
       } */
-      if (SwitchOrIf.length > 0) {
-        for (let i = 0; found.length > i; i++) {
+      if (SwitchOrIf.length > 0 && found.length > 0) {
+        console.log(found, SwitchOrIf)
+        for (let i = 1; found.length > i; i++) {
           SwitchOrIf.forEach(element => {
             if (found[i].start > element.start && found[i].end < element.end) {
               found[i].keepMe = true;
@@ -309,13 +337,12 @@
             }
           });
         }
-        if (found[0].keepMe) {
-          found.forEach(element => {
-            if (element.keepMe === true) {
-              check.push(element);
-            }
-          });
-        }
+        found[0].keepMe = true;
+        found.forEach(element => {
+          if (element.keepMe === true) {
+            check.push(element);
+          }
+        });
       }
       else {
         if (found[0] != undefined) {
