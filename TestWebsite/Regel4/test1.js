@@ -11,5 +11,5 @@ async function func1R4T1() {
         "jwk", //can be "jwk" or "raw"
         key //extractable must be true
     );
-    exkey = "1234";
+    exkey.k = "1234";
 }

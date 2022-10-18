@@ -4,26 +4,19 @@
     const walk = require("acorn-walk");
 
 window.Regel4 = async function (WebCryptoAPIScripts) {
-  let sign = [];
-  for (let i = 0; i < WebCryptoAPIScripts.regel3.length; i++) {
-    let sig = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[i], "CallExpression").node
-    let signTyp = sig.arguments[0].properties[0].value.value;
-    if (signTyp === "RSASSA-PKCS1-v1_5" || signTyp === "RSA-PSS" || signTyp === "ECDSA" || signTyp === "HMAC") {
-      sign.push(sig);
-    }
-  }
-  for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
-    let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression").node;
-    let encMode = encCall.arguments[0].properties[0].value.value;
-    if (encMode === "AES-CBC" || encMode === "AES-CTR") {
-      if (sign.length != 0) {
+
+  for (let i = 0; i < WebCryptoAPIScripts.regel4.length; i++) {
+    let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel4[i], "CallExpression").node;
+    let exportKeyMode = encCall.arguments[0].value;
+    if (exportKeyMode === "jwk" || exportKeyMode === "AES-CTR") {
+      console.log("hi")
         let results = [[encCall, []]]             
         let result;
         let ergebnis = [];
         let i = 0;
         do {
           //console.log(encCall.start)
-          result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
+          result = await checkPrePosition([results[i]], WebCryptoAPIScripts, []);
           if (typeof result != "boolean") {
             if (result === "Ignore") {
             }
@@ -42,11 +35,11 @@ window.Regel4 = async function (WebCryptoAPIScripts) {
             //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
             if (!result) {
               if (results[i][0].start === encCall.start) {
-                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
                 WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
               }
               else {
-                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
                 WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
               }
             }
@@ -57,12 +50,6 @@ window.Regel4 = async function (WebCryptoAPIScripts) {
         }
         while (i < results.length ) 
         //console.log(results)
-      }
-      else {
-        let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-        WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-        console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
-      }
     }
     else {
       console.log("keine Signatur nötig")
@@ -97,7 +84,7 @@ function signCheck(node) {
   }
 }
 
-async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i) {
+async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i) {
   let fr = call;
   if (ergebnis === undefined) {
     ergebnis = [];
@@ -115,13 +102,13 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         if(call[i][2] === "ingnore Return") {
           ergebnis.push("Verarbeitung des API Call. Keine Regelspezifische Funktion")
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
         }
         else {
           console.log(call[i][2])
           call.push([call[i][2], preposition[2]]);
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
         }
       }
       else {
@@ -141,10 +128,10 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         else {
           ergebnis.push("No Callexpresstions found for ", preposition[0]);
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
         }
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
       }
     }
       else if (preposition[1] === "MemberExpression" || preposition[1] === "Identifier") {
@@ -175,10 +162,10 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
         else {
           ergebnis.push("No Callexpresstions found for " , preposition[0]);
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
         }
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
       }              
       else if (preposition[1] === "ThenCall") {
         let a = preposition[2];
@@ -232,7 +219,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
           }
         }
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
       }
       else if (preposition[1] === "FunctionCall") { 
         let calls, result = [];
@@ -250,35 +237,35 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
             }
           }
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
         }
         else {
           if(signCheck(preposition[0])) {
             ergebnis.push(true);
             i++;
-            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
           }
           else {
             ergebnis.push("Operation Function");
             call.push([preposition[0], preposition[3]]);
             i++;
-            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
           }
         }
       }
       else if (preposition === "Error") {
         ergebnis.push("Error no Prepossition found at ", call[i].start);
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
       }
       else if (preposition === "Ignore") {
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
       }
       else {
         ergebnis.push("Error in finding Prepositionat ", call[i].start)
         i++;
-        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls , i)
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls , i)
       }
   }
   else {
@@ -301,6 +288,7 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcC
 async function findPreposition(WebCryptoAPIScripts, encCall) {
   let type;
   let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
+  console.log(prePosition, encCall)
   let w = encCall[1].map((x) => x)
   for(let i = 0; i < prePosition.length; i++) {
     switch (prePosition[i].type) {
@@ -331,10 +319,9 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
 
       case "AssignmentExpression":
         if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left)) {
+          console.log(JSON.stringify(prePosition[i].left) , JSON.stringify(encCall[0]));
+          
           break;
-        }
-        if (prePosition[i].left === prePosition[i-1]) {
-          console.log("found Bitch")
         }
           type = "Identifier";
         return [prePosition[i].left, type, w, prePosition.slice(i)];

@@ -51,7 +51,7 @@
               await Regel3(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel4.length != 0) {
-              Regel4(WebCryptoAPIScripts[i]);
+              await Regel4(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel5.length != 0) {
               Regel5(WebCryptoAPIScripts[i]);
