@@ -8,9 +8,8 @@ window.Regel4 = async function (WebCryptoAPIScripts) {
   for (let i = 0; i < WebCryptoAPIScripts.regel4.length; i++) {
     let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel4[i], "CallExpression").node;
     let exportKeyMode = encCall.arguments[0].value;
-    if (exportKeyMode === "jwk" || exportKeyMode === "AES-CTR") {
-      console.log("hi")
-        let results = [[encCall, []]]             
+    if (exportKeyMode === "jwk") {
+        let results = [[encCall, [{type: "Identifier", name: "k"}]]]             
         let result;
         let ergebnis = [];
         let i = 0;
@@ -32,8 +31,8 @@ window.Regel4 = async function (WebCryptoAPIScripts) {
             }
           }
           else {
-            //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
-            if (!result) {
+            console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
+            if (result) {
               if (results[i][0].start === encCall.start) {
                 let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
                 WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
@@ -253,6 +252,11 @@ async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, 
           }
         }
       }
+      else if (preposition === "Assign") {
+        ergebnis.push(true);
+        i++;
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
+      }
       else if (preposition === "Error") {
         ergebnis.push("Error no Prepossition found at ", call[i].start);
         i++;
@@ -318,10 +322,10 @@ async function findPreposition(WebCryptoAPIScripts, encCall) {
         }
 
       case "AssignmentExpression":
-        if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left)) {
+        console.log(encCall)
+        if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left) || JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left.object)) {
           console.log(JSON.stringify(prePosition[i].left) , JSON.stringify(encCall[0]));
-          
-          break;
+          return "Assign"
         }
           type = "Identifier";
         return [prePosition[i].left, type, w, prePosition.slice(i)];
