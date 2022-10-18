@@ -2,14 +2,14 @@ async function func1R4T1() {
     let key = await window.crypto.subtle.generateKey(
         {
             name: "AES-CTR",
-            length: 256, //can be  128, 192, or 256
+            length: 256, 
         },
-        true, //whether the key is extractable (i.e. can be used in exportKey)
-        ["encrypt", "decrypt"] //can "encrypt", "decrypt", "wrapKey", or "unwrapKey"
+        true,
+        ["encrypt", "decrypt"] 
     );
     let exkey = await window.crypto.subtle.exportKey(
-        "jwk", //can be "jwk" or "raw"
-        key //extractable must be true
+        "jwk",
+        key 
     );
     exkey.k = "1234";
     exkey = 123;
@@ -19,14 +19,11 @@ async function func2R4T1() {
     let key = await window.crypto.subtle.generateKey(
         {
             name: "AES-CTR",
-            length: 256, //can be  128, 192, or 256
+            length: 256, 
         },
-        true, //whether the key is extractable (i.e. can be used in exportKey)
-        ["encrypt", "decrypt"] //can "encrypt", "decrypt", "wrapKey", or "unwrapKey"
+        true, 
+        ["encrypt", "decrypt"] 
     );
-    let exkey = await window.crypto.subtle.exportKey(
-        "jwk", //can be "jwk" or "raw"
-        key //extractable must be true
-    );
+    let exkey = await window.crypto.subtle.exportKey("jwk", key);
     exkey = 123;
 }
