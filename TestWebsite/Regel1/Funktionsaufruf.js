@@ -49,7 +49,7 @@ function func7R1T2() {
 
 async function Regel1T2() {    
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[4].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
-    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[3].O2()[0]}, await AESKeyR1T2, klarTextR1T2));
+    console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func6R1T2()[3].O2()}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func5R1T2()[3]}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func4R1T2().O2[4],}, await AESKeyR1T2, klarTextR1T2));
     console.log(await window.crypto.subtle.encrypt({name: "AES-GCM",iv: func4R1T2().O3[4],}, await AESKeyR1T2, klarTextR1T2));
