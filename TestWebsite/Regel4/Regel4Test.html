@@ -7,35 +7,268 @@
   <br>
   <br>
   <p>
-    Test 1 
+    Test 1 Variablenbinndung
    <br>
-   Die Browser Extension sollte hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
-   <br>
-   
+    1. true
+    <br>
+    2. true
+    <br>
+    3. false
+    <br>
+    4. true
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. true
+    <br>
+    10. false
+    <br>
+    11. true
+    <br>
+    12. false
     <br>
   </p>
   <button id="test1">Test 1</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 2 Funktionswiedergabe
+   <br>
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. true
+    <br>
+    4. false
+    <br>
+    5. true
+    <br>
+    6. false
+    <br>
+    7. true
+    <br>
+    8. true
+    <br>
+    9. false
+    <br>
+    10. true
+    <br>
+    11. false
+    <br>
+    12. true
+    <br>
+  </p>
+  <button id="test2">Test 2</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 3 Chaining
+   <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. true
+    <br>
+    4. false
+    <br>
+    5. true
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+  </p>
+  <button id="test3">Test 3</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 4 Funktionsaufruf
+    <br>
+    1. true
+    <br>
+    2. true
+    <br>
+    3. true
+    <br>
+    4. false
+    <br>
+    5. false
+    <br>
+    6. true
+    <br>
+    7. true
+  </p>
+  <button id="test4">Test 4</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test 5 Then() Call
+    <br>
+    1. true
+    <br>
+    2. false
+    <br>
+    3. true
+    <br>
+    4. false
+    <br>
+    5. true
+    <br>
+    6. true
+    <br>
+    7. false
+    <br>
+    8. true
+    <br>
+    9. false
+    <br>
+    10. true
+    <br>
+    11. false
+    <br>
+    12. true
+    <br>
+    13. true
+    <br>
+    14. true
+  </p>
+  <button id="test5">Test 5</button>
+  <br>
+  <br>
+  <br>
+  <p>
+    Test aller Scripts auf einmal.
+  </p>
+  <button id="test6">Test 6</button>
+  <br>
+  <br>
+  <br>
+
 
   <script>
     let test1 = document.getElementById("test1");
+    let test2 = document.getElementById("test2");
+    let test3 = document.getElementById("test3");
+    let test4 = document.getElementById("test4");
+    let test5 = document.getElementById("test5");
+    let test6 = document.getElementById("test6");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
     }
 
-    test1.addEventListener("click", Test1);
-    async function Test1() {
+    test1.addEventListener("click", async function() {
       let script1 = document.createElement("script");
-      script1.src = "test1.js";
-      try {
-        document.head.removeChild(document.scripts[0]);
-      }
+      script1.src = "Variablenbinndung.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
       catch (e) {
         console.log(e);
       }
       await delay(1000);
       document.head.appendChild(script1);
-    }
+    });
+
+    test2.addEventListener("click", async function() {
+      let script2 = document.createElement("script");
+      script2.src = "Funktionswiedergabe.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script2);
+    });
+
+    test3.addEventListener("click", async function() {
+      let script3 = document.createElement("script");
+      script3.src = "Chaining.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script3);
+    });
+
+    test4.addEventListener("click", async function() {
+      let script4 = document.createElement("script");
+      script4.src = "Funktionsaufruf.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script4);
+    });
+
+    test5.addEventListener("click", async function() {
+      let script5 = document.createElement("script");
+      script5.src = "Then()Call.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script5);
+    });
+
+    test6.addEventListener("click", async function() {
+      let script1 = document.createElement("script");
+      let script2 = document.createElement("script");
+      let script3 = document.createElement("script");
+      let script4 = document.createElement("script");
+      let script5 = document.createElement("script");
+      script1.src = "Variablenbinndung.js";
+      script2.src = "Funktionswiedergabe.js";
+      script3.src = "Chaining.js";
+      script4.src = "Funktionsaufruf.js";
+      script5.src = "Then()Call.js";
+      try{
+        for(let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+      document.head.appendChild(script3);
+      document.head.appendChild(script4);
+      document.head.appendChild(script5);
+    });
+    
   </script>
 </body>
+
 </html>
