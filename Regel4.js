@@ -21,10 +21,13 @@
               }
               else {
                 result.forEach(element => {
-                  if (results.includes(JSON.stringify(element))) {
-                    console.log("war schon enthalten")
-                  }
-                  else {
+                  let push = true;
+                  results.forEach(element2 => {
+                    if (JSON.stringify(element) === JSON.stringify(element2)) {
+                      push = false;
+                    }
+                  });
+                  if (push === true) {
                     results.push(element)
                   }
                 });
@@ -70,7 +73,7 @@
 
 
     function signCheck(node) {
-     return false
+      return false
     }
 
     async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i) {
@@ -106,10 +109,13 @@
             let a = preposition[2];
             if (calls.length > 0) {
               for (let j = 0; calls.length > j; j++) {
-                if (funcCalls.includes(JSON.stringify(calls[j]))) {
-                  console.log("war schon enthalten")
-                }
-                else {
+                let push = true;
+                funcCalls.forEach(element => {
+                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                    push = false;
+                  }
+                });
+                if (push === true) {
                   funcCalls.unshift([calls[j], a]);
                 }
               }
@@ -143,15 +149,12 @@
                 let push = true;
                 call.forEach(element => {
                   //console.log(element[0], calls[j])
-                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j])) {
+                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
                     console.log("war schon drin");
                     push = false;
                   }
-                })
-                if (push === false) {
-                  console.log("war schon enthalten")
-                }
-                else {
+                });
+                if (push === true) {
                   call.push([calls[j], a]);
                 }
               }
@@ -226,10 +229,13 @@
             calls = await findCallExpression(result[1].params[preposition[2]], WebCryptoAPIScripts, result[0].type);
             for (let j = 0; j < calls.length; j++) {
               if (result[1].start <= calls[j].start && result[1].end >= calls[j].end) {
-                if (call.includes(JSON.stringify(calls[j]))) {
-                  console.log("war schon enthalten")
-                }
-                else {
+                let push = true;
+                call.forEach(element => {
+                  if(JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                    push = false; 
+                  }
+                })
+                if (push === true) {
                   call.push([calls[j], preposition[3], "ingnore Return"]);
                 }
               }
@@ -327,7 +333,7 @@
           case "AssignmentExpression":
             console.log(encCall[0], encCall[1], prePosition[i].left)
             let pos = prePosition[i].left;
-            for(let w = 0; w < counter; w++) {
+            for (let w = 0; w < counter; w++) {
               pos = pos.object;
               console.log(pos)
             }
@@ -368,7 +374,7 @@
                 if (prePosition[i].property.name === w[w.length - 1].name) {
                   console.log("pip")
                   w.pop();
-                  counter = counter +1;
+                  counter = counter + 1;
                 }
                 else {
                   return "Ignore";
@@ -377,7 +383,7 @@
               else {
                 if (prePosition[i].property.value === w[w.length - 1].value) {
                   w.pop();
-                  counter = counter +1;
+                  counter = counter + 1;
                 }
                 else {
                   return "Ignore";

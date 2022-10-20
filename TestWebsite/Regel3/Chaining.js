@@ -25,7 +25,7 @@ let EncCall11R3T3 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, SignKeyR3T3.then(
 async function Regel2Test3() {
     let AESKeyR3T3 = await window.crypto.subtle.generateKey(
         {
-            name: "AES-CBC",
+            name: "AES-GCM",
             length: 256,
         },
         false,
@@ -49,13 +49,13 @@ async function Regel2Test3() {
     let chain16 = {O1: 1, O2: "sdf", O3: 12, O4: chain15};
     let chain17 = chain15[2].O4;
     
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, chain2[3]));
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain4.O2));
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, chain6));
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain9[4].O2[5]));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, chain2[3]));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain4.O2));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, chain6));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain9[4].O2[5]));
     console.log(await chain12[4].O2[5]);
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain14[1].O1[4].O2));
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain17[2]));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain14[1].O1[4].O2));
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESKeyR3T3, await chain17[2]));
 
 }
 

@@ -35,50 +35,50 @@ async function Regel2Test4() {
 async function func1(cipher) {
     let AESkeyR3T4 = await window.crypto.subtle.generateKey(
         {
-            name: "AES-CBC",
+            name: "AES-GCM",
             length: 256,
         },
         false,
         ["encrypt", "decrypt"]);
 
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher));   
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher));   
 }
 
 async function func2(placeholder1, placeholder2, cipher) {
     let AESkeyR3T4 = await window.crypto.subtle.generateKey(
         {
-            name: "AES-CBC",
+            name: "AES-GCM",
             length: 256,
         },
         false,
         ["encrypt", "decrypt"]);
 
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher), placeholder1, placeholder2);   
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher), placeholder1, placeholder2);   
 }
 
 async function func3(placeholder1, cipher, placeholder2) {
     let AESkeyR3T4 = await window.crypto.subtle.generateKey(
         {
-            name: "AES-CBC",
+            name: "AES-GCM",
             length: 256,
         },
         false,
         ["encrypt", "decrypt"]);
 
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher), cipher, placeholder1, placeholder2);   
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, cipher), cipher, placeholder1, placeholder2);   
 }
 
 async function func4(placeholder1, placeholder2, cipher) {
     let buffer = klarTextR3T4.buffer;
     let AESkeyR3T4 = await window.crypto.subtle.generateKey(
         {
-            name: "AES-CBC",
+            name: "AES-GCM",
             length: 256,
         },
         false,
         ["encrypt", "decrypt"]);
 
-    console.log(await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, buffer), cipher, placeholder1, placeholder2);   
+    console.log(await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: window.crypto.getRandomValues(new Uint8Array(16)), }, AESkeyR3T4, buffer), cipher, placeholder1, placeholder2);   
 }
 
 async function func5(cipher, placeholder1, placeholder2) {
