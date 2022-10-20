@@ -41,14 +41,8 @@ window.Regel2 = async function (WebCryptoAPIScripts) {
           else {
             //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
             if (!result) {
-              if (results[i][0].start === encCall.start) {
                 let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
                 WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-              }
-              else {
-                let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
-              }
             }
             ergebnis.push(result);
           }

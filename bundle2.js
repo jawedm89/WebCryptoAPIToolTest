@@ -93,6 +93,9 @@
 
       browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.click) {
+          WebCryptoAPIScripts.forEach(element => {
+            element.verstöße.sort((a, b) => a[0].start - b[0].start)
+          })
           browser.runtime.sendMessage({ Ergebnis: WebCryptoAPIScripts})          
         }
       })
