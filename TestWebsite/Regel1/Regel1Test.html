@@ -11,8 +11,11 @@
   <p>
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    <br>
     Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    <br>
     Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 9 mal nicht.
+    <br>
     <br>
     Die Browser Extension sollte entprechend hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel
     eingehalten.
@@ -61,8 +64,11 @@
   <p>
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    <br>
     Dabei wird der Initialisierungsvektor über eine Funktion wiedergegeben, die dann im API Call abgerufen wird.
+    <br>
     Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 3 mal nicht.
+    <br>
     <br>
     Die Browser Extension sollte hier 3 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
     <br>
@@ -99,12 +105,16 @@
   <p>
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    <br>
     Dabei wird der Initialisierungsvektor als Argument im Funktionsaufruf übergeben, welcher dann im API Call abgerufen
     wird.
+    <br>
     Dabei stammt der als Argument übergebene Initialisierungsvektor 13 mal vom API Call window.crypto.getRandomValues()
     und 7 mal nicht.
+    <br>
     3 mal stammt der Initialisierungsvektor zwar vom API Call window.crypto.getRandomValues(), dieser wird aber golbal
     initialisiert.
+    <br>
     <br>
     Die Browser Extension sollte hier 10 Regelverstöße erkennen. Bei den 10 anderen API Calls wird die Regel
     eingehalten.
@@ -127,11 +137,15 @@
   <p>
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    <br>
     Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    <br>
     Jeder API Call ist in einer Funktion, in der auch ein If- oder Switch-Statment enthalten ist, der den
     Initialisierungsvektor verändern kann.
+    <br>
     Dabei kann der Initialisierungsvektor 5 mal nur vom API Call window.crypto.getRandomValues() stammen und 8 mal
     könnte er einen anderen Wert annehmen.
+    <br>
     <br>
     Die Browser Extension sollte hier 8 Fehler Erkennen. Bei den 5 anderen API Calls wird die Regel eingehalten.
     <br>
@@ -171,6 +185,8 @@
   <p>
     <br>
     Hier werden alle Scripte aus den vorherigen Tests geladen.
+    <br>
+    <br>
     Die Browser Extension sollte hier 30 Fehler Erkennen.
   </p>
   <button id="test5">Test All</button>
