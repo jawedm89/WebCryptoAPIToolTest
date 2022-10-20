@@ -5,7 +5,7 @@ let AESKeyR2T5 = window.crypto.subtle.generateKey({
     false,
     ["encrypt", "decrypt"]);
 
-signkeyR2T5 = window.crypto.subtle.generateKey(
+let signkeyR2T5 = window.crypto.subtle.generateKey(
     {
         name: "RSASSA-PKCS1-v1_5",
         modulusLength: 2048, 
