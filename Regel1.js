@@ -88,7 +88,7 @@
             do {
               let s = await typeCheck(arr.pop(), WebCryptoAPIScripts);
               if (typeof s === "boolean") {
-                console.log(s)
+                //console.log(s)
                 ergebnis.push(s);
               }
               else {
@@ -96,20 +96,17 @@
               }
             } while (arr.length > 0)
             if (ergebnis.every(element => element === true) && ergebnis.length > 0) {
-              console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
+              //console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
             }
             else {
-              console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
+              //console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
               //let verstoßDefinition = " Hier wird bei der Verschlüsselungsmethode " + encMode + " ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
               //WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
               //window.alert("IV wurde nicht korrekt initialisiert!");
             }
           }
-          else if (props[0].value.type != "Literal") {
-            console.log("die Property für den Encryption Mode ist hier nicht als String angegeben sonder als ", props[0].value.type, " , wodurch eine Überprüfung zu aufwendig wird")
-          }
           else {
-            console.log("Die Encryption Mode ist nicht AES-CTR, AES-GCM oder AES-CBC, wodurch eine Überprüfung nicht notwendig ist für Regel 1")
+            //console.log("Die Encryption Mode ist nicht AES-CTR, AES-GCM oder AES-CBC, wodurch eine Überprüfung nicht notwendig ist für Regel 1")
           }
         }
         catch (e) {
@@ -129,14 +126,14 @@
     }
 
     async function typeCheck(node, WebCryptoAPIScripts) {
-      console.log(node)
+      //console.log(node)
       if (node.type === "Identifier") {
         let r = await identifierValueCheck(node, WebCryptoAPIScripts);
         return r;
       }
       else if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
-        console.log(r)
+        //console.log(r)
         if (r) {
           return r;
         }
