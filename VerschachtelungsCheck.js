@@ -80,7 +80,7 @@ async function verschachtelungsCheck(found, node) {
             for (i = i; i < node.length; i++) {
                 newNode = { property: node[i], object: newNode, type: "MemberExpression", start: foundInit.start, end: foundInit.end }
             }
-            console.log(newNode)
+            //console.log(newNode)
             return newNode;
         }
         else if (foundInit.type === "MemberExpression") {
@@ -94,16 +94,17 @@ async function verschachtelungsCheck(found, node) {
             return newNode;
         }
         else if (foundInit.type === "FunctionDeclaration" || foundInit.type === "FunctionExpression" || foundInit.type === "ArrowFunctionExpression") {
+            console.log("h")
             let chek = await NodeWalk(foundInit.body, foundInit.end, true);
             let filter = chek.filter(element => element.type === "ReturnStatement");
             filter.forEach(function (element, index, arr) {
-                console.log(element.argument)
+                //console.log(element.argument)
                 arr[index] = element.argument;
             });
             for (let j = 0; j < filter.length; j++) {
                 filter[j] = [filter[j], node.slice(i)]
             }
-            console.log(filter, node, i)
+            //console.log(filter, node, i)
             filter.reRun = true;
             return filter;
             foundInit = filter[0]
@@ -111,6 +112,23 @@ async function verschachtelungsCheck(found, node) {
         }
         else {
             return false;
+        }
+        if ((foundInit.type === "FunctionDeclaration" || foundInit.type === "FunctionExpression" || foundInit.type === "ArrowFunctionExpression") && i === node.length - 1) {
+            console.log("h")
+            let chek = await NodeWalk(foundInit.body, foundInit.end, true);
+            let filter = chek.filter(element => element.type === "ReturnStatement");
+            filter.forEach(function (element, index, arr) {
+                //console.log(element.argument)
+                arr[index] = element.argument;
+            });
+            for (let j = 0; j < filter.length; j++) {
+                filter[j] = [filter[j], node.slice(i)]
+            }
+            //console.log(filter, node, i)
+            filter.reRun = true;
+            return filter;
+            foundInit = filter[0]
+            i = i -1;
         }
     }
     return foundInit;
@@ -126,7 +144,7 @@ function makeArray2(node, callex) {
             result.unshift(node)
         }
         else if (callex === true && node.type === "CallExpression") {
-            console.log(callex, node.type)
+            //console.log(callex, node.type)
             //result.unshift(node);
             callExpr = node;
             node = node.callee;

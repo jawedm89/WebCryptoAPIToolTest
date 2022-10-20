@@ -88,6 +88,7 @@
             do {
               let s = await typeCheck(arr.pop(), WebCryptoAPIScripts);
               if (typeof s === "boolean") {
+                console.log(s)
                 ergebnis.push(s);
               }
               else {
@@ -99,8 +100,8 @@
             }
             else {
               console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
-              let verstoßDefinition = " Hier wird bei der Verschlüsselungsmethode " + encMode + " ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+              //let verstoßDefinition = " Hier wird bei der Verschlüsselungsmethode " + encMode + " ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              //WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
               //window.alert("IV wurde nicht korrekt initialisiert!");
             }
           }
@@ -143,23 +144,32 @@
           let callCheck = makeArray2(node, true);
           let slicer = makeArray2(callCheck[1], true)
           callCheck[0] = callCheck[0].slice(slicer[0].length);
-          console.log(callCheck, slicer);
+          //console.log(callCheck, slicer);
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
           if (r) {
-            console.log(r)
+            //console.log(r)
             let chek = await NodeWalk(r[1].body, r[1].end, true);
             let filter = chek.filter(element => element.type === "ReturnStatement");
             filter.forEach(function (element, index, arr) {
-              console.log(element.argument)
+              //console.log(element.argument)
               arr[index] = element.argument;
             });
             for (let j = 0; j < filter.length; j++) {
               filter[j] = await verschachtelungsCheck(filter[j], callCheck[0]);
             }
-            console.log(filter)
-            return filter;
+            //console.log(filter)
+            if (filter.length > 0) {
+              return filter;
+            }
+            else {
+              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              return false;
+            }
           }
           else {
+            let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
             return false;
           }
         }
@@ -178,33 +188,50 @@
         filter.forEach(function (element, index, arr) {
           arr[index] = element.argument;
         });
-        console.log(filter)
-        return filter;
+        if (filter.length > 0) {
+          return filter;
+        }
+        else {
+          let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+          return false;
+        }
       }
       else if (node.type === "CallExpression" && node.callee.type === "CallExpression") {
         if (node.callee.callee.type === "Identifier") {
           let check = await compare(WebCryptoAPIScripts, node.callee.callee);
-          console.log("1")
+          //console.log("1")
           if(check) {
             let filter = await NodeWalk(check[1].body, check[1].end, true);
             filter = filter.filter(element => element.type === "ReturnStatement");
             filter = filter.filter(element => element.argument.type === "FunctionExpression");
-            console.log(filter)
+            //console.log(filter)
             let filter2 = []
             for(let i = 0; i < filter.length; i++) {
               let arr = await NodeWalk(filter[i].argument.body, filter[i].end, true);
-              console.log(arr, filter[i])
+              //console.log(arr, filter[i])
               filter2 = filter2.concat(arr)
             }
             filter2 = filter2.filter(element => element.type === "ReturnStatement");
             filter2.forEach(function (element, index, arr) {
               arr[index] = element.argument;
             });
-            console.log(check, filter2);
-            return filter2
+            //console.log(check, filter2);
+            if (filter2.length > 0) {
+              return filter2;
+            }
+            else {
+              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              return false;
+            }
           }
+          let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
           return false
         }
+        let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
       else if (node.type === "MemberExpression") {
@@ -216,7 +243,7 @@
         else {
           let slicer = makeArray2(callCheck[1], true)
           callCheck[0] = callCheck[0].slice(slicer[0].length);
-          console.log(callCheck)
+          //console.log(callCheck)
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
           if (r) {
             let chek = await NodeWalk(r[1].body, r[1].end, true);
@@ -227,14 +254,25 @@
             for (let j = 0; j < filter.length; j++) {
               filter[j] = await verschachtelungsCheck(filter[j], callCheck[0]);
             }
-            return filter;
+            if (filter.length > 0) {
+              return filter;
+            }
+            else {
+              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              return false;
+            }
           }
           else {
-            return false
+            let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+            return false;
           }
         }
       }
       else {
+        let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
     }
@@ -253,6 +291,8 @@
       let arr = [];
       if (inOrOut === "OutSideFunction") {
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
+        let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
       else {
@@ -326,7 +366,7 @@
         check.push(found[0]);
       } */
       if (SwitchOrIf.length > 0 && found.length > 0) {
-        console.log(found, SwitchOrIf)
+        //console.log(found, SwitchOrIf)
         for (let i = 0; found.length > i; i++) {
           SwitchOrIf.forEach(element => {
             if (found[i].start > element.start && found[i].end < element.end) {
@@ -365,7 +405,7 @@
             if (node.name === parameter[i].name) {
               param = true;
               let call = await findCallExpression(inOrOut, WebCryptoAPIScripts);
-              console.log(call)
+              //console.log(call)
               call.forEach(element => {
                 check.push(element.arguments[p])
               });
@@ -373,15 +413,19 @@
             p++;
           }
           if (param === true) {
-            console.log(check)
+            //console.log(check)
             return check;
           }
           if (param === false) {
+            let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
             console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
             return false
           }
         }
         else {
+          let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
           return false;
         }
       }

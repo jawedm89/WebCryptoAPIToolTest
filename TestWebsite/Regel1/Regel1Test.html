@@ -3,15 +3,22 @@
 
 <body>
 
-  <h1 align="center">Web Crypto API TestWebsite für Regel 1</h1>
+  <h1 align="center">Regel 1: Test auf korrekte nutzung des Initialisierungsvektors</h1>
   <br>
   <br>
   <br>
+  <h3>Test 1 Variablenbinndung</h3>
   <p>
-    Test 1 Variablenbinndung
-   <br>
-   Die Browser Extension sollte hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
-   <br>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 9 mal nicht.
+    <br>
+    Die Browser Extension sollte entprechend hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+    <!--
+    <br>
     1. true
     <br>
     2. false
@@ -44,16 +51,22 @@
     <br>
     16. false
     <br>
+    -->
   </p>
   <button id="test1">Test 1</button>
   <br>
   <br>
   <br>
+  <h3>Test 2 Funktionsaufruf</h3>
   <p>
-    Test 2 Funktionsaufruf
-   <br>
-   Die Browser Extension sollte hier 2 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
-   <br>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    Dabei wird der Initialisierungsvektor über eine Funktion wiedergegeben, die dann im API Call abgerufen wird.
+    Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 3 mal nicht.
+    <br>
+    Die Browser Extension sollte hier 3 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
+    <br>
+    <!--
     1. true
     <br>
     2. true
@@ -76,17 +89,27 @@
     <br>
     11. false
     <br>
+    -->
   </p>
   <button id="test2">Test 2</button>
   <br>
   <br>
   <br>
+  <h3>Test 3 Variablen außerhalb von Funktion</h3>
   <p>
-    Test 3 Variablen außerhalb von Funktion
     <br>
-    Die Browser Extension sollte hier 3 Regelverstöße erkennen. Nur ein API Call hält hier die Regel ein.
-   <br>
-    1. false
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    Dabei wird der Initialisierungsvektor als Argument im Funktionsaufruf übergeben, welcher dann im API Call abgerufen
+    wird.
+    Dabei stammt der als Argument übergebene Initialisierungsvektor 13 mal vom API Call window.crypto.getRandomValues()
+    und 7 mal nicht.
+    3 mal stammt der Initialisierungsvektor zwar vom API Call window.crypto.getRandomValues(), dieser wird aber golbal
+    initialisiert.
+    <br>
+    Die Browser Extension sollte hier 10 Regelverstöße erkennen. Bei den 10 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+    <!--1. false
     <br>
     2. true
     <br>
@@ -94,17 +117,25 @@
     <br>
     4. false
     <br>
+    -->
   </p>
   <button id="test3">Test 3</button>
   <br>
   <br>
   <br>
+  <h3>Test 4 If- und Switch-Statments</h3>
   <p>
-    Test 4 If- und Switch-Statments
-   <br>
-    Die Browser Extension sollte hier 6 Fehler Erkennen. Bei den 8 anderen API Calls wurde die Regel eingehalten. 
     <br>
-    1. true
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
+    Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    Jeder API Call ist in einer Funktion, in der auch ein If- oder Switch-Statment enthalten ist, der den
+    Initialisierungsvektor verändern kann.
+    Dabei kann der Initialisierungsvektor 5 mal nur vom API Call window.crypto.getRandomValues() stammen und 8 mal
+    könnte er einen anderen Wert annehmen.
+    <br>
+    Die Browser Extension sollte hier 8 Fehler Erkennen. Bei den 5 anderen API Calls wird die Regel eingehalten.
+    <br>
+    <!--1. true
     <br>
     2. false
     <br>
@@ -130,14 +161,17 @@
     <br>
     13. true
     <br>
+    -->
   </p>
   <button id="test4">Test 4</button>
   <br>
   <br>
   <br>
+  <h3>Test 5 alle Scripts</h3>
   <p>
-    Test 5 alle Scripts
     <br>
+    Hier werden alle Scripte aus den vorherigen Tests geladen.
+    Die Browser Extension sollte hier 30 Fehler Erkennen.
   </p>
   <button id="test5">Test All</button>
   <p></p>
@@ -223,10 +257,11 @@
       script2.src = "Funktionsaufruf.js";
       script3.src = "VariablenAußerhalbFunktion.js";
       script4.src = "If-undSwitchStatement.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }

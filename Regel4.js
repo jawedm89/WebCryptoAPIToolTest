@@ -35,11 +35,11 @@
               if (result) {
                 if (results[i][0].start === encCall.start) {
                   let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                  WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+                  //WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
                 }
                 else {
                   let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                  WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
+                  //WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
                 }
               }
               ergebnis.push(result);
@@ -70,17 +70,7 @@
 
 
     function signCheck(node) {
-      try {
-        if (node.callee.property.name === "sign" && node.callee.object.property.name === "subtle" && node.callee.object.object.property.name === "crypto" && node.callee.object.object.object.name === "window") {
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
-      catch (e) {
-        return false;
-      }
+     return false
     }
 
     async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i) {
@@ -263,6 +253,9 @@
         }
         else if (preposition === "Assign") {
           ergebnis.push(true);
+          console.log(call)
+          let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + call[i][0] + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
           i++;
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
         }
@@ -300,6 +293,7 @@
 
     async function findPreposition(WebCryptoAPIScripts, encCall) {
       let type;
+      let counter = 0;
       let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
       console.log(prePosition, encCall)
       let w = encCall[1].map((x) => x)
@@ -331,8 +325,13 @@
             }
 
           case "AssignmentExpression":
-            console.log(encCall[0], prePosition[i].left)
-            if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left) || JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left.object)) {
+            console.log(encCall[0], encCall[1], prePosition[i].left)
+            let pos = prePosition[i].left;
+            for(let w = 0; w < counter; w++) {
+              pos = pos.object;
+              console.log(pos)
+            }
+            if (JSON.stringify(encCall[0]) === JSON.stringify(pos) || JSON.stringify(encCall[0]) === JSON.stringify(pos)) {
               console.log(JSON.stringify(prePosition[i].left), JSON.stringify(encCall[0]));
               return "Assign"
             }
@@ -369,6 +368,7 @@
                 if (prePosition[i].property.name === w[w.length - 1].name) {
                   console.log("pip")
                   w.pop();
+                  counter = counter +1;
                 }
                 else {
                   return "Ignore";
@@ -377,12 +377,15 @@
               else {
                 if (prePosition[i].property.value === w[w.length - 1].value) {
                   w.pop();
+                  counter = counter +1;
                 }
                 else {
                   return "Ignore";
                 }
               }
             }
+            //hier müssten noch alle Stringoperationen rein, mit denen es möglich ist einen String zu verändern. Diese müssten ale Memberexpression erkannt werden.
+            //wenn eine solche Operation gefunden wird muss true wiedergegeben werden, um festzuhalten, das hier der Key mit einer Methode verändert wurde, was ein Regelverstoß ist.
             else {
               break;
             }
