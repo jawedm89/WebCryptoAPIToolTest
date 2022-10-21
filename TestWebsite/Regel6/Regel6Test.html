@@ -1,8 +1,234 @@
 <!DOCTYPE html>
 <html>
 <body>
-  
-  <h1 align ="center">Web Crypto API TestWebsite für Regel 6</h1>
-    
+  <h1 align="center">Regel 6: Test auf Speicherung des exportierten Schlüssel in den Cookies oder Browser Storage</h1>
+  <br>
+  <br>
+  <br>
+  <h3>Test 1: Variablenbinndung</h3>
+  <p>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
+    <br>
+    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, wobei der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht.
+    <br>
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 7 mal in den Cookies oder Browser Storage gespeichert und 5 mal nicht.
+    <br>
+    <br>
+    Die Browser Extension sollte entprechend hier 7 Regelverstöße erkennen. Bei den 5 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+  </p>
+  <button id="test1">Test 1</button>
+  <br>
+  <br>
+  <br>
+  <h3>Test 2: Funktionswiedergabe</h3>
+  <p>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
+    <br>
+    Dabei wird der Schlüssel des API Calls durch eine Funktion wiedergegeben, der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
+    <br>
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage gespeichert und 6 mal nicht.
+    <br>
+    <br>
+    Die Browser Extension sollte entprechend hier 5 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+  </p>
+  <button id="test2">Test 2</button>
+  <br>
+  <br>
+  <br>
+  <h3>Test 3: Chaining</h3>
+  <p>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
+    <br>
+    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, der dann mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
+    <br>
+    Der Schlüssel wird mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
+    in den Cookies oder Browser Storage gespeichert wird wird.
+    <br>
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal in den Cookies oder Browser Storage gespeichert und 4 mal nicht.
+    <br>
+    <br>
+    Die Browser Extension sollte entprechend hier 3 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+  </p>
+  <button id="test3">Test 3</button>
+  <br>
+  <br>
+  <br>
+  <h3>Test 4: Funktionsaufruf</h3>
+  <p>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
+    <br>
+    Dabei wird der Schlüssel des API Calls als Argument in einem Funktionsaufruf weitergegeben, der dann in der Funktion
+    mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
+    <br>
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 1 mal in den Cookies oder Browser Storage gespeichert und 4 mal nicht.
+    <br>
+    <br>
+    Die Browser Extension sollte entprechend hier 1 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+  </p>
+  <button id="test4">Test 4</button>
+  <br>
+  <br>
+  <br>
+  <h3>Test 5: Then()-Call</h3>
+  <p>
+    <br>
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
+    <br>
+    Dabei wird der Schlüssel des API Calls über den Then() Call, wobei der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht.
+    <br>
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage gespeichert und 7 mal nicht.
+    <br>
+    <br>
+    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    eingehalten.
+    <br>
+  </p>
+  <button id="test5">Test 5</button>
+  <br>
+  <br>
+  <br>
+  <h3>Test 6: Alle Scripts</h3>
+  <p>
+    <br>
+    Hier werden alle Scripte aus den vorherigen Tests aufeinmal geladen.
+    <br>
+    <br>
+    Die Browser Extension sollte hier 22 Fehler Erkennen.
+    <br>
+  </p>
+  <button id="test6">Test 6</button>
+  <br>
+  <br>
+  <br>
+
+
+  <script>
+    let test1 = document.getElementById("test1");
+    let test2 = document.getElementById("test2");
+    let test3 = document.getElementById("test3");
+    let test4 = document.getElementById("test4");
+    let test5 = document.getElementById("test5");
+    let test6 = document.getElementById("test6");
+
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    test1.addEventListener("click", async function () {
+      let script1 = document.createElement("script");
+      script1.src = "Variablenbinndung.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+    });
+
+    test2.addEventListener("click", async function () {
+      let script2 = document.createElement("script");
+      script2.src = "Funktionswiedergabe.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script2);
+    });
+
+    test3.addEventListener("click", async function () {
+      let script3 = document.createElement("script");
+      script3.src = "Chaining.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script3);
+    });
+
+    test4.addEventListener("click", async function () {
+      let script4 = document.createElement("script");
+      script4.src = "Funktionsaufruf.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script4);
+    });
+
+    test5.addEventListener("click", async function () {
+      let script5 = document.createElement("script");
+      script5.src = "Then()Call.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script5);
+    });
+
+    test6.addEventListener("click", async function () {
+      let script1 = document.createElement("script");
+      let script2 = document.createElement("script");
+      let script3 = document.createElement("script");
+      let script4 = document.createElement("script");
+      let script5 = document.createElement("script");
+      script1.src = "Variablenbinndung.js";
+      script2.src = "Funktionswiedergabe.js";
+      script3.src = "Chaining.js";
+      script4.src = "Funktionsaufruf.js";
+      script5.src = "Then()Call.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1);
+      document.head.appendChild(script2);
+      document.head.appendChild(script3);
+      document.head.appendChild(script4);
+      document.head.appendChild(script5);
+    });
+
+  </script>
 </body>
+
 </html>
