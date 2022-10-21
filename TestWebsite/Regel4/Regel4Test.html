@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <h1 align="center">Regel 3: Test auf Einhaltung der "Encrypt-then-MAC" Regel</h1>
+  <h1 align="center">Regel 4: Test auf Veränderungen am exportierten Schlüssel</h1>
   <br>
   <br>
   <br>
   <h3>Test 1: Variablenbinndung</h3>
   <p>
     <br>
-    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird das Ergebnis des API Calls an eine Variable gebunden, das dann mal mit dem window.crypto.subtle.encrypt()
-    API Call verschlüsselt wird.
+    Dabei wird das Ergebnis des API Calls an eine Variable gebunden, wobei dann mal der Schlüssel verändert wird.
     <br>
-    Dabei mündet der window.crypto.subtle.sign() API Call 7 mal im window.crypto.subtle.encrypt() API Call und 6 mal
-    nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 7 mal verändert und 5 mal nicht.
     <br>
     <br>
-    Die Browser Extension sollte entprechend hier 7 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    Die Browser Extension sollte entprechend hier 7 Regelverstöße erkennen. Bei den 5 anderen API Calls wird die Regel
     eingehalten.
     <br>
   </p>
@@ -28,16 +26,14 @@
   <h3>Test 2: Funktionswiedergabe</h3>
   <p>
     <br>
-    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird das Ergebnis des API Calls durch eine Funktion wiedergegeben, das dann mal mit dem
-    window.crypto.subtle.encrypt() API Call verschlüsselt wird.
+    Dabei wird der Schlüssel des API Calls durch eine Funktion wiedergegeben, der dann mal verändert wird und mal nicht.
     <br>
-    Dabei mündet der window.crypto.subtle.sign() API Call 8 mal im window.crypto.subtle.encrypt() API Call und 4 mal
-    nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal verändert und 6 mal nicht.
     <br>
     <br>
-    Die Browser Extension sollte entprechend hier 8 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
+    Die Browser Extension sollte entprechend hier 5 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
     eingehalten.
     <br>
   </p>
@@ -48,19 +44,17 @@
   <h3>Test 3: Chaining</h3>
   <p>
     <br>
-    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird das Ergebnis des API Calls an eine Variable gebunden, das dann mal mit dem window.crypto.subtle.encrypt()
-    API Call verschlüsselt wird.
+    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, der dann mal verändert wird und mal nicht.
     <br>
-    Die Variable wird vor dem verschlüsseln mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
-    verschlüsselt wird.
+    Der Schlüssel wird mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
+    verändert wird.
     <br>
-    Dabei mündet der window.crypto.subtle.sign() API Call 6 mal im window.crypto.subtle.encrypt() API Call und 2 mal
-    nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal verändert und 4 mal nicht.
     <br>
     <br>
-    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 2 anderen API Calls wird die Regel
+    Die Browser Extension sollte entprechend hier 3 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
     eingehalten.
     <br>
   </p>
@@ -71,16 +65,15 @@
   <h3>Test 4: Funktionsaufruf</h3>
   <p>
     <br>
-    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird das Ergebnis des API Calls als Argument in einem Funktionsaufruf weitergegeben, das dann in der Funktion
-    mal mit dem window.crypto.subtle.encrypt() API Call verschlüsselt wird.
+    Dabei wird der Schlüssel des API Calls als Argument in einem Funktionsaufruf weitergegeben, der dann in der Funktion
+    mal verändert wird und mal nicht.
     <br>
-    Dabei mündet der window.crypto.subtle.sign() API Call 6 mal im window.crypto.subtle.encrypt() API Call und 2 mal
-    nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 1 mal verändert und 4 mal nicht.
     <br>
     <br>
-    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 2 anderen API Calls wird die Regel
+    Die Browser Extension sollte entprechend hier 1 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
     eingehalten.
     <br>
   </p>
@@ -91,16 +84,14 @@
   <h3>Test 5: Then()-Call</h3>
   <p>
     <br>
-    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird das Ergebnis des API Calls über den Then() Call, mal mit dem window.crypto.subtle.encrypt() API Call
-    verschlüsselt wird.
+    Dabei wird der Schlüssel des API Calls über den Then() Call, mal verändert und mal nicht.
     <br>
-    Dabei mündet der window.crypto.subtle.sign() API Call 8 mal im window.crypto.subtle.encrypt() API Call und 6 mal
-    nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal verändert und 7 mal nicht.
     <br>
     <br>
-    Die Browser Extension sollte entprechend hier 8 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
     eingehalten.
     <br>
   </p>
@@ -114,7 +105,7 @@
     Hier werden alle Scripte aus den vorherigen Tests aufeinmal geladen.
     <br>
     <br>
-    Die Browser Extension sollte hier 19 Fehler Erkennen.
+    Die Browser Extension sollte hier 22 Fehler Erkennen.
     <br>
   </p>
   <button id="test6">Test 6</button>
