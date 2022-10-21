@@ -1,158 +1,121 @@
 <!DOCTYPE html>
 <html>
 <body>
-  
-  <h1 align ="center">Web Crypto API TestWebsite für Regel 4</h1>
+  <h1 align="center">Regel 3: Test auf Einhaltung der "Encrypt-then-MAC" Regel</h1>
   <br>
   <br>
   <br>
+  <h3>Test 1: Variablenbinndung</h3>
   <p>
-    Test 1 Variablenbinndung
-   <br>
-    1. true
     <br>
-    2. true
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
     <br>
-    3. false
+    Dabei wird das Ergebnis des API Calls an eine Variable gebunden, das dann mal mit dem window.crypto.subtle.encrypt()
+    API Call verschlüsselt wird.
     <br>
-    4. true
+    Dabei mündet der window.crypto.subtle.sign() API Call 7 mal im window.crypto.subtle.encrypt() API Call und 6 mal
+    nicht.
     <br>
-    5. false
     <br>
-    6. true
-    <br>
-    7. false
-    <br>
-    8. true
-    <br>
-    9. true
-    <br>
-    10. false
-    <br>
-    11. true
-    <br>
-    12. false
+    Die Browser Extension sollte entprechend hier 7 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    eingehalten.
     <br>
   </p>
   <button id="test1">Test 1</button>
   <br>
   <br>
   <br>
+  <h3>Test 2: Funktionswiedergabe</h3>
   <p>
-    Test 2 Funktionswiedergabe
-   <br>
-   <br>
-    1. true
     <br>
-    2. true
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
     <br>
-    3. true
+    Dabei wird das Ergebnis des API Calls durch eine Funktion wiedergegeben, das dann mal mit dem
+    window.crypto.subtle.encrypt() API Call verschlüsselt wird.
     <br>
-    4. false
+    Dabei mündet der window.crypto.subtle.sign() API Call 8 mal im window.crypto.subtle.encrypt() API Call und 4 mal
+    nicht.
     <br>
-    5. true
     <br>
-    6. false
-    <br>
-    7. true
-    <br>
-    8. true
-    <br>
-    9. false
-    <br>
-    10. true
-    <br>
-    11. false
-    <br>
-    12. true
+    Die Browser Extension sollte entprechend hier 8 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
+    eingehalten.
     <br>
   </p>
   <button id="test2">Test 2</button>
   <br>
   <br>
   <br>
+  <h3>Test 3: Chaining</h3>
   <p>
-    Test 3 Chaining
-   <br>
-    1. true
     <br>
-    2. false
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
     <br>
-    3. true
+    Dabei wird das Ergebnis des API Calls an eine Variable gebunden, das dann mal mit dem window.crypto.subtle.encrypt()
+    API Call verschlüsselt wird.
     <br>
-    4. false
+    Die Variable wird vor dem verschlüsseln mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
+    verschlüsselt wird.
     <br>
-    5. true
+    Dabei mündet der window.crypto.subtle.sign() API Call 6 mal im window.crypto.subtle.encrypt() API Call und 2 mal
+    nicht.
     <br>
-    6. true
     <br>
-    7. false
-    <br>
-    8. true
+    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 2 anderen API Calls wird die Regel
+    eingehalten.
     <br>
   </p>
   <button id="test3">Test 3</button>
   <br>
   <br>
   <br>
+  <h3>Test 4: Funktionsaufruf</h3>
   <p>
-    Test 4 Funktionsaufruf
     <br>
-    1. true
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
     <br>
-    2. true
+    Dabei wird das Ergebnis des API Calls als Argument in einem Funktionsaufruf weitergegeben, das dann in der Funktion
+    mal mit dem window.crypto.subtle.encrypt() API Call verschlüsselt wird.
     <br>
-    3. true
+    Dabei mündet der window.crypto.subtle.sign() API Call 6 mal im window.crypto.subtle.encrypt() API Call und 2 mal
+    nicht.
     <br>
-    4. false
     <br>
-    5. false
+    Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 2 anderen API Calls wird die Regel
+    eingehalten.
     <br>
-    6. true
-    <br>
-    7. true
   </p>
   <button id="test4">Test 4</button>
   <br>
   <br>
   <br>
+  <h3>Test 5: Then()-Call</h3>
   <p>
-    Test 5 Then() Call
     <br>
-    1. true
+    Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.sign() API Call enthalten.
     <br>
-    2. false
+    Dabei wird das Ergebnis des API Calls über den Then() Call, mal mit dem window.crypto.subtle.encrypt() API Call
+    verschlüsselt wird.
     <br>
-    3. true
+    Dabei mündet der window.crypto.subtle.sign() API Call 8 mal im window.crypto.subtle.encrypt() API Call und 6 mal
+    nicht.
     <br>
-    4. false
     <br>
-    5. true
+    Die Browser Extension sollte entprechend hier 8 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
+    eingehalten.
     <br>
-    6. true
-    <br>
-    7. false
-    <br>
-    8. true
-    <br>
-    9. false
-    <br>
-    10. true
-    <br>
-    11. false
-    <br>
-    12. true
-    <br>
-    13. true
-    <br>
-    14. true
   </p>
   <button id="test5">Test 5</button>
   <br>
   <br>
   <br>
+  <h3>Test 6: Alle Scripts</h3>
   <p>
-    Test aller Scripts auf einmal.
+    <br>
+    Hier werden alle Scripte aus den vorherigen Tests aufeinmal geladen.
+    <br>
+    <br>
+    Die Browser Extension sollte hier 19 Fehler Erkennen.
+    <br>
   </p>
   <button id="test6">Test 6</button>
   <br>
@@ -172,13 +135,14 @@
       return new Promise(resolve => setTimeout(resolve, time));
     }
 
-    test1.addEventListener("click", async function() {
+    test1.addEventListener("click", async function () {
       let script1 = document.createElement("script");
       script1.src = "Variablenbinndung.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -186,13 +150,14 @@
       document.head.appendChild(script1);
     });
 
-    test2.addEventListener("click", async function() {
+    test2.addEventListener("click", async function () {
       let script2 = document.createElement("script");
       script2.src = "Funktionswiedergabe.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -200,13 +165,14 @@
       document.head.appendChild(script2);
     });
 
-    test3.addEventListener("click", async function() {
+    test3.addEventListener("click", async function () {
       let script3 = document.createElement("script");
       script3.src = "Chaining.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -214,13 +180,14 @@
       document.head.appendChild(script3);
     });
 
-    test4.addEventListener("click", async function() {
+    test4.addEventListener("click", async function () {
       let script4 = document.createElement("script");
       script4.src = "Funktionsaufruf.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -228,13 +195,14 @@
       document.head.appendChild(script4);
     });
 
-    test5.addEventListener("click", async function() {
+    test5.addEventListener("click", async function () {
       let script5 = document.createElement("script");
       script5.src = "Then()Call.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -242,7 +210,7 @@
       document.head.appendChild(script5);
     });
 
-    test6.addEventListener("click", async function() {
+    test6.addEventListener("click", async function () {
       let script1 = document.createElement("script");
       let script2 = document.createElement("script");
       let script3 = document.createElement("script");
@@ -253,10 +221,11 @@
       script3.src = "Chaining.js";
       script4.src = "Funktionsaufruf.js";
       script5.src = "Then()Call.js";
-      try{
-        for(let i = 0; i < document.scripts.length; i++) {
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
           document.head.removeChild(document.scripts[i]);
-        }      }
+        }
+      }
       catch (e) {
         console.log(e);
       }
@@ -267,7 +236,7 @@
       document.head.appendChild(script4);
       document.head.appendChild(script5);
     });
-    
+
   </script>
 </body>
 

@@ -259,9 +259,9 @@
         }
         else if (preposition === "Assign") {
           ergebnis.push(true);
-          console.log(call)
-          let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + call[i][0] + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+          let verstoßDefinition = " Hier wird der Exportierte Schlüssel verändert, was zu einem Sicherheitsrisiko führen kann!"
           WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
+          console.log(call)
           i++;
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
         }

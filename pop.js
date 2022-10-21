@@ -79,7 +79,7 @@ function entwicklerContent() {
             let script = document.createElement('div');
             let scriptContent = verstöße[i].script;
             let newHTML = "";
-            const openingTag = '<span style="Background-color:yellow" id="';
+            const openingTag = '<span class="markierungen" style="Background-color:yellow" id="';
         const closingTag = '</span>'
         let descrition = document.createElement('div');
         for (let j = 0; j < verstöße[i].verstöße.length; j++) {
@@ -90,15 +90,14 @@ function entwicklerContent() {
                 x = verstöße[i].verstöße[j - 1][0].end;
             }
             let idTag = 'scrollToPostion' + i + ',' + j;
-            newHTML = newHTML + scriptContent.slice(x, verstöße[i].verstöße[j][0].start)
+            newHTML = newHTML + scriptContent.slice(x, verstöße[i].verstöße[j][0].start) 
             + openingTag + idTag + '">' + scriptContent.substring(verstöße[i].verstöße[j][0].start, verstöße[i].verstöße[j][0].end) + closingTag;
-            let para = document.createElement('p');
-            para.className = "verstoßBeschreibung"
-            //para.innerHTML = '<a href="#' + idTag + '">' + (j+1) +'. Markeirte Stelle:</a>' + verstöße[i].verstöße[j][1];
-            para.innerHTML = (j+1) + '. Markierte Stelle:' + verstöße[i].verstöße[j][1]  + "  ";
             let button = document.createElement('button');
             button.textContent = "Zur Markierung"
-            button.onclick = function () {let markirung = document.getElementById(idTag); markirung.scrollIntoView({ behavior: 'smooth', block: 'nearest'})}
+            button.onclick = async function () {let markirung = document.getElementById(idTag); markirung.scrollIntoView({ behavior: 'smooth', block: 'nearest'}); markirung.style.backgroundColor= "red"; await delay(1000); markirung.style.backgroundColor= "yellow";}
+            let para = document.createElement('p');
+            para.className = "verstoßBeschreibung"
+            para.innerHTML = (j+1) + '. Markierte Stelle:' + verstöße[i].verstöße[j][1]  + "  ";
             para.appendChild(button);
             descrition.appendChild(para);
             if (j + 1 === verstöße[i].verstöße.length) {
@@ -134,3 +133,7 @@ function normalerContent() {
         })
     }
 }
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
