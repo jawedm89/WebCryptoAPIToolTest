@@ -24,13 +24,13 @@ let ExKey11R4T1 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, await window.crypto
 let ExKey12R4T1 = {O1: 3, O2: "sdf", O3: {O1: 3}, O4: [0, 1, await window.crypto.subtle.exportKey("jwk", await AESKeyR4T1), 3, 4]};
 
     let k1 = await ExKey1R4T1()
-    k1 = 12;
-    ExKey2R4T1.k = "sdfsdfsdf"
-    ExKey4R4T1.O3 = "sdfsdfsdfsdfsdf"
-    ExKey6R4T1[5].k = ExKey6R4T1.k
-    ExKey8R4T1[1] = ExKey8R4T1.k
-    ExKey10R4T1[4].O2 = "llllllllllllllllllllllll"
-    ExKey12R4T1.O4[2].k = 1234;
+    Storage.setItem('key', k1);
+    document.cookie = ExKey2R4T1.k;
+    Storage.setItem('key', ExKey4R4T1.O3);
+    document.cookie = ExKey6R4T1[5].k
+    Storage.setItem('key', ExKey8R4T1[1]);
+    Storage.setItem('key', ExKey10R4T1);
+    document.cookie = ExKey12R4T1.O4[2].k;
     console.log(ExKey3R4T1, ExKey5R4T1, ExKey7R4T1, ExKey9R4T1, ExKey11R4T1)
 
 }

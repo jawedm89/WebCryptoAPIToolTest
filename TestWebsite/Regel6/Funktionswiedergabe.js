@@ -77,11 +77,11 @@ async function Regel4Test2() {
     let func9 = await func9R4T2();
     let func10 = await func10R4T2();
     let func11 = await func11R4T2();
-    func3.O3 = "aasdfasdfdfgfdgsdflcmoirjtNSäJRPJPIJE"
-    func4.O3 = "aasdfasdfdfgfdgsdflcmoirjtNSäJRPJPIJE"
-    func5[5].k = "aasdfasdfdfgfdgsdflcmoirjtNSäJRPJPIJE"
-    func9[4].O2 = "aasdfasdfdfgfdgsdflcmoirjtNSäJRPJPIJE"
-    func11[1].O4[2].k = "aasdfasdfdfgfdgsdflcmoirjtNSäJRPJPIJE"
+    Storage.setItem('key', func3.O3)
+    Storage.setItem('key2', func4.O3)
+    document.cookie = func5[5].k;
+    Storage.setItem('key3', func9[4].O2)
+    document.cookie = func11[1].O4[2].k;
     
     console.log(await func1R4T2());
     console.log(await func2R4T2());

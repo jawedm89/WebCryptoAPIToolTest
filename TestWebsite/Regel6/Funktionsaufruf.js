@@ -33,7 +33,7 @@ async function func1(ExportKey) {
 }
 
 async function func2(placeholder1, placeholder2, ExportKey) {
-    let ExKey2 = ExportKey;
+    Storage.setItem('key', ExportKey)
     console.log(ExportKey, ExKey2, placeholder1, placeholder2);   
 }
 
@@ -43,7 +43,7 @@ async function func3(placeholder1, ExportKey, placeholder2) {
 }
 
 async function func4(placeholder1, placeholder2, ExportKey) {
-    ExportKey.k = "asdfgfdsflkandslnalsdnglanflg"
+    document.cookie = ExportKey.k;
     console.log(ExportKey, placeholder1, placeholder2);   
 }
 

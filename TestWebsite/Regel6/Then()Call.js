@@ -19,7 +19,7 @@ async function func1(exKey) {
 }
 
 async function func2(exKey) {
-    exKey.k = "naösodfh9823hrfijbhdpqrujf" 
+    Storage.setItem('key', exKey.k);
     console.log(exKey);
     return exKey;
 }
@@ -32,11 +32,11 @@ function func3(exKey) {
 AESKeyR4T5.then(result => window.crypto.subtle.exportKey("jwk", result)).then(
     async function(result) {return result}).then(console.log);
 AESKeyR4T5.then(result => window.crypto.subtle.exportKey("jwk", result)).then(
-    async function(result) {result = "öljandsvoquh3hfovnaö"; return result}).then(console.log);
+    async function(result) {document.cookie = result.k; return result}).then(console.log);
 ExKey1R4T5().then(async function(result) {return result}).then(console.log);
-ExKey1R4T5().then(async function(result) {result.k = "asdjnfp92wpf9qcwhecmexj,pwaö<hdö"; return result}).then(console.log);
-ExKey2R4T5().O4[2].then(async function(result) {result = await result; result.k = "asdjnfp922938rmx23rx9r28hr9xhaö56dö"; return result}).then(console.log);
-ExKey2R4T5().O4[2].then(async function(result) {return [result, "placeholder"]}).then(result => result[0].k = "jdfnpajmcw03rumafxüewa0cmf0a").then(console.log);
+ExKey1R4T5().then(async function(result) {Storage.setItem('key', result); return result}).then(console.log);
+ExKey2R4T5().O4[2].then(async function(result) {result = await result; document.cookie = result.k; return result}).then(console.log);
+ExKey2R4T5().O4[2].then(async function(result) {return [result, "placeholder"]}).then(result => document.cookie = result[0].k).then(console.log);
 ExKey2R4T5().O4[2].then(async function(result) {return [result, "placeholder"]}).then(result => console.log(result[0].k)).then(console.log);
 ExKey1R4T5().then(func1).then(console.log);
 ExKey1R4T5().then(func2).then(console.log);
