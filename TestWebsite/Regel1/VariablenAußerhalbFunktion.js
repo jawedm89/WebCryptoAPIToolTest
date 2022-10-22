@@ -42,7 +42,7 @@ async function Regel1T3() {
     func4R1T3("placeholder", "placeholder", iv2);
     func4R1T3("placeholder", "placeholder", func5R1T3());
 }
-
+Regel1T3();
 
 let iv = window.crypto.getRandomValues(new Uint8Array(16));
 func1R1T3(window.crypto.getRandomValues(new Uint8Array(16)));
