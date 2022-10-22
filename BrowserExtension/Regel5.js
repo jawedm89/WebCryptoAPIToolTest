@@ -4,7 +4,6 @@
     const walk = require("acorn-walk");
 
     async function findCallExpression(func, WebCryptoAPIScripts) {
-      console.log("starte find function");
       let Expr = await makeArray(func[0])
       let callEx = [];
       let calls = [];
@@ -41,7 +40,7 @@
           else if (node.type === "Identifier") {
             if (node.name === Expr[i].name && i === Expr.length - 1) {
               callEx.push(calls[j]);
-              console.log(calls[j])
+              //console.log(calls[j])
               weiter = false;
             }
             else {
@@ -53,7 +52,7 @@
           }
         } while (weiter === true)
       }
-      console.log(callEx)
+      //console.log(callEx)
       return callEx;
     }
 
@@ -79,7 +78,7 @@
       let j = 0;
       for (let i = 0; i < WebCryptoAPIScripts.regel5.length; i++) {
         try {
-          let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel1[i], "CallExpression").node;
+          let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel5[i], "CallExpression").node;
           let props = encCall.arguments[0].properties;
           let encMode = props[0].value.value;
           if (encMode === "PBKDF2") {
@@ -135,7 +134,6 @@
           //console.log(callCheck, slicer);
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
           if (r) {
-            //console.log(r)
             let chek = await NodeWalk(r[1].body, r[1].end, true);
             let filter = chek.filter(element => element.type === "ReturnStatement");
             filter.forEach(function (element, index, arr) {
@@ -150,13 +148,13 @@
               return filter;
             }
             else {
-              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
               WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
               return false;
             }
           }
           else {
-            let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+            let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
             WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
             return false;
           }
@@ -180,7 +178,7 @@
           return filter;
         }
         else {
-          let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+          let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
           WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
           return false;
         }
@@ -209,16 +207,16 @@
               return filter2;
             }
             else {
-              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
               WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
               return false;
             }
           }
-          let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+          let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
           WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
           return false
         }
-        let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+        let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
         WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
@@ -246,20 +244,20 @@
               return filter;
             }
             else {
-              let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+              let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
               WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
               return false;
             }
           }
           else {
-            let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+            let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
             WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
             return false;
           }
         }
       }
       else {
-        let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+        let verstoßDefinition = " Hier wird ein ^Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
         WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
@@ -273,20 +271,18 @@
       else {
         memberExpr = true;
       }
-      let RegelEingehalten = true;
       let check = [];
       let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions);
       let arr = [];
       if (inOrOut === "OutSideFunction") {
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
-        let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+        let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
         WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }
       else {
         arr = await NodeWalk(inOrOut[1].body, node.end, true);
       }
-      //let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];
       for (let i = arr.length - 1; i >= 0; i--) {
@@ -350,9 +346,6 @@
         }
         catch (e) { }
       }
-      /* if(found.length >= 1) {
-        check.push(found[0]);
-      } */
       if (SwitchOrIf.length > 0 && found.length > 0) {
         //console.log(found, SwitchOrIf)
         for (let i = 0; found.length > i; i++) {
@@ -405,14 +398,14 @@
             return check;
           }
           if (param === false) {
-            let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+            let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
             WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-            console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
+            //console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
             return false
           }
         }
         else {
-          let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
+          let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
           WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
           return false;
         }

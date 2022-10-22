@@ -13,56 +13,58 @@
         }
       }
       for (let j = 0; j < WebCryptoAPIScripts.regel2.length; j++) {
-        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[j], "CallExpression").node;
-        let encMode = encCall.arguments[0].properties[0].value.value;
-        if (encMode === "AES-CBC" || encMode === "AES-CTR") {
-          if (sign.length != 0) {
-            let results = [[encCall, []]]
-            let result;
-            let ergebnis = [];
-            let i = 0;
-            do {
-              //console.log(encCall.start)
-              result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
-              if (typeof result != "boolean") {
-                if (result === "Ignore") {
-                }
-                else {
-                  result.forEach(element => {
-                    let push = true;
-                    results.forEach(element2 => {
-                      if (JSON.stringify(element) === JSON.stringify(element2)) {
-                        push = false;
+        try {
+          let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[j], "CallExpression").node;
+          let encMode = encCall.arguments[0].properties[0].value.value;
+          if (encMode === "AES-CBC" || encMode === "AES-CTR") {
+            if (sign.length != 0) {
+              let results = [[encCall, []]]
+              let result;
+              let ergebnis = [];
+              let i = 0;
+              do {
+                //console.log(encCall.start)
+                result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
+                if (typeof result != "boolean") {
+                  if (result === "Ignore") {
+                  }
+                  else {
+                    result.forEach(element => {
+                      let push = true;
+                      results.forEach(element2 => {
+                        if (JSON.stringify(element) === JSON.stringify(element2)) {
+                          push = false;
+                        }
+                      });
+                      if (push === true) {
+                        results.push(element)
                       }
                     });
-                    if (push === true) {
-                      results.push(element)
-                    }
-                  });
+                  }
                 }
-              }
-              else {
-                //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
-                if (!result) {
-                  let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                  WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+                else {
+                  //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
+                  if (!result) {
+                    let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+                    WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+                  }
+                  ergebnis.push(result);
                 }
-                ergebnis.push(result);
+                //console.log(result, results, i)
+                i++;
               }
-              console.log(result, results, i)
-              i++;
+              while (i < results.length)
+              //console.log(results)
             }
-            while (i < results.length)
-            //console.log(results)
-          }
-          else {
-            let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-            WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-            console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+            else {
+              let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
+              WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+              //console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+            }
           }
         }
-        else {
-          console.log("keine Signatur nötig")
+        catch (e) {
+          console.log(e);
         }
       }
     }
@@ -115,7 +117,7 @@
               return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
             }
             else {
-              console.log(call[i][2])
+              //console.log(call[i][2])
               call.push([call[i][2], preposition[2]]);
               i++;
               return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
@@ -167,7 +169,7 @@
                 call.forEach(element => {
                   //console.log(element[0], calls[j])
                   if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
-                    console.log("war schon drin");
+                    //console.log("war schon drin");
                     push = false;
                   }
                 });
@@ -214,7 +216,7 @@
           } else {
             if (preposition[0].arguments[0].type === "Identifier" || preposition[0].arguments[0].type === "MemberExpression") {
               let funcall = await compare(WebCryptoAPIScripts, preposition[0].arguments[0]);
-              console.log(funcall)
+              //console.log(funcall)
               if (funcall != undefined) {
                 let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
                 for (let j = 0; j < calls.length; j++) {
@@ -248,8 +250,8 @@
               if (result[1].start <= calls[j].start && result[1].end >= calls[j].end) {
                 let push = true;
                 call.forEach(element => {
-                  if(JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
-                    push = false; 
+                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                    push = false;
                   }
                 })
                 if (push === true) {

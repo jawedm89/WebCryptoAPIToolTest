@@ -4,7 +4,6 @@
     const walk = require("acorn-walk");
 
     async function findCallExpression(func, WebCryptoAPIScripts) {
-      console.log("starte find function");
       let Expr = await makeArray(func[0])
       let callEx = [];
       let calls = [];
@@ -41,7 +40,7 @@
           else if (node.type === "Identifier") {
             if (node.name === Expr[i].name && i === Expr.length - 1) {
               callEx.push(calls[j]);
-              console.log(calls[j])
+              //console.log(calls[j])
               weiter = false;
             }
             else {
@@ -53,7 +52,7 @@
           }
         } while (weiter === true)
       }
-      console.log(callEx)
+      //console.log(callEx)
       return callEx;
     }
 
@@ -95,15 +94,6 @@
                 s.forEach(element => { arr.push(element) })
               }
             } while (arr.length > 0)
-            if (ergebnis.every(element => element === true) && ergebnis.length > 0) {
-              //console.log("Regel 1 wurde eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
-            }
-            else {
-              //console.log("Regel 1 wurde nicht eingehalte für: ", WebCryptoAPIScripts.src, "an der Stelle: ", WebCryptoAPIScripts.regel1[i]);
-              //let verstoßDefinition = " Hier wird bei der Verschlüsselungsmethode " + encMode + " ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              //WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-              //window.alert("IV wurde nicht korrekt initialisiert!");
-            }
           }
           else {
             //console.log("Die Encryption Mode ist nicht AES-CTR, AES-GCM oder AES-CBC, wodurch eine Überprüfung nicht notwendig ist für Regel 1")
@@ -133,7 +123,6 @@
       }
       else if (node.type === "CallExpression" && node.callee.type === "MemberExpression") {
         let r = await correctRandomValueCheck(node);
-        //console.log(r)
         if (r) {
           return r;
         }
@@ -144,7 +133,6 @@
           //console.log(callCheck, slicer);
           let r = await compare(WebCryptoAPIScripts, callCheck[1].callee);
           if (r) {
-            //console.log(r)
             let chek = await NodeWalk(r[1].body, r[1].end, true);
             let filter = chek.filter(element => element.type === "ReturnStatement");
             filter.forEach(function (element, index, arr) {
@@ -197,7 +185,6 @@
       else if (node.type === "CallExpression" && node.callee.type === "CallExpression") {
         if (node.callee.callee.type === "Identifier") {
           let check = await compare(WebCryptoAPIScripts, node.callee.callee);
-          //console.log("1")
           if(check) {
             let filter = await NodeWalk(check[1].body, check[1].end, true);
             filter = filter.filter(element => element.type === "ReturnStatement");
@@ -206,7 +193,6 @@
             let filter2 = []
             for(let i = 0; i < filter.length; i++) {
               let arr = await NodeWalk(filter[i].argument.body, filter[i].end, true);
-              //console.log(arr, filter[i])
               filter2 = filter2.concat(arr)
             }
             filter2 = filter2.filter(element => element.type === "ReturnStatement");
@@ -282,7 +268,6 @@
       else {
         memberExpr = true;
       }
-      let RegelEingehalten = true;
       let check = [];
       let inOrOut = await inOrOutFunction(node.start, WebCryptoAPIScripts.functions);
       let arr = [];
@@ -295,7 +280,6 @@
       else {
         arr = await NodeWalk(inOrOut[1].body, node.end, true);
       }
-      //let i = arr.length - 1;
       let found = [];
       let SwitchOrIf = [];
       for (let i = arr.length - 1; i >= 0; i--) {
@@ -359,9 +343,6 @@
         }
         catch (e) { }
       }
-      /* if(found.length >= 1) {
-        check.push(found[0]);
-      } */
       if (SwitchOrIf.length > 0 && found.length > 0) {
         //console.log(found, SwitchOrIf)
         for (let i = 0; found.length > i; i++) {
@@ -416,7 +397,7 @@
           if (param === false) {
             let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
             WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-            console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
+            //console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
             return false
           }
         }

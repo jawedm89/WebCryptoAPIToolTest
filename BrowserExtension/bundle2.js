@@ -15,7 +15,7 @@
             if (mutation[j].addedNodes[i].nodeName === "SCRIPT") {
               mutationObserved = true;
               s.push(mutation[j].addedNodes[i]);
-              console.log(mutation)
+              //console.log(mutation)
             }
           }
         }
@@ -23,7 +23,7 @@
 
       setInterval(function () {
         if (mutationObserved === true) {
-          console.log("es  gab eine veränderung");
+          //console.log("es  gab eine veränderung");
           mutationObserved = false;
           mutation.disconnect();
           starten(s);
