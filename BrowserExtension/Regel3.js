@@ -3,511 +3,485 @@
     const acorn = require('acorn');
     const walk = require("acorn-walk");
 
-    window.Regel6 = async function (WebCryptoAPIScripts) {
-
-      for (let i = 0; i < WebCryptoAPIScripts.regel4.length; i++) {
-        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel4[i], "CallExpression").node;
-        let exportKeyMode = encCall.arguments[0].value;
-          let results = [[encCall, [{ type: "Identifier", name: "k" }]]]
-          let result;
-          let ergebnis = [];
-          let i = 0;
-          do {
-            //console.log(encCall.start)
-            result = await checkPrePosition([results[i]], WebCryptoAPIScripts, []);
-            if (typeof result != "boolean") {
-              if (result === "Ignore") {
-              }
-              else {
-                result.forEach(element => {
-                  let push = true;
-                  results.forEach(element2 => {
-                    if (JSON.stringify(element) === JSON.stringify(element2)) {
-                      push = false;
-                    }
-                  });
-                  if (push === true) {
-                    results.push(element)
-                  }
-                });
-              }
-            }
-            else {
-              console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
-              if (result) {
-                if (results[i][0].start === encCall.start) {
-                  let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                  //WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-                }
-                else {
-                  let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + exportKeyMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                  //WebCryptoAPIScripts.verstöße.push([results[i][0], verstoßDefinition])
-                }
-              }
-              ergebnis.push(result);
-            }
-            console.log(result, results, i)
-            i++;
-          }
-          while (i < results.length)
-      }
-    }
-
-
-    function getParentNode(WebCryptoAPIScripts, node) {
-      let parents = [];
-      walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
-        if (ancestors.start <= node.start && ancestors.end >= node.end) {
-          parents.push(ancestors);
-        }
-      });
-      let i = parents.filter(element => JSON.stringify(element) != JSON.stringify(node))
-      return i;
-    }
-
-
-    function signCheck(node) {
-      try {
-        if (node.callee.property.name === "setItem" && node.callee.object.name === "Storage") {
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
-      catch (e) {
-        return false;
-      }
-    }
-
-    async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i) {
-      let fr = call;
-      if (ergebnis === undefined) {
-        ergebnis = [];
-      }
-      if (funcCalls === undefined) {
-        funcCalls = [];
-      }
-      if (i === undefined) {
-        i = 0;
-      }
-      if (call[i] != undefined) {
-        let preposition = await findPreposition(WebCryptoAPIScripts, fr[i]);
-        if (preposition[1] === "ReturnStatment") {
-          if (call[i][2] != undefined) {
-            if (call[i][2] === "ingnore Return") {
-              ergebnis.push("Verarbeitung des API Call. Keine Regelspezifische Funktion")
-              i++;
-              return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
-            }
-            else {
-              console.log(call[i][2])
-              call.push([call[i][2], preposition[2]]);
-              i++;
-              return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
-            }
+window.Regel3 = async function (WebCryptoAPIScripts) {
+  for (let j = 0; j < WebCryptoAPIScripts.regel3.length; j++) {
+    let sign = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel3[j], "CallExpression").node
+    let signTyp = sign.arguments[0].properties[0].value.value;
+    if (signTyp === "RSASSA-PKCS1-v1_5" || signTyp === "RSA-PSS" || signTyp === "ECDSA" || signTyp === "HMAC") {
+      let results = [[sign, []]]             
+      let result;
+      let ergebnis = [];
+      let i = 0;
+      do {
+        result = await checkPrePosition([results[i]], WebCryptoAPIScripts, [], sign);
+        if (typeof result != "boolean") {
+          if (result === "Ignore") {
           }
           else {
-            let calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, "CallExpression");
-            console.log(calls)
-            let a = preposition[2];
-            if (calls.length > 0) {
-              for (let j = 0; calls.length > j; j++) {
-                let push = true;
-                funcCalls.forEach(element => {
-                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
-                    push = false;
-                  }
-                });
-                if (push === true) {
-                  funcCalls.unshift([calls[j], a]);
+            result.forEach(element => {
+              let push = true;
+              results.forEach(element2 => {
+                if (JSON.stringify(element) === JSON.stringify(element2)) {
+                  push = false;
                 }
+              });
+              if (push === true) {
+                results.push(element)
+              }
+            });
+          }
+        }
+        else {
+          ergebnis.push(result);
+        }
+        i++;
+      }
+      while (i < results.length ) 
+      //console.log(ergebnis, results); 
+      if (ergebnis.includes(true)) {
+        //console.log("Verstoß gegen Regel 3 an der Stelle ", sign.start, "! es wird " + signTyp + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ")
+      }
+      else {
+        //console.log("Regel 2 wurde eingehalten an der Stelle ", sign.start)
+      }
+    }
+  }
+}
+
+
+function getParentNode(WebCryptoAPIScripts, node) {
+  let parents = [];
+  walk.fullAncestor(WebCryptoAPIScripts.ast, ancestors => {
+    if(ancestors.start <= node.start && ancestors.end >= node.end) {
+      parents.push(ancestors);
+    }
+  });
+  let i = parents.filter(element => JSON.stringify(element) != JSON.stringify(node))
+  return i;
+}
+
+
+function encCheck(node, WebCryptoAPIScripts) {
+  console.log(node)
+  try {
+    if(node.callee.property.name === "encrypt" && node.callee.object.property.name === "subtle" && node.callee.object.object.property.name === "crypto" && node.callee.object.object.object.name === "window") {
+      console.log("hi")
+      let verstoßDefinition = " Hier wird Signiert und dann verschlüsselt. Dies ist ein Verstoß gegen die Encrypt-then-MAC Regel"
+      WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch (e) {
+    return false;
+  }
+}
+
+async function checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i) {
+  let fr = call;
+  if (ergebnis === undefined) {
+    ergebnis = [];
+  }
+  if (funcCalls === undefined) {
+    funcCalls = [];
+  }
+  if (i === undefined) {
+    i = 0;
+  }
+  if (call[i] != undefined) {
+    let preposition = await findPreposition(WebCryptoAPIScripts, fr[i]);
+    if (preposition[1] === "ReturnStatment") {
+      if (call[i][2] != undefined) {
+        if (call[i][2] === "ingnore Return") {
+          ergebnis.push("Verarbeitung des API Call. Keine Regelspezifische Funktion")
+          i++;
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+        }
+        else {
+          console.log(call[i][2])
+          call.push([call[i][2], preposition[2]]);
+          i++;
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+        }
+      }
+      else {
+        let calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, "CallExpression");
+        let a = preposition[2];
+        if (calls.length > 0) {
+          for (let j = 0; calls.length > j; j++) {
+            let push = true;
+            funcCalls.forEach(element => {
+              if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                push = false;
+              }
+            });
+            if (push === true) {
+              funcCalls.unshift([calls[j], a]);
+            }
+          }
+        }
+        else {
+          ergebnis.push("No Callexpresstions found for ", preposition[0]);
+          i++;
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+        }
+        i++;
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+      }
+    }
+    else if (preposition[1] === "MemberExpression" || preposition[1] === "Identifier") {
+      let calls;
+      let a = preposition[2];
+      let pre = preposition[3];
+      let inout = await inOrOutFunction(preposition[0].start, WebCryptoAPIScripts, true);
+      let inoruot = inout.map((x) => x);
+      for (let x = 0; x < pre.length; x++) {
+        if (pre[x].type === "FunctionExpression" || pre[x].type === "ArrowFunctionExpression") {
+          if (pre[x].start > inoruot[1].start && pre[x].end <= inoruot[1].end) {
+            inoruot[1] = pre[x];
+          }
+        }
+      }
+      calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, preposition[1]);
+      if (calls.length > 0) {
+        for (let j = 0; calls.length > j; j++) {
+          if (calls[j].start >= inoruot[1].start && calls[j].end <= inoruot[1].end) {
+            let push = true;
+            call.forEach(element => {
+              //console.log(element[0], calls[j])
+              if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                console.log("war schon drin");
+                push = false;
+              }
+            });
+            if (push === true) {
+              call.push([calls[j], a]);
+            }
+          }
+        }
+      }
+      else {
+        ergebnis.push("No Callexpresstions found for ", preposition[0]);
+        i++;
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+      }
+      i++;
+      return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+    }
+    else if (preposition[1] === "ThenCall") {
+      let a = preposition[2];
+      let callback;
+      let parents = getParentNode(WebCryptoAPIScripts, preposition[0]);
+      try {
+        if (parents[0].property.name === "then") {
+          callback = preposition[0];
+        }
+      } catch (e) { }
+      if (preposition[0].arguments[0].params != undefined) {
+        let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
+        if (calls.length > 0) {
+          for (let j = 0; calls.length > j; j++) {
+            if (calls[j].start >= preposition[0].arguments[0].start && calls[j].end <= preposition[0].arguments[0].end) {
+              if (callback != undefined) {
+                call.push([calls[j], a, callback]);
+              }
+              else {
+                call.push([calls[j], a]);
               }
             }
             else {
-              ergebnis.push("No Callexpresstions found for ", preposition[0]);
-              i++;
-              return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
+              ergebnis.push("Das Fulfillment Value wird im ThenCall nicht genutzt");
             }
-            i++;
-            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
           }
         }
-        else if (preposition[1] === "MemberExpression" || preposition[1] === "Identifier") {
-          let calls;
-          let a = preposition[2];
-          let pre = preposition[3];
-          let inout = await inOrOutFunction(preposition[0].start, WebCryptoAPIScripts, true);
-          let inoruot = inout.map((x) => x);
-          for (let x = 0; x < pre.length; x++) {
-            if (pre[x].type === "FunctionExpression" || pre[x].type === "ArrowFunctionExpression") {
-              if (pre[x].start > inoruot[1].start && pre[x].end <= inoruot[1].end) {
-                inoruot[1] = pre[x];
-              }
-            }
-          }
-          calls = await findCallExpression(preposition[0], WebCryptoAPIScripts, preposition[1]);
-          if (calls.length > 0) {
-            for (let j = 0; calls.length > j; j++) {
-              if (calls[j].start >= inoruot[1].start && calls[j].end <= inoruot[1].end) {
-                let push = true;
-                call.forEach(element => {
-                  //console.log(element[0], calls[j])
-                  if (JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
-                    console.log("war schon drin");
-                    push = false;
-                  }
-                });
-                if (push === true) {
+      } else {
+        if (preposition[0].arguments[0].type === "Identifier" || preposition[0].arguments[0].type === "MemberExpression") {
+          let funcall = await compare(WebCryptoAPIScripts, preposition[0].arguments[0]);
+          console.log(funcall)
+          if (funcall != undefined) {
+            let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
+            for (let j = 0; j < calls.length; j++) {
+              if (funcall[1].start <= calls[j].start && funcall[1].end >= calls[j].end) {
+                if (callback != undefined) {
+                  call.push([calls[j], a, callback]);
+                }
+                else {
                   call.push([calls[j], a]);
                 }
               }
             }
           }
           else {
-            ergebnis.push("No Callexpresstions found for ", preposition[0]);
-            i++;
-            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
+            ergebnis.push("Wahrscheinlich eine Methode die im ThenCall ausgeführt wird")
           }
-          i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
         }
-        else if (preposition[1] === "ThenCall") {
-          let a = preposition[2];
-          let callback;
-          let parents = getParentNode(WebCryptoAPIScripts, preposition[0]);
-          try {
-            if (parents[0].property.name === "then") {
-              callback = preposition[0];
-            }
-          } catch (e) { }
-          if (preposition[0].arguments[0].params != undefined) {
-            let calls = await findCallExpression(preposition[0].arguments[0].params[0], WebCryptoAPIScripts, "Identifier");
-            if (calls.length > 0) {
-              for (let j = 0; calls.length > j; j++) {
-                if (calls[j].start >= preposition[0].arguments[0].start && calls[j].end <= preposition[0].arguments[0].end) {
-                  if (callback != undefined) {
-                    call.push([calls[j], a, callback]);
-                  }
-                  else {
-                    call.push([calls[j], a]);
-                  }
-                }
-                else {
-                  ergebnis.push("Das Fulfillment Value wird im ThenCall nicht genutzt");
-                }
-              }
-            }
-          } else {
-            if (preposition[0].arguments[0].type === "Identifier" || preposition[0].arguments[0].type === "MemberExpression") {
-              let funcall = await compare(WebCryptoAPIScripts, preposition[0].arguments[0]);
-              console.log(funcall)
-              if (funcall != undefined) {
-                let calls = await findCallExpression(funcall[1].params[0], WebCryptoAPIScripts, "Identifier");
-                for (let j = 0; j < calls.length; j++) {
-                  if (funcall[1].start <= calls[j].start && funcall[1].end >= calls[j].end) {
-                    if (callback != undefined) {
-                      call.push([calls[j], a, callback]);
-                    }
-                    else {
-                      call.push([calls[j], a]);
-                    }
-                  }
-                }
-              }
-              else {
-                ergebnis.push("Wahrscheinlich eine Methode die im ThenCall ausgeführt wird")
-              }
-            }
-            else {
-              ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
-            }
-          }
-          i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
+        else {
+          ergebnis.push("ist wahrscheinlich ein Functioncall nach dem Then call")
         }
-        else if (preposition[1] === "FunctionCall") {
-          let calls, result = [];
-          result = await compare(WebCryptoAPIScripts, preposition[0].callee)
-          if (result) {
-            calls = await findCallExpression(result[1].params[preposition[2]], WebCryptoAPIScripts, result[0].type);
-            for (let j = 0; j < calls.length; j++) {
-              if (result[1].start <= calls[j].start && result[1].end >= calls[j].end) {
-                let push = true;
-                call.forEach(element => {
-                  if(JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
-                    push = false; 
-                  }
-                })
-                if (push === true) {
-                  call.push([calls[j], preposition[3], "ingnore Return"]);
-                }
+      }
+      i++;
+      return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+    }
+    else if (preposition[1] === "FunctionCall") {
+      let calls, result = [];
+      result = await compare(WebCryptoAPIScripts, preposition[0].callee)
+      if (result) {
+        calls = await findCallExpression(result[1].params[preposition[2]], WebCryptoAPIScripts, result[0].type);
+        for (let j = 0; j < calls.length; j++) {
+          if (result[1].start <= calls[j].start && result[1].end >= calls[j].end) {
+            let push = true;
+            call.forEach(element => {
+              if(JSON.stringify(element[0]) === JSON.stringify(calls[j]) && JSON.stringify(element[1]) === JSON.stringify(a)) {
+                push = false; 
               }
-            }
-            i++;
-            return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
-          }
-          else {
-            if (signCheck(preposition[0])) {
-              let verstoßDefinition = " Hier wird der Exportierte Schlüssel im localen Bowser Storage gespeichert, was ein Sicherheitsrisiko darstellt!"
-              WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
-              ergebnis.push(true);
-              i++;
-              return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
-            }
-            else {
-              ergebnis.push("Operation Function");
-              call.push([preposition[0], preposition[3]]);
-              i++;
-              return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
+            })
+            if (push === true) {
+              call.push([calls[j], preposition[3], "ingnore Return"]);
             }
           }
         }
-        else if (preposition === "Assign") {
+        i++;
+        return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
+      }
+      else {
+        if (encCheck(preposition[0], WebCryptoAPIScripts)) {
           ergebnis.push(true);
-          let verstoßDefinition = " Hier wird der Exportierte Schlüssel in den Cookies gespeichert, was ein Sicherheitsrisiko darstellt!"
-          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
-          console.log(call)
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
-        }
-        else if (preposition === "Error") {
-          ergebnis.push("Error no Prepossition found at ", call[i].start);
-          i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
-        }
-        else if (preposition === "Ignore") {
-          i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
         }
         else {
-          ergebnis.push("Error in finding Prepositionat ", call[i].start)
+          ergebnis.push("Operation Function");
+          call.push([preposition[0], preposition[3]]);
           i++;
-          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)
-        }
-      }
-      else {
-        if (ergebnis.includes(true)) {
-          return true;
-        }
-        else if (funcCalls.length > 0) {
-          return funcCalls;
-        }
-        else if (ergebnis.length < 1) {
-          return "Ignore";
-        }
-        else {
-          return false;
+          return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i);
         }
       }
     }
-
-
-    async function findPreposition(WebCryptoAPIScripts, encCall) {
-      let type;
-      let counter = 0;
-      let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
-      console.log(prePosition, encCall)
-      let w = encCall[1].map((x) => x)
-      for (let i = 0; i < prePosition.length; i++) {
-        switch (prePosition[i].type) {
-          case "AwaitExpression":
-            break;
-
-          case "ReturnStatement":
-            for (let x = i; x < prePosition.length; x++) {
-              if (prePosition[x].type === "FunctionExpression" || prePosition[x].type === "ArrowFunctionExpression") {
-                try {
-                  if (prePosition[x + 2].property.name === "then") {
-                    return [prePosition[x + 3], "ThenCall", w]
-                  }
-                } catch (e) { }
-              }
-            }
-            let callee1 = await inOrOutFunction(prePosition[i].start, WebCryptoAPIScripts, true);
-            return [callee1[0], "ReturnStatment", w];
-
-          case "VariableDeclarator":
-            if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].id)) {
-              break;
-            }
-            else {
-              type = "Identifier";
-              return [prePosition[i].id, type, w, prePosition.slice(i)];
-            }
-
-          case "AssignmentExpression":
-            console.log(encCall[0], encCall[1], prePosition[i].left)
-            let pos = prePosition[i].left;
-            for (let w = 0; w < counter; w++) {
-              pos = pos.object;
-              console.log(pos)
-            }
-            if (prePosition[i].left.property.name === "cookie" && prePosition[i].left.object.name === "document") {
-              console.log(JSON.stringify(prePosition[i].left), JSON.stringify(encCall[0]));
-              return "Assign"
-            }
-            type = "Identifier";
-            return [prePosition[i].left, type, w, prePosition.slice(i)];
-
-          case "Property":
-            let c = { type: "Identifier", name: prePosition[i].key.name }
-            w.push(c);
-            break;
-
-          case "ObjectExpression":
-            break;
-
-          case "ArrayExpression":
-            let index = 0;
-            prePosition[i].elements.forEach(element => {
-              if (element.start <= encCall[0].start && element.end >= encCall[0].end) {
-                let c = { type: "Literal", value: index }
-                w.push(c);
-              }
-              else {
-                index = index + 1;
-              }
-            });
-            break;
-
-          case "MemberExpression":
-            if (prePosition[i].property.name === "then") {
-              return [prePosition[i + 1], "ThenCall", w];
-            }
-            else if (encCall[1].length > 0) {
-              if (prePosition[i].property.type === "Identifier") {
-                if (prePosition[i].property.name === w[w.length - 1].name) {
-                  console.log("pip")
-                  w.pop();
-                  counter = counter + 1;
-                }
-                else {
-                  return "Ignore";
-                }
-              }
-              else {
-                if (prePosition[i].property.value === w[w.length - 1].value) {
-                  w.pop();
-                  counter = counter + 1;
-                }
-                else {
-                  return "Ignore";
-                }
-              }
-            }
-            //hier müssten noch alle Stringoperationen rein, mit denen es möglich ist einen String zu verändern. Diese müssten ale Memberexpression erkannt werden.
-            //wenn eine solche Operation gefunden wird muss true wiedergegeben werden, um festzuhalten, das hier der Key mit einer Methode verändert wurde, was ein Regelverstoß ist.
-            else {
-              break;
-            }
-
-          case "CallExpression":
-            if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].callee)) {
-              break;
-            }
-            if (prePosition[i].arguments) {
-              for (let j = 0; j < prePosition[i].arguments.length; j++) {
-                if (encCall[0].start >= prePosition[i].arguments[j].start && encCall[0].end <= prePosition[i].arguments[j].end) {
-                  return [prePosition[i], "FunctionCall", j, w]
-                }
-              }
-              break;
-            }
-            break;
-
-          case "Program":
-            return "Error"
-
-          default:
-            break;
-        }
-      }
+    else if (preposition === "Error") {
+      ergebnis.push("Error no Prepossition found at ", call[i].start);
+      i++;
+      return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
     }
+    else if (preposition === "Ignore") {
+      i++;
+      return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+    }
+    else {
+      ergebnis.push("Error in finding Prepositionat ", call[i].start)
+      i++;
+      return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, sign, funcCalls, i)
+    }
+  }
+  else {
+    if (ergebnis.includes(true)) {
+      return true;
+    }
+    else if (funcCalls.length > 0) {
+      return funcCalls;
+    }
+    else if (ergebnis.length < 1) {
+      return "Ignore";
+    }
+    else {
+      return false;
+    }
+  }
+}
 
-    async function compare(WebCryptoAPIScripts, node) {
-      let result;
-      for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
-        let comp = WebCryptoAPIScripts.functions[i][0];
-        let stop = false;
-        do {
-          if (comp.type === "MemberExpression" && node.type === "MemberExpression") {
-            if (comp.property.type === node.property.type) {
-              if (comp.property.type === "Identifier") {
-                if (comp.property.name === node.property.name) {
-                  comp = comp.object;
-                  node = node.object;
-                }
-                else {
-                  stop = true;
-                }
+
+async function findPreposition(WebCryptoAPIScripts, encCall) {
+  let type;
+  let prePosition = await getParentNode(WebCryptoAPIScripts, encCall[0]);
+  let w = encCall[1].map((x) => x)
+  for (let i = 0; i < prePosition.length; i++) {
+    switch (prePosition[i].type) {
+      case "AwaitExpression":
+        break;
+
+      case "ReturnStatement":
+        for (let x = i; x < prePosition.length; x++) {
+          if (prePosition[x].type === "FunctionExpression" || prePosition[x].type === "ArrowFunctionExpression") {
+            try {
+              if (prePosition[x + 2].property.name === "then") {
+                return [prePosition[x + 3], "ThenCall", w]
               }
-              else {
-                if (comp.property.value === node.property.value) {
-                  comp = comp.object;
-                  node = node.object;
-                }
-                else {
-                  stop = true;
-                }
-              }
-            }
-            else {
-              stop = true;
-            }
+            } catch (e) { }
           }
-          else if (comp.type === "Identifier" && node.type === "Identifier") {
-            if (comp.name === node.name) {
-              result = WebCryptoAPIScripts.functions[i];
-              stop = true;
+        }
+        let callee1 = await inOrOutFunction(prePosition[i].start, WebCryptoAPIScripts, true);
+        return [callee1[0], "ReturnStatment", w];
+
+      case "VariableDeclarator":
+        if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].id)) {
+          break;
+        }
+        else {
+          type = "Identifier";
+          return [prePosition[i].id, type, w, prePosition.slice(i)];
+        }
+
+      case "AssignmentExpression":
+        if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].left)) {
+          break;
+        }
+        type = "Identifier";
+        return [prePosition[i].left, type, w, prePosition.slice(i)];
+
+      case "Property":
+        let c = { type: "Identifier", name: prePosition[i].key.name }
+        w.push(c);
+        break;
+
+      case "ObjectExpression":
+        break;
+
+      case "ArrayExpression":
+        let index = 0;
+        prePosition[i].elements.forEach(element => {
+          if (element.start <= encCall[0].start && element.end >= encCall[0].end) {
+            let c = { type: "Literal", value: index }
+            w.push(c);
+          }
+          else {
+            index = index + 1;
+          }
+        });
+        break;
+
+      case "MemberExpression":
+        if (prePosition[i].property.name === "then") {
+          return [prePosition[i + 1], "ThenCall", w];
+        }
+        else if (encCall[1].length > 0) {
+          if (prePosition[i].property.type === "Identifier") {
+            if (prePosition[i].property.name === w[w.length - 1].name) {
+              w.pop();
             }
             else {
-              stop = true
+              return "Ignore";
             }
           }
           else {
-            stop = true;
+            if (prePosition[i].property.value === w[w.length - 1].value) {
+              w.pop();
+            }
+            else {
+              return "Ignore";
+            }
           }
         }
-        while (stop === false)
-      }
-      return result;
+        else {
+          break;
+        }
+
+      case "CallExpression":
+        if (JSON.stringify(encCall[0]) === JSON.stringify(prePosition[i].callee)) {
+          break;
+        }
+        if (prePosition[i].arguments) {
+          for (let j = 0; j < prePosition[i].arguments.length; j++) {
+            if (encCall[0].start >= prePosition[i].arguments[j].start && encCall[0].end <= prePosition[i].arguments[j].end) {
+              return [prePosition[i], "FunctionCall", j, w]
+            }
+          }
+          break;
+        }
+        break;
+
+      case "Program":
+        return "Error"
+
+      default:
+        break;
     }
+  }
+}
 
-
-    async function inOrOutFunction(start, WebCryptoAPIScripts, inner) {
-      let functions = WebCryptoAPIScripts.functions;
-      if (inner === undefined) {
-        inner = false;
-      }
-      let arr = [];
-      functions.forEach(element => {
-        if (element[1].start <= start && element[1].end >= start) {
-          arr.push(element);
-        }
-      });
-      if (arr.length >= 1 && inner === false) {
-        let min = arr[0];
-        for (let i = 1; i < arr.length; i++) {
-          if (arr[i][1].start < min[1].start) {
-            min = arr[i];
+async function compare(WebCryptoAPIScripts, node) {
+  let result;
+  for (let i = 0; WebCryptoAPIScripts.functions.length > i; i++) {
+    let comp = WebCryptoAPIScripts.functions[i][0];
+    let stop = false;
+    do {
+      if (comp.type === "MemberExpression" && node.type === "MemberExpression") {
+        if (comp.property.type === node.property.type) {
+          if (comp.property.type === "Identifier") {
+            if (comp.property.name === node.property.name) {
+              comp = comp.object;
+              node = node.object;
+            }
+            else {
+              stop = true;
+            }
+          }
+          else {
+            if (comp.property.value === node.property.value) {
+              comp = comp.object;
+              node = node.object;
+            }
+            else {
+              stop = true;
+            }
           }
         }
-        return min;
-      }
-      else if (arr.length >= 1 && inner === true) {
-        let max = arr[0];
-        for (let i = 1; i < arr.length; i++) {
-          if (arr[i][1].start > max[1].start) {
-            max = arr[i];
-          }
+        else {
+          stop = true;
         }
-        return max;
+      }
+      else if (comp.type === "Identifier" && node.type === "Identifier") {
+        if (comp.name === node.name) {
+          result = WebCryptoAPIScripts.functions[i];
+          stop = true;
+        }
+        else {
+          stop = true
+        }
       }
       else {
-        return ["OutSideFunction", WebCryptoAPIScripts.ast];
+        stop = true;
       }
     }
+    while (stop === false)
+  }
+  return result;
+}
+
+
+async function inOrOutFunction(start, WebCryptoAPIScripts, inner) {
+  let functions = WebCryptoAPIScripts.functions;
+  if (inner === undefined) {
+    inner = false;
+  }
+  let arr = [];
+  functions.forEach(element => {
+    if (element[1].start <= start && element[1].end >= start) {
+      arr.push(element);
+    }
+  });
+  if (arr.length >= 1 && inner === false) {
+    let min = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i][1].start < min[1].start) {
+        min = arr[i];
+      }
+    }
+    return min;
+  }
+  else if (arr.length >= 1 && inner === true) {
+    let max = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i][1].start > max[1].start) {
+        max = arr[i];
+      }
+    }
+    return max;
+  }
+  else {
+    return ["OutSideFunction", WebCryptoAPIScripts.ast];
+  }
+}
 
 
   }, { "acorn": 3, "acorn-walk": 2 }], 2: [function (require, module, exports) {

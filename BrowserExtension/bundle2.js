@@ -54,13 +54,11 @@
               await Regel4(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel5.length != 0) {
-              Regel5(WebCryptoAPIScripts[i]);
+              await Regel5(WebCryptoAPIScripts[i]);
             }
             if (WebCryptoAPIScripts[i].regel6.length != 0) {
-              Regel6(WebCryptoAPIScripts[i]);
-            }
-            if (WebCryptoAPIScripts[i].regel7.length != 0) {
-              Regel7(WebCryptoAPIScripts[i]);
+              console.log("start")
+              await Regel6(WebCryptoAPIScripts[i]);
             }
           }
         }

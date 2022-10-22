@@ -5,8 +5,8 @@
 
     window.Regel4 = async function (WebCryptoAPIScripts) {
 
-      for (let i = 0; i < WebCryptoAPIScripts.regel4.length; i++) {
-        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel4[i], "CallExpression").node;
+      for (let j = 0; j < WebCryptoAPIScripts.regel4.length; j++) {
+        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel4[j], "CallExpression").node;
         let exportKeyMode = encCall.arguments[0].value;
         if (exportKeyMode === "jwk") {
           let results = [[encCall, [{ type: "Identifier", name: "k" }]]]
@@ -333,17 +333,21 @@
           case "AssignmentExpression":
             console.log(encCall[0], encCall[1], prePosition[i].left)
             let pos = prePosition[i].left;
+            try {
             for (let w = 0; w < counter; w++) {
-              pos = pos.object;
-              console.log(pos)
+              if (pos.object != undefined) {
+                pos = pos.object;
+                console.log(pos)
+              }
             }
-            if (JSON.stringify(encCall[0]) === JSON.stringify(pos) || JSON.stringify(encCall[0]) === JSON.stringify(pos)) {
+            if (JSON.stringify(encCall[0]) === JSON.stringify(pos) || JSON.stringify(encCall[0]) === JSON.stringify(pos.object)) {
               console.log(JSON.stringify(prePosition[i].left), JSON.stringify(encCall[0]));
               return "Assign"
             }
+            }
+            catch (e) {}
             type = "Identifier";
             return [prePosition[i].left, type, w, prePosition.slice(i)];
-
           case "Property":
             let c = { type: "Identifier", name: prePosition[i].key.name }
             w.push(c);

@@ -12,9 +12,9 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
     <br>
-    Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    Dabei wird der Salt an eine Variable gebunden, die dann im API Call abgerufen wird.
     <br>
-    Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 9 mal nicht.
+    Dabei stammt der Salt 7 mal vom API Call window.crypto.getRandomValues() und 9 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 9 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel
@@ -30,9 +30,9 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
     <br>
-    Dabei wird der Initialisierungsvektor über eine Funktion wiedergegeben, die dann im API Call abgerufen wird.
+    Dabei wird der Salt über eine Funktion wiedergegeben, die dann im API Call abgerufen wird.
     <br>
-    Dabei stammt der Initialisierungsvektor 7 mal vom API Call window.crypto.getRandomValues() und 3 mal nicht.
+    Dabei stammt der Salt 7 mal vom API Call window.crypto.getRandomValues() und 3 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte hier 3 Regelverstöße erkennen. Bei den 7 anderen API Calls wird die Regel eingehalten.
@@ -47,13 +47,13 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
     <br>
-    Dabei wird der Initialisierungsvektor als Argument im Funktionsaufruf übergeben, welcher dann im API Call abgerufen
+    Dabei wird der Salt als Argument im Funktionsaufruf übergeben, welcher dann im API Call abgerufen
     wird.
     <br>
-    Dabei stammt der als Argument übergebene Initialisierungsvektor 13 mal vom API Call window.crypto.getRandomValues()
+    Dabei stammt der als Argument übergebene Salt 13 mal vom API Call window.crypto.getRandomValues()
     und 7 mal nicht.
     <br>
-    3 mal stammt der Initialisierungsvektor zwar vom API Call window.crypto.getRandomValues(), dieser wird aber golbal
+    3 mal stammt der Salt zwar vom API Call window.crypto.getRandomValues(), dieser wird aber golbal
     initialisiert.
     <br>
     <br>
@@ -70,12 +70,12 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.encrypt() API Call enthalten.
     <br>
-    Dabei wird der Initialisierungsvektor an eine Variable gebunden, die dann im API Call abgerufen wird.
+    Dabei wird der Salt an eine Variable gebunden, die dann im API Call abgerufen wird.
     <br>
     Jeder API Call ist in einer Funktion, in der auch ein If- oder Switch-Statment enthalten ist, der den
-    Initialisierungsvektor verändern kann.
+    Salt verändern kann.
     <br>
-    Dabei kann der Initialisierungsvektor 5 mal nur vom API Call window.crypto.getRandomValues() stammen und 8 mal
+    Dabei kann der Salt 5 mal nur vom API Call window.crypto.getRandomValues() stammen und 8 mal
     könnte er einen anderen Wert annehmen.
     <br>
     <br>

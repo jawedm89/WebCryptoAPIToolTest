@@ -12,8 +12,8 @@
           sign.push(sig);
         }
       }
-      for (let i = 0; i < WebCryptoAPIScripts.regel2.length; i++) {
-        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[i], "CallExpression").node;
+      for (let j = 0; j < WebCryptoAPIScripts.regel2.length; j++) {
+        let encCall = walk.findNodeAround(WebCryptoAPIScripts.ast, WebCryptoAPIScripts.regel2[j], "CallExpression").node;
         let encMode = encCall.arguments[0].properties[0].value.value;
         if (encMode === "AES-CBC" || encMode === "AES-CTR") {
           if (sign.length != 0) {

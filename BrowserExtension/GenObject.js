@@ -155,13 +155,10 @@ window.objectGen = async function (WebCryptoAPIScripts, jsscripts, scripts) {
                 break;
               case "exportKey":
                 WebCryptoAPIScripts[j].regel4.push(indexx);
-                WebCryptoAPIScripts[j].regel7.push(indexx);
+                WebCryptoAPIScripts[j].regel6.push(indexx);
                 break;
               case "deriveBits":
                 WebCryptoAPIScripts[j].regel5.push(indexx);
-                break;
-              case "deriveKey":
-                WebCryptoAPIScripts[j].regel6.push(indexx);
                 break;
             }
             WebCryptoAPIScripts[j].entrys.push(indexx);

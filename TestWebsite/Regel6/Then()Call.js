@@ -35,7 +35,7 @@ AESKeyR4T5.then(result => window.crypto.subtle.exportKey("jwk", result)).then(
     async function(result) {document.cookie = result.k; return result}).then(console.log);
 ExKey1R4T5().then(async function(result) {return result}).then(console.log);
 ExKey1R4T5().then(async function(result) {Storage.setItem('key', result); return result}).then(console.log);
-ExKey2R4T5().O4[2].then(async function(result) {result = await result; document.cookie = result.k; return result}).then(console.log);
+ExKey2R4T5().O4[2].then(async function(result) {let result2 = await result; document.cookie = result2.k; return result2}).then(console.log);
 ExKey2R4T5().O4[2].then(async function(result) {return [result, "placeholder"]}).then(result => document.cookie = result[0].k).then(console.log);
 ExKey2R4T5().O4[2].then(async function(result) {return [result, "placeholder"]}).then(result => console.log(result[0].k)).then(console.log);
 ExKey1R4T5().then(func1).then(console.log);
