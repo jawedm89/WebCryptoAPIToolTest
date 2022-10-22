@@ -4,5 +4,111 @@
   
   <h1 align ="center">Web Crypto API TestWebsite für Regel 7</h1>
     
+  <button id="test1">Test Alles</button>
+
+  <script>
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    let test1 = document.getElementById("test1");
+    test1.addEventListener("click", Test1);
+
+    async function Test1() {
+      let script1R1 = document.createElement("script");
+      let script2R1 = document.createElement("script");
+      let script3R1 = document.createElement("script");
+      let script4R1 = document.createElement("script");
+      script1R1.src = "../Regel1/Variablenbinndung.js";
+      script2R1.src = "../Regel1/Funktionsaufruf.js";
+      script3R1.src = "../Regel1/VariablenAußerhalbFunktion.js";
+      script4R1.src = "../Regel1/If-undSwitchStatement.js";    
+      let script1R2 = document.createElement("script");
+      let script2R2 = document.createElement("script");
+      let script3R2 = document.createElement("script");
+      let script4R2 = document.createElement("script");
+      let script5R2 = document.createElement("script");
+      script1R2.src = "../Regel2/Variablenbinndung.js";
+      script2R2.src = "../Regel2/Funktionswiedergabe.js";
+      script3R2.src = "../Regel2/Chaining.js";
+      script4R2.src = "../Regel2/Funktionsaufruf.js";
+      script5R2.src = "../Regel2/Then()Call.js";
+      let script1R3 = document.createElement("script");
+      let script2R3 = document.createElement("script");
+      let script3R3 = document.createElement("script");
+      let script4R3 = document.createElement("script");
+      let script5R3 = document.createElement("script");
+      script1R3.src = "../Regel3/Variablenbinndung.js";
+      script2R3.src = "../Regel3/Funktionswiedergabe.js";
+      script3R3.src = "../Regel3/Chaining.js";
+      script4R3.src = "../Regel3/Funktionsaufruf.js";
+      script5R3.src = "../Regel3/Then()Call.js";
+      let script1R4 = document.createElement("script");
+      let script2R4 = document.createElement("script");
+      let script3R4 = document.createElement("script");
+      let script4R4 = document.createElement("script");
+      let script5R4 = document.createElement("script");
+      script1R4.src = "../Regel4/Variablenbinndung.js";
+      script2R4.src = "../Regel4/Funktionswiedergabe.js";
+      script3R4.src = "../Regel4/Chaining.js";
+      script4R4.src = "../Regel4/Funktionsaufruf.js";
+      script5R4.src = "../Regel4/Then()Call.js";
+      let script1R5 = document.createElement("script");
+      let script2R5 = document.createElement("script");
+      let script3R5 = document.createElement("script");
+      let script4R5 = document.createElement("script");
+      script1R5.src = "../Regel5/Variablenbinndung.js";
+      script2R5.src = "../Regel5/Funktionsaufruf.js";
+      script3R5.src = "../Regel5/VariablenAußerhalbFunktion.js";
+      script4R5.src = "../Regel5/If-undSwitchStatement.js";
+      let script1R6 = document.createElement("script");
+      let script2R6 = document.createElement("script");
+      let script3R6 = document.createElement("script");
+      let script4R6 = document.createElement("script");
+      let script5R6 = document.createElement("script");
+      script1R6.src = "../Regel6/Variablenbinndung.js";
+      script2R6.src = "../Regel6/Funktionswiedergabe.js";
+      script3R6.src = "../Regel6/Chaining.js";
+      script4R6.src = "../Regel6/Funktionsaufruf.js";
+      script5R6.src = "../Regel6/Then()Call.js";
+      try {
+        for (let i = 0; i < document.scripts.length; i++) {
+          document.head.removeChild(document.scripts[i]);
+        }
+      }
+      catch (e) {
+        console.log(e);
+      }
+      await delay(1000);
+      document.head.appendChild(script1R1);
+      document.head.appendChild(script2R1);
+      document.head.appendChild(script3R1);
+      document.head.appendChild(script4R1);
+      document.head.appendChild(script1R2);
+      document.head.appendChild(script2R2);
+      document.head.appendChild(script3R2);
+      document.head.appendChild(script4R2);
+      document.head.appendChild(script5R2);
+      document.head.appendChild(script1R3);
+      document.head.appendChild(script2R3);
+      document.head.appendChild(script3R3);
+      document.head.appendChild(script4R3);
+      document.head.appendChild(script5R3);
+      document.head.appendChild(script1R4);
+      document.head.appendChild(script2R4);
+      document.head.appendChild(script3R4);
+      document.head.appendChild(script4R4);
+      document.head.appendChild(script5R4);
+      document.head.appendChild(script1R5);
+      document.head.appendChild(script2R5);
+      document.head.appendChild(script3R5);
+      document.head.appendChild(script4R5);
+      document.head.appendChild(script1R6);
+      document.head.appendChild(script2R6);
+      document.head.appendChild(script3R6);
+      document.head.appendChild(script4R6);
+      document.head.appendChild(script5R6);
+    }
+  </script>
 </body>
 </html>
