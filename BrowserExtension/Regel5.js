@@ -257,7 +257,7 @@
         }
       }
       else {
-        let verstoßDefinition = " Hier wird ein ^Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
+        let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
         WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
         return false;
       }

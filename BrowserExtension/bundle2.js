@@ -74,6 +74,10 @@
         let verstöße = await verstoßZähler();
         if (verstöße > 0) {
           browser.runtime.sendMessage({ verstoßAnzahl: verstöße})
+          let pop = await browser.storage.local.get("Alert");
+          if (pop.Alert.stat === true) {
+            window.alert("Auf der akteullen Seite kommt es zur verwendung falsche kryptographischer Primitive!");
+          }
         }
       }
 

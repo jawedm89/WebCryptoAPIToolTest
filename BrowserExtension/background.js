@@ -6,3 +6,5 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       browser.browserAction.setBadgeText({ text: verstoß.toString(), tabId: sender.tab.id});
     }
   })
+
+

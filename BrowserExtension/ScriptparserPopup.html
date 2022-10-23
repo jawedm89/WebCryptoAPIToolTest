@@ -8,18 +8,27 @@
   <script src="node_modules/highlight-within-textarea/jquery.highlight-within-textarea.js"></script>
 </head>
 
-<body>
+<body style="width: 790px; overflow-x: hidden;">
   <h2 style="text-align: center;">Web Crypto API konsistenz Überprüfung <br>für kryptographische Regeln</h2>
   <div class="Verstoß" id="popup-content">
     <p id="info">Auf der akuellten Seite wird die Web Crypto API nicht genutzt</p>
     <div id="Ergebnis"></div>
   </div>
-  <div class="EntwicklerSwitch">
-    <label class="toggle">
-      <input id="toggleswitch" type="checkbox">
-      <span class="roundbutton"></span>
-    </label>
+  <div class="einstellungen">
+    <div class="mode2">PopUp Alert: <span id="PopUpStatus">deaktiviert</span></div>
+    <div class="PopUpSwitch">
+      <label class="toggle">
+        <input id="toggleswitch2" type="checkbox">
+        <span class="roundbutton"></span>
+      </label>
+    </div>
     <div class="mode">Entwickler Modus: <span id="EntwicklerModusStatus">deaktiviert</span></div>
+    <div class="EntwicklerSwitch">
+      <label class="toggle">
+        <input id="toggleswitch" type="checkbox">
+        <span class="roundbutton"></span>
+      </label>
+    </div>
   </div>
   <script src="pop.js"></script>
 </body>
