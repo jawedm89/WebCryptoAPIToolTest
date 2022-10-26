@@ -1,16 +1,16 @@
 {
 "manifest_version": 2,
-  "name": "ScriptparserExtension",
+  "name": "Crypto Prime Checker",
   "version": "1.0",
-  "description": "Ladet die Scripte erneut aus der besuchten Website und die können über den Popup eingesehen werden",
-  "icons": { "48": "zorro.jpg" },
+  "description": "Untersucht die aktuell aufgerufene Website auf verwendung und korrekte Nutzung der Web Cryptography API",
+  "icons": { "48": "PrimitiveCheckerIcon.png" },
   
  	
 
 
 
     "browser_action": {
-    "default_icon": "zorro.jpg",
+    "default_icon": "PrimitiveCheckerIcon.png",
     "default_title": "Popup",
     "default_popup": "ScriptparserPopup.html"
   },

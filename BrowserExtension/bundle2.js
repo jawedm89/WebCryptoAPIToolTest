@@ -68,6 +68,7 @@
       }
 
       async function hin() {
+        console.log(await browser.storage.local.get("Modus"));
         jsscripts = await laden(scripts, jsscripts);
         WebCryptoAPIScripts = await objectGen(WebCryptoAPIScripts, jsscripts, scripts);
         await RegelVerteiler(WebCryptoAPIScripts);
@@ -76,7 +77,7 @@
           browser.runtime.sendMessage({ verstoßAnzahl: verstöße})
           let pop = await browser.storage.local.get("Alert");
           if (pop.Alert.stat === true) {
-            window.alert("Auf der akteullen Seite kommt es zur verwendung falsche kryptographischer Primitive!");
+            window.alert("Auf der akteullen Seite kommt es zur verwendung falsche kryptographischer Primitive! Für nähere Informationen klicken Sie oben rechts auf das Browser Extension Icon");
           }
         }
       }
