@@ -1,6 +1,6 @@
 {
 "manifest_version": 2,
-  "name": "Crypto Prime Checker",
+  "name": "Crypto Primitive Checker",
   "version": "1.0",
   "description": "Untersucht die aktuell aufgerufene Website auf verwendung und korrekte Nutzung der Web Cryptography API",
   "icons": { "48": "PrimitiveCheckerIcon.png" },

@@ -7,13 +7,6 @@ var popUpContent = document.getElementById('Ergebnis');
 var info = document.getElementById('info')
 var an;
 
-let inf = document.createElement('button');
-inf.textContent = "Info"
-inf.onclick = function() {buttonShow("halllo esdasd")};
-
-popUpContent.appendChild(inf);
-
-
 browser.tabs.query({
     currentWindow: true,
     active: true
