@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <body>
   <h1 align="center">Regel 4: Test auf Veränderungen am exportierten Schlüssel</h1>
+  <br>
+  <br>
+  Durch die Web Cryptography API kann ein Schlüssel zum verschlüsseln von Dateien exportiert werden, so dass dieser
+  gespeichert werden kann, um diesen dann zu einem späteren Zeitpunkt wieder zu verwenden. Der Schlüssel sollte niemals
+  verändert werden, da dieser in der Web Cryptography API, über einen speziellen Algorithmus erzeugt wird. Eine
+  Veränderung würde die Sicherheit des Schlüssels mindern und könnte dazu führen, dass der Schlüssel von allen Usern an
+  der selben Stelle gleich sind. Dadurch steigt die Wahrscheinlichkeit für einen Angreifer, Ihre verschlüsselten Daten
+  entschlüsseln zu können.
   <br>
   <br>
   <br>

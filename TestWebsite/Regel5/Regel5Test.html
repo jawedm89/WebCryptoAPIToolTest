@@ -6,6 +6,15 @@
   <h1 align="center">Regel 5: Test auf korrekte nutzung des Salts</h1>
   <br>
   <br>
+  In der Web Cryptography API wird der Salt in der PBKDF2 Methode verwendet. In dieser Methode kann aus einem Passwort
+  ein Schlüssel für die Verschlüsselung generiert werden. Der Salt ist eine Zahlenfolge einer bestimmten länge. Dieser
+  sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet
+  wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist.
+  Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global
+  einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem
+  Schlüssel mittels Rainbow Tabellen, herausfinden.
+  <br>
+  <br>
   <br>
   <h3>Test 1: Variablenbinndung</h3>
   <p>

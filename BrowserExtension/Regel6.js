@@ -241,7 +241,8 @@
           else {
             if (signCheck(preposition[0])) {
               let verstoßDefinition = " Hier wird der Exportierte Schlüssel im localen Bowser Storage gespeichert, was ein Sicherheitsrisiko darstellt!"
-              WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
+              let mehrInfos = "Dieser Schlüssel sollte nie im Browser Storage oder in den Cookies gespeichert werden, da beim besuchen von anderen Websites, die Cookies oder der Browser Storage von bestreiber der Website ausgelesen werden können. So könnte der Schlüsseln in die Hände von dritten geraten, die dann den Schlüssel für böswillige Zwecke missbrauchen könnten. "
+              WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition, mehrInfos]);
               ergebnis.push(true);
               i++;
               return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i);
@@ -257,7 +258,8 @@
         else if (preposition === "Assign") {
           ergebnis.push(true);
           let verstoßDefinition = " Hier wird der Exportierte Schlüssel in den Cookies gespeichert, was ein Sicherheitsrisiko darstellt!"
-          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
+          let mehrInfos = "Dieser Schlüssel sollte nie im Browser Storage oder in den Cookies gespeichert werden, da beim besuchen von anderen Websites, die Cookies oder der Browser Storage von bestreiber der Website ausgelesen werden können. So könnte der Schlüsseln in die Hände von dritten geraten, die dann den Schlüssel für böswillige Zwecke missbrauchen könnten. "
+          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition, mehrInfos]);
           //console.log(call)
           i++;
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)

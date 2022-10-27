@@ -149,13 +149,15 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
               return false;
             }
           }
           else {
             let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+            let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);            
             return false;
           }
         }
@@ -179,7 +181,8 @@
         }
         else {
           let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+          let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);          
           return false;
         }
       }
@@ -208,16 +211,19 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);              
               return false;
             }
           }
           let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+          let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
           return false
         }
         let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+        let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);        
         return false;
       }
       else if (node.type === "MemberExpression") {
@@ -245,20 +251,23 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);              
               return false;
             }
           }
           else {
             let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+            let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);            
             return false;
           }
         }
       }
       else {
         let verstoßDefinition = " Hier wird ein Salt genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+        let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);        
         return false;
       }
     }
@@ -277,7 +286,8 @@
       if (inOrOut === "OutSideFunction") {
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
         let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+        let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);        
         return false;
       }
       else {
@@ -399,14 +409,15 @@
           }
           if (param === false) {
             let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-            //console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
+            let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
             return false
           }
         }
         else {
           let verstoßDefinition = " Hier wird der Salt global initialisiert, was zu einer Wiederverwendung des Salts führen kann und verhindert werden sollte."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+          let mehrInfos = "Dieser sollte einen global einzigartigen Wert haben. Wenn die getRandomValues() Funktion der Web Cryptography API verwendet wird, um den Salt zu erzeugen, dann ist die Wahrscheinlichkeit am höchsten, dass der Salt auch global einzigartig ist. Dies liegt daran, weil die getRandomValues() Funktion, einen absolut zufällige Zahlenfolge erzeugt. Wenn ein global einzigartiger Salt verwendet wird, wird dardurch die Wahrscheinlichkeit gemindert, das Angreifer das Passwort aus dem Schlüssel mittels Rainbow Tabellen, herausfinden."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);          
           return false;
         }
       }

@@ -6,6 +6,13 @@
   <h1 align="center">Regel 3: Test auf Einhaltung der "Encrypt-then-MAC" Regel</h1>
   <br>
   <br>
+  Wenn Daten nicht nur verschlüsselt werden sollen, sondern auch autentisch sein sollen, dann müssen die Dateien
+  signiert werden. Dadurch kann vom Empfänger der Datei geprüft werden, ob die Datei auch wirklich von der Person
+  stammt, von der er Sie erwartet hat und ob die Datei nicht verändert wurde. Dabei muss immer die Reihenfolge "erst
+  verschlüsseln, dann signieren" eingehalten werden. Wenn diese nicht eingehalten wird, dann geht dadurch die
+  Authentizität der verschlüsselten Datei verloren und kann erst nach dem entschlüsseln der Datei geprüft werden.
+  <br>
+  <br>
   <br>
   <h3>Test 1: Variablenbinndung</h3>
   <p>
@@ -55,7 +62,8 @@
     Dabei wird das Ergebnis des API Calls an eine Variable gebunden, das dann mal mit dem window.crypto.subtle.encrypt()
     API Call verschlüsselt wird.
     <br>
-    Die Variable wird vor dem verschlüsseln mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
+    Die Variable wird vor dem verschlüsseln mehrfach an andere Variablen weitergegeben, wobei dann nur eine der
+    Variablen
     verschlüsselt wird.
     <br>
     Dabei mündet der window.crypto.subtle.sign() API Call 6 mal im window.crypto.subtle.encrypt() API Call und 2 mal

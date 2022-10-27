@@ -46,7 +46,8 @@
                   //console.log("das Ergebins ist ", result, " an der Stelle: ", results[i][0].start);
                   if (!result) {
                     let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-                    WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
+                    let mehrInfos = "Die Verschlüsselungsmethoden AES-CBC oder AES-CTR, entsprechen nicht dem höchsten Sicherheitsstandard. Dies bedeutet das es für diese Verschlüsselungsmethoden ein Angriffs Szenario gibt, in dem ein Angreifer in der Lage wäre die verschlüsselten Daten zu entschlüsseln. Um diese Verschlüsselungsmethoden auf den höchsten Sicherheitsstandard zu heben, müssen die Daten nach dem Verschlüsseln signiert werden. "
+                    WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition, mehrInfos]);
                   }
                   ergebnis.push(result);
                 }
@@ -58,8 +59,8 @@
             }
             else {
               let verstoßDefinition = " Hier wird die Verschlüsselungsmethode " + encMode + " ohne Signatur genutzt, was CPA-secure ist aber nicht CCA-secure!"
-              WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition]);
-              //console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
+              let mehrInfos = "Die Verschlüsselungsmethoden AES-CBC oder AES-CTR, entsprechen nicht dem höchsten Sicherheitsstandard. Dies bedeutet das es für diese Verschlüsselungsmethoden ein Angriffs Szenario gibt, in dem ein Angreifer in der Lage wäre die verschlüsselten Daten zu entschlüsseln. Um diese Verschlüsselungsmethoden auf den höchsten Sicherheitsstandard zu heben, müssen die Daten nach dem Verschlüsseln signiert werden. "
+              WebCryptoAPIScripts.verstöße.push([encCall, verstoßDefinition, mehrInfos]);              //console.log("Verstoß gegen Regel 2 an der Stelle ", encCall.start, "! es wird " + encMode + " genutzt ohne Signatur. Dies ist CPA-Secure, aber nicht CCA-Secure. ");
             }
           }
         }

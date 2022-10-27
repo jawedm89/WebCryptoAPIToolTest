@@ -7,6 +7,13 @@ var popUpContent = document.getElementById('Ergebnis');
 var info = document.getElementById('info')
 var an;
 
+let inf = document.createElement('button');
+inf.textContent = "Info"
+inf.onclick = function() {buttonShow("halllo esdasd")};
+
+popUpContent.appendChild(inf);
+
+
 browser.tabs.query({
     currentWindow: true,
     active: true
@@ -127,13 +134,23 @@ function entwicklerContent() {
                 let idTag = 'scrollToPostion' + i + ',' + j;
                 newHTML = newHTML + scriptContent.slice(x, verstöße[i].verstöße[j][0].start)
                     + openingTag + idTag + '">' + scriptContent.substring(verstöße[i].verstöße[j][0].start, verstöße[i].verstöße[j][0].end) + closingTag;
+                let mehrInfos = document.createElement('img');
+                mehrInfos.src = "information.png";
+                mehrInfos.style.height = '16px';
+                mehrInfos.style.width = '16px';
+                mehrInfos.style.paddingLeft = '10px';
+                mehrInfos.style.paddingTop = '5px';
                 let button = document.createElement('button');
                 button.textContent = "Zur Markierung"
                 button.onclick = async function () { let markirung = document.getElementById(idTag); markirung.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); markirung.style.backgroundColor = "red"; await delay(1000); markirung.style.backgroundColor = "yellow"; }
                 let para = document.createElement('p');
+                let infoBox = document.createElement('div');
+                mehrInfos.onmouseover = function () {buttonShow(verstöße[i].verstöße[j][2], infoBox); para.appendChild(infoBox)};
+                mehrInfos.onmouseleave = function () {infoBox.style.display = "none"}
                 para.className = "verstoßBeschreibung"
-                para.innerHTML = (j + 1) + '. Markierte Stelle:' + verstöße[i].verstöße[j][1] + "  ";
+                para.innerHTML = (j + 1) + '. Markierte Stelle:' + verstöße[i].verstöße[j][1] + "  <br>";
                 para.appendChild(button);
+                para.appendChild(mehrInfos);
                 descrition.appendChild(para);
                 if (j + 1 === verstöße[i].verstöße.length) {
                     newHTML = newHTML + scriptContent.slice(verstöße[i].verstöße[j][0].end);
@@ -203,3 +220,26 @@ function normalerContent() {
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
+
+function buttonShow(mehrInfos, infoBox) {
+    // Infobox anzeigen
+    //inf.appendChild(infoBox)
+    
+    infoBox.className = "infoBox";
+    infoBox.style.display = "";
+    infoBox.style.position = "absolute";
+    infoBox.style.zIndex = 999;
+    infoBox.style.marginTop = "20px";
+    infoBox.innerText = mehrInfos;
+    let p = document.createElement('p');
+    p.style.textAlign = "center";
+    p.style.marginTop = "10px";
+    let schließen = document.createElement('button');
+    schließen.textContent = "Schließen";
+    schließen.onclick = function () {infoBox.style.display = "none"};
+    //p.appendChild(schließen);
+    infoBox.appendChild(p);
+    //popUpContent.appendChild(infoBox);
+    
+  }
+

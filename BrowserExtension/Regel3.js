@@ -71,7 +71,8 @@
       try {
         if (node.callee.property.name === "encrypt" && node.callee.object.property.name === "subtle" && node.callee.object.object.property.name === "crypto" && node.callee.object.object.object.name === "window") {
           let verstoßDefinition = " Hier wird Signiert und dann verschlüsselt. Dies ist ein Verstoß gegen die Encrypt-then-MAC Regel"
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+          let mehrInfos = "Wenn Daten verschlüsselt und signiert werden sollen, dann muss immer die Reihenfolge \"erst verschlüsseln, dann signieren\" eingehalten werden. Wenn diese nicht eingehalten wird, dann geht dadurch die Authentizität der verschlüsselten Datei verloren und kann erst nach dem entschlüsseln der Datei geprüft werden."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
           return true;
         }
         else {

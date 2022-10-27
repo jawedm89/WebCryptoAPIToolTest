@@ -148,13 +148,16 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+              let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+  
               return false;
             }
           }
           else {
             let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+            let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
             return false;
           }
         }
@@ -178,8 +181,9 @@
         }
         else {
           let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-          return false;
+          let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+        return false;
         }
       }
       else if (node.type === "CallExpression" && node.callee.type === "CallExpression") {
@@ -205,17 +209,20 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-              return false;
+              let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+                return false;
             }
           }
           let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-          return false
+          let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+        return false
         }
         let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-        return false;
+        let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+    return false;
       }
       else if (node.type === "MemberExpression") {
         let callCheck = makeArray2(node, true);
@@ -242,21 +249,24 @@
             }
             else {
               let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-              return false;
+              let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+              WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+                return false;
             }
           }
           else {
             let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+            let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
             return false;
           }
         }
       }
       else {
         let verstoßDefinition = " Hier wird ein Initialisierungsvektor genutzt, der nicht von der getRandomValues Funktion stammt und damit nicht sicher ist."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-        return false;
+        let mehrInfos = "Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein. Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren Wahrscheinlichkeit entschlüsseln. Bei AES-CTR sollte auch die getRandomValues() Funktion genutzt werden, weil sonst es passieren könnte, das der Counter 2 mal verwendet wird. Dadurch können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem Angreifer einfach entschlüsselt werden"
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
+    return false;
       }
     }
 
@@ -274,7 +284,8 @@
       if (inOrOut === "OutSideFunction") {
         arr = await NodeWalk(WebCryptoAPIScripts.ast, node.end, true);
         let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
-        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
+        let mehrInfos = "Durch das wiederverwenden des Initialisierungsvektors, werden die Verschlüsselungsmethoden AES-CBC und AES-CTR Angreifbar. Besonders Daten die mittels AES-CTR verschlüsselt wurden, bei dem der selbe Schlüssel und Counter verwendet wurde, können von einem Angreifer ganz leicht entschlüsselt werden."
+        WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);
         return false;
       }
       else {
@@ -396,15 +407,15 @@
           }
           if (param === false) {
             let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
-            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-            //console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
+            let mehrInfos = "Durch das wiederverwenden des Initialisierungsvektors, werden die Verschlüsselungsmethoden AES-CBC und AES-CTR Angreifbar. Besonders Daten die mittels AES-CTR verschlüsselt wurden, bei dem der selbe Schlüssel und Counter verwendet wurde, können von einem Angreifer ganz leicht entschlüsselt werden."
+            WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);            //console.log("der IV wird global initialisiert, was zu einer Wiederverwendung des IV führen kann und verhindert werden sollte")
             return false
           }
         }
         else {
           let verstoßDefinition = " Hier wird der Initialisierungsvektor global initialisiert, was zu einer Wiederverwendung des Initialisierungsvektors führen kann und verhindert werden sollte."
-          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition]);
-          return false;
+          let mehrInfos = "Durch das wiederverwenden des Initialisierungsvektors, werden die Verschlüsselungsmethoden AES-CBC und AES-CTR Angreifbar. Besonders Daten die mittels AES-CTR verschlüsselt wurden, bei dem der selbe Schlüssel und Counter verwendet wurde, können von einem Angreifer ganz leicht entschlüsselt werden."
+          WebCryptoAPIScripts.verstöße.push([node, verstoßDefinition, mehrInfos]);          return false;
         }
       }
     }

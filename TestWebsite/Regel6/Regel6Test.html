@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <body>
   <h1 align="center">Regel 6: Test auf Speicherung des exportierten Schlüssel in den Cookies oder Browser Storage</h1>
+  <br>
+  <br>
+  Durch die Web Cryptography API kann ein Schlüssel zum verschlüsseln von Dateien exportiert werden, so dass dieser
+  gespeichert werden kann, um diesen dann zu einem späteren Zeitpunkt wieder zu verwenden. Dieser Schlüssel sollte aber
+  nie im Browser Storage oder in den Cookies gespeichert werden, da beim besuchen von anderen Websites, die Cookies oder
+  der Browser Storage von bestreiber der Website ausgelesen werden können. So könnte Ihr Schlüsseln in die Hände von
+  dritten geraten, die dann Ihren Schlüssel für böswillige Zwecke missbrauchen könnten. 
   <br>
   <br>
   <br>
@@ -10,9 +18,11 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, wobei der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht.
+    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, wobei der Schlüssel mal in den Cookies oder
+    Browser Storage gespeichert wird und mal nicht.
     <br>
-    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 7 mal in den Cookies oder Browser Storage gespeichert und 5 mal nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 7 mal in den Cookies oder Browser Storage
+    gespeichert und 5 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 7 Regelverstöße erkennen. Bei den 5 anderen API Calls wird die Regel
@@ -28,9 +38,11 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird der Schlüssel des API Calls durch eine Funktion wiedergegeben, der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
+    Dabei wird der Schlüssel des API Calls durch eine Funktion wiedergegeben, der Schlüssel mal in den Cookies oder
+    Browser Storage gespeichert wird und mal nicht
     <br>
-    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage gespeichert und 6 mal nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage
+    gespeichert und 6 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 5 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel
@@ -46,12 +58,14 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, der dann mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
+    Dabei wird der Schlüssel des API Calls an eine Variable gebunden, der dann mal in den Cookies oder Browser Storage
+    gespeichert wird und mal nicht
     <br>
     Der Schlüssel wird mehrfach an andere Variablen weitergegeben, wobei dann nur eine der Variablen
     in den Cookies oder Browser Storage gespeichert wird wird.
     <br>
-    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal in den Cookies oder Browser Storage gespeichert und 4 mal nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal in den Cookies oder Browser Storage
+    gespeichert und 4 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 3 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
@@ -70,7 +84,8 @@
     Dabei wird der Schlüssel des API Calls als Argument in einem Funktionsaufruf weitergegeben, der dann in der Funktion
     mal in den Cookies oder Browser Storage gespeichert wird und mal nicht
     <br>
-    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal in den Cookies oder Browser Storage gespeichert und 4 mal nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 3 mal in den Cookies oder Browser Storage
+    gespeichert und 4 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 3 Regelverstöße erkennen. Bei den 4 anderen API Calls wird die Regel
@@ -86,9 +101,11 @@
     <br>
     Bei diesen Test sind im Script mehrere Male der window.crypto.subtle.exportKey() API Call enthalten.
     <br>
-    Dabei wird der Schlüssel des API Calls über den Then() Call, wobei der Schlüssel mal in den Cookies oder Browser Storage gespeichert wird und mal nicht.
+    Dabei wird der Schlüssel des API Calls über den Then() Call, wobei der Schlüssel mal in den Cookies oder Browser
+    Storage gespeichert wird und mal nicht.
     <br>
-    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage gespeichert und 7 mal nicht.
+    Dabei wird der Schlüssel des window.crypto.subtle.exportKey() API Call 5 mal in den Cookies oder Browser Storage
+    gespeichert und 7 mal nicht.
     <br>
     <br>
     Die Browser Extension sollte entprechend hier 6 Regelverstöße erkennen. Bei den 6 anderen API Calls wird die Regel

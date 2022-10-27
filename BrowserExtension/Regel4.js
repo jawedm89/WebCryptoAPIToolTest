@@ -248,8 +248,9 @@
         }
         else if (preposition === "Assign") {
           ergebnis.push(true);
-          let verstoßDefinition = " Hier wird der Exportierte Schlüssel verändert, was zu einem Sicherheitsrisiko führen kann!"
-          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition]);
+          let verstoßDefinition = " Hier wird der Exportierte Schlüssel verändert, was zu einem Sicherheitsrisiko führen kann!";
+          let mehrInfos = "Der Schlüssel sollte niemals verändert werden, da dieser in der Web Cryptography API, über einen speziellen Algorithmus erzeugt wird. Eine Veränderung würde die Sicherheit des Schlüssels mindern und könnte dazu führen, dass der Schlüssel von allen Usern an der selben Stelle gleich sind. Dadurch steigt die Wahrscheinlichkeit für einen Angreifer, Ihre verschlüsselten Daten entschlüsseln zu können."
+          WebCryptoAPIScripts.verstöße.push([call[i][0], verstoßDefinition, mehrInfos]);
           //console.log(call)
           i++;
           return await checkPrePosition(call, WebCryptoAPIScripts, ergebnis, funcCalls, i)

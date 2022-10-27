@@ -6,6 +6,19 @@
   <h1 align="center">Regel 1: Test auf korrekte nutzung des Initialisierungsvektors</h1>
   <br>
   <br>
+  Mit der Web Cryptography API ist es möglich Daten mittels der AES-CBC Methode zu verschlüsseln. Dabei muss ein
+  Initialisierungsvektor angegeben werden. Dieser Initialisierungsvektor muss eine absolut zufällige Zahlenfolge sein.
+  Dafür sollte am besten die getRandomValues() Funktion der Web Cryptography API genutzt werden, da diese eine absolut
+  zufällige Zahlenfolge erzeugt. Wenn der Initialisierungsvektor aber vorhersagbar ist, dann wird dadurch die
+  Verschlüsselungsmethode AES-CBC angreifbar. Dadruch kann ein Angreifer die verschlüsselten Daten mit einer höheren
+  Wahrscheinlichkeit entschlüsseln. Wenn der Initialisierungsvektor wiederverwendet wird, macht das diese
+  Verschlüsselungsmethode genauso angreifbar als auch die Verschlüsselungsmethode AES-CTR. Bei AES-CTR wird zwar keine
+  absolut zufällige Zahlenfolge als Counter benötigt, aber dieser darf nie wiederverwendet werden mit dem gleichen
+  Schlüssel. Ansonsten können die Daten die mit dem selben Schlüssel und Counter verschlüsselt wurden, von einem
+  Angreifer einfach entschlüsselt werden. Entsprechen sollte hier auch die getRandomValues() Funktion genutzt werden um
+  einen Counter zu erzeugen.
+  <br>
+  <br>
   <br>
   <h3>Test 1: Variablenbinndung</h3>
   <p>
