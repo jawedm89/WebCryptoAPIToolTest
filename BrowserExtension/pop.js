@@ -186,27 +186,37 @@ function normalerContent() {
     let verstoßListe = [];
     for(let i = 0; i < verstöße.length; i++) {
         verstöße[i].verstöße.forEach(element => {
-            verstoßListe.push(element[1]);
+            verstoßListe.push([element[1], element[2]]);
         })
     }
     let counts =[];
     for (let i = 0; i < verstoßListe.length; i++) {
         let newEntry = true;
         counts.forEach(element => {
-            if (element[0] === verstoßListe[i]) {
+            if (element[0] === verstoßListe[i][0]) {
                 element[1] = element[1] +1 ;
                 newEntry = false;
             }
         });
         if (newEntry === true) {
-            counts.push([verstoßListe[i], 1])
+            counts.push([verstoßListe[i][0], 1, verstoßListe[i][1]])
         }
     }
     for (let i = 0; i < counts.length; i++) {
-            let verstoß = document.createElement('p');
-            verstoß.innerHTML = verstoßAnzahl + ". Auf der aktuellen Seite kommt es " + "<b>" + counts[i][1] + "</b>" + " mal zu folgenden Fehler:" + "<b>" + counts[i][0] + "</b>";
-            normaleVerstoßErklärung.appendChild(verstoß);
-            verstoßAnzahl++;
+        let mehrInfos = document.createElement('img');
+        mehrInfos.src = "information.png";
+        mehrInfos.style.height = '16px';
+        mehrInfos.style.width = '16px';
+        mehrInfos.style.paddingLeft = '10px';
+        mehrInfos.style.paddingTop = '5px';
+        let infoBox = document.createElement('div');
+        let verstoß = document.createElement('p');
+        verstoß.innerHTML = verstoßAnzahl + ". Auf der aktuellen Seite kommt es " + "<b>" + counts[i][1] + "</b>" + " mal zu folgenden Fehler:" + "<b>" + counts[i][0] + "</b> ";
+        normaleVerstoßErklärung.appendChild(verstoß);
+        mehrInfos.onmouseover = function () {buttonShow(counts[i][2], infoBox); verstoß.appendChild(infoBox)};
+        mehrInfos.onmouseleave = function () {infoBox.style.display = "none"};
+        verstoß.appendChild(mehrInfos)
+        verstoßAnzahl++;
     }
 }
 

@@ -120,6 +120,7 @@ input:checked + .roundbutton:before  {
 
 .normaleVerstoßErklärung {
     padding: 0px 30px 0px 30px;
+    min-height: 250px;
 }
 
 .source {
